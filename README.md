@@ -141,7 +141,7 @@ Use the shared library from one programming language, you may
 | [Fortran](./demo/demo-Fortran)      |  [seuif97.f08](./demo/demo-fortran/seuif97.f08)  |
 | [Pascal](./demo/demo-pascal)        |  [seuif97.pas](./demo/demo-pascal/seuif97.pas)   |
 | [Modelica](./demo/demo-modelica)    |  [seuif97.mo](./demo/demo-modelica/demomodelica/seuif97.mo) |
-| [Golang](./demo-go)                |  **Example** [demo.go](./demo-go/demo.go) |
+| [Golang](./demo-go)                |  **Example** [demo.go](./demo/demo-go/demo.go) |
 
 You can modify these interfaces provided in the repository to your own APIs.
 
