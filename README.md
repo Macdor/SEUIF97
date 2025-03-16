@@ -18,7 +18,7 @@ In addition to the source code, the repository provides
 
 * the interfaces and examples of multiple programming languages:  [/demo/](./demo)
 
-   *  C/C++, Python, C#, Java, Excel VBA, MATLAB,  Rust, Fortran, Pascal, Modelica 
+   *  C/C++, Python, C#, Java, Excel VBA, MATLAB,  Rust, Fortran, Pascal, Modelica, Golang
 
 ## Building the shared library
 
@@ -141,6 +141,7 @@ Use the shared library from one programming language, you may
 | [Fortran](./demo/demo-Fortran)      |  [seuif97.f08](./demo/demo-fortran/seuif97.f08)  |
 | [Pascal](./demo/demo-pascal)        |  [seuif97.pas](./demo/demo-pascal/seuif97.pas)   |
 | [Modelica](./demo/demo-modelica)    |  [seuif97.mo](./demo/demo-modelica/demomodelica/seuif97.mo) |
+| [Golang](./demo-go)                |  **Example** [demo.go](./demo-go/demo.go) |
 
 You can modify these interfaces provided in the repository to your own APIs.
 

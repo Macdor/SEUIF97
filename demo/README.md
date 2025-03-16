@@ -9,8 +9,9 @@
 | [Java](./demo-java)                |  [seuif97.java](./demo-java/seuif97.java)   |
 | [MATLAB64](./MATLAB64)             |  [seuif97.m](./MATLAB64/seuif97/seuif97.m)  |
 | [Rust](./demo-rust)                |  [seuif97.rs](./demo-rust/src/seuif97.rs)   |
-| [Fortran](./demo-Fortran)          |   [seuif97.f08](./demo-fortran/seuif97.f08) |
+| [Fortran](./demo-Fortran)          |  [seuif97.f08](./demo-fortran/seuif97.f08) |
 | [Pascal](./demo-pascal)            |  [seuif97.pas](./demo-pascal/seuif97.pas)    |
-| [Modelica](./demo-modelica)        | [seuif97.mo](./demo-modelica/demomodelica/seuif97.mo) |
+| [Modelica](./demo-modelica)        |  [seuif97.mo](./demo-modelica/demomodelica/seuif97.mo) |
+| [Golang](./demo-go)                |  **Example** [demo.go](./demo-go/demo.go) |
 
 You can modify these interfaces provided in the repository to your own APIs.
