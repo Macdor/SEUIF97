@@ -192,7 +192,7 @@ You can modify these interfaces provided in the repository to your own APIs.
 | Thermal conductivity                  |   W/(m.K)   |     λ  |         26 |
 | Thermal diffusivity                   |   um^2/s    |     a  |         27 |
 | Prandtl number                        |             |     Pr |         28 |
-| Surface tension                       |    mN/m     |     σ  |         29 |
+| Surface tension                       |     N/m     |     σ  |         29 |
 
 ## Publications
 
