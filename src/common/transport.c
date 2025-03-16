@@ -3,12 +3,12 @@
 
 | Propertry                             |    Unit     | Symbol |   o_id     |
 | ------------------------------------- | :---------: |:-----: |:---------: |
-|  Dynamic viscosity                    |  kg/(m·s)   |     η  |         24 |
+| Dynamic viscosity                    |  kg/(m·s)    |     η  |         24 |
 | Kinematic viscosity                   |    m^2/s    |     ν  |         25 |
 | Thermal conductivity                  |   W/(m.K)   |     λ  |         26 |
 | Thermal diffusivity                   |   um^2/s    |     a  |         27 |
 | Prandtl number                        |             |     Pr |         28 |
-| Surface tension                       |    mN/m     |     σ  |         29 |
+| Surface tension                       |    N/m      |     σ  |         29 |
 
 */
 #include <math.h>
