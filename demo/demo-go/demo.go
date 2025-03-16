@@ -1,7 +1,7 @@
 package main
 /*
 #cgo LDFLAGS: -LC:/Windows/system -llibseuif97
-double pt(double p, double t, int o_id);
+#include "seuif97.h"
 */
 import "C"
 import "fmt"
