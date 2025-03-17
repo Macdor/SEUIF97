@@ -3,65 +3,9 @@ Region 5: the extended properties
 
 */
 #include <math.h>
-#include "../common/constand.h"
-#include "region5_coff.h"
-#include "region5.h"
-
-#include <math.h>
 #include <stdint.h>
-#include "../common/constand.h"
-#include "../common/propertry_id.h"
-#include "../algo/algorithm.h"
 #include "region5.h"
-#include "region5_coff.h"
 
-// Region 5: the extended properties
-double pT_ext_reg5(double p, double T, int o_id)
-{
-    double r = 0.0;
-    switch (o_id)
-    {
-    case OKISE:
-        r = pT2k_reg5(p, T);
-        break;
-    case OG:
-        r = pT2g_reg5(p, T);
-        break;
-    case OF:
-        r = pT2f_reg5(p, T);
-        break;
-    case OIJTC:
-        r = pT2ijoule_reg5(p, T);
-        break;
-    case OZ:
-        r = pT2z_reg5(p, T);
-        break;
-    case OKT:
-        r = pT2kt_reg5(p, T);
-        break;
-    case OJTC:
-        r = pT2joule_reg5(p, T);
-        break;
-    case OIPCEC:
-        r = pT2ipcec_reg5(p, T);
-        break;
-    case OE:
-        r = pT2e_reg5(p, T);
-        break;
-    case ODPDT:
-        r = pT2dpdtcv_reg5(p, T);
-        break;
-    case ODVDP:
-        r = pT2dvdpct_reg5(p, T);
-        break;
-    case ODVDT:
-        r = pT2dvdtcp_reg5(p, T);
-        break;
-    default:
-        r = INVALID_OUTID;
-    }
-    return r;
-}
 
 // k: isentropic exponent  T K,	p MPa OKISE 11
 //    k= -(v/p)*/1000*(dp/dv)s
@@ -73,7 +17,7 @@ double pT2k_reg5(double p, double T)
     double pi = p / r5Pstar;
     double dgammar_pi = gammar_pi_reg5(pi, tau);
 
-    a = IPOW(1.0 + pi * dgammar_pi, 2);
+    a = ipowsac(1.0 + pi * dgammar_pi, 2);
     b = 1.0 - pi * pi * gammar_pipi_reg5(pi, tau);
     c = 1.0 + pi * (dgammar_pi - tau * gammar_pitau_reg5(pi, tau));
     d = tau * tau * (gamma0_tautau_reg5(tau) + gammar_tautau_reg5(pi, tau));

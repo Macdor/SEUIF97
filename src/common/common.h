@@ -1,10 +1,6 @@
 #pragma once
-
-typedef struct
-{
-  int I, J;
-  double n;
-} IJnData;
+#include "../algo/algorithm.h"
+#include "../common/constand.h"
 
 // methods
 typedef double (*properties_region)(double, double, int);
@@ -15,7 +11,6 @@ double thCond(double rho, double T);
 double thermal_diffusivity(double tc, double cp, double d);
 double tension(double T);
 double prandtl_number(double dv, double cp, double tc);
-double thermal_diffusivity(double tc, double cp, double d);
 
 // double dielectric(double rho, double T);
 // double refractive(double rho, double T);
@@ -34,9 +29,6 @@ double pair_prop(double v1, double v2, int o_id, region_fn regfn,
                  prop_fn fn3,
                  prop_fn fn4,
                  prop_fn fn5);
-
-
-double pT(double p, double T, int o_id);
 
 // Boundary equations:
 

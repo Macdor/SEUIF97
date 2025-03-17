@@ -2,8 +2,6 @@
  Thermodynamic process
 */
 #include "common.h"
-#include "constand.h"
-#include "propertry_id.h"
 #include "seuif97.h"
 
 IF97_DLL double ishd(double pi, double ti, double pe)

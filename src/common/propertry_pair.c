@@ -2,14 +2,6 @@
 //  1.  pT_transport -> 1，2，5
 //  2  Td_transport_reg3  in region3_out.c
 #include "../common/common.h"
-#include "../common/propertry_id.h"
-#include "../common/constand.h"
-#include "../algo/algorithm.h"
-#include "../r1/region1.h"
-#include "../r2/region2.h"
-#include "../r3/region3.h"
-#include "../r4/region4.h"
-#include "../r5/region5.h"
 
 double pT_transport(double p, double T, int o_id, properties_region fn)
 {
@@ -101,11 +93,6 @@ double pair_prop(double v1, double v2, int o_id, region_fn regfn,
         break;
     }
     return v;
-}
-
-double pT(double p, double T, int o_id)
-{
-    return pair_prop(p, T, o_id, pT_region, pT_reg1, pT_reg2, pT_reg3, pT_reg4, pT_reg5);
 }
 
 double pT_reg(double p, double T, int o_id, properties_region pT_thermal, properties_region pT_ext)

@@ -29,67 +29,7 @@
 
 #include <math.h>
 #include <stdint.h>
-#include "../common/constand.h"
-#include "../common/propertry_id.h"
-#include "../algo/algorithm.h"
 #include "region2.h"
-#include "region2_coff.h"
-#include "region2_solo_ij.h"
-
-// Region1: the extended properties
-double pT_ext_reg2(double p, double T, int o_id)
-{
-    double r = 0.0;
-    switch (o_id)
-    {
-    case OKISE:
-        r = pT2k_reg2(p, T);
-        break;
-    case OIPCEC:
-        r = pT2ipcec_reg2(p, T);
-        break;
-    case OKT:
-        r = pT2kt_reg2(p, T);
-        break;
-    case OG:
-        r = pT2g_reg2(p, T);
-        break;
-    case OF:
-        r = pT2f_reg2(p, T);
-        break;
-    case OJTC:
-        r = pT2joule_reg2(p, T);
-        break;
-        break;
-    case OIJTC:
-        r = pT2ijoule_reg2(p, T);
-        break;
-    case OZ:
-        r = pT2z_reg2(p, T);
-        break;
-    case OE:
-        r = pT2e_reg2(p, T);
-        break;
-    case ODPDT:
-        r = pT2dpdtcv_reg2(p, T);
-        break;
-    case ODVDP:
-        r = pT2dvdpct_reg2(p, T);
-        break;
-    case ODVDT:
-        r = pT2dvdtcp_reg2(p, T);
-        break;
-    /*
-       OPC => pT2pc_reg2(p, T),
-       OBETAP => pT2batap_reg2(p, T),
-       OFI => pT2fi_reg2(p, T),
-       OFU => pT2fu_reg2(p, T),
-       OALFAP => pT2alfap_reg2(p, T),*/
-    default:
-        r = INVALID_OUTID;
-    }
-    return r;
-}
 
 // k:Isentropic exponent OKISE 11
 // * k= -(v/p)*/1000*(dp/dv)s

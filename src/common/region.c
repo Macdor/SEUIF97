@@ -7,19 +7,16 @@
 #include "../r3/region3.h"
 #include "../r4/region4.h"
 #include "../r5/region5.h"
-#include "common.h"
-#include "constand.h"
-#include "../algo/algorithm.h"
 
 int pT_region(double p, double T)
 // 温度升序，判断区域 ，直接return。判定逻辑简单，避免了多重if
 // p in MPa。T in K returns the region
 {
-    if (p < Pmin || p > 100)
+    if (p < Pmin || p > PMAX1)
         return INVALID_P;
-    if (T < 273.15 || T > 2273.15)
+    if (T < TMIN1 || T > TMAX5)
         return INVALID_T;
-    if (T > 1073.15 && T <= 2273.15 && p > 50.0)
+    if (T > TMIN5 && T <= TMAX5 && p > PMAX5)
         return INVALID_P;
 
     // ON TOP: Saturaton lines、critical point等特殊点判断在前
@@ -27,9 +24,9 @@ int pT_region(double p, double T)
 
     // TODO: Saturaton Pressure Tolerance
     const double psatTol = 1.0e-6;
-    if (T >= 273.15 && T < tc_water)
+    double ps = pSat(T);
+    if (T >= TMIN1 && T < tc_water)
     {
-        double ps = pSat(T);
         if (fabs(p - ps) / ps < psatTol)
             return 4;
     }
@@ -37,29 +34,29 @@ int pT_region(double p, double T)
     if (T == tc_water && p == pc_water)
         return 4;
 
-    if (T >= 273.15 && T <= 623.15)
+    if (T >= TMIN1 && T <= TMAX1)
     {
-        if (p >= pSat(T) && p <= 100.0)
+        if (p >= ps && p <= PMAX1)
             return 1;
-        if (p < pSat(T) && p > Pmin)
+        if (p < ps && p > Pmin)
             return 2;
     };
 
-    // T（623.15,tc_water)之间的饱和线，critical point情况，已在前面处理，这里无需判断，简化了区域判断
-    if (T > 623.15 && T <= 863.15)
+    // T（TMAX1,tc_water)之间的饱和线，critical point情况，已在前面处理，这里无需判断，简化了区域判断
+    if (T > TMIN3 && T <= TMAX3)
     {
         if (p >= Pmin && p <= B23_T2p(T))
             return 2;
-        if (p > B23_T2p(T) && p <= 100.0)
+        if (p > B23_T2p(T) && p <= PMAX3)
             return 3;
     };
 
-    if (T > 863.15 && T <= 1073.15 &&
-        p >= Pmin && p <= 100.0)
+    if (T > TMAX3 && T <= TMAX2 &&
+        p >= Pmin && p <= PMAX2)
         return 2;
 
-    if (1073.15 < T && T <= 2273.15 &&
-        Pmin <= p && p <= 50)
+    if (TMIN5 < T && T <= TMAX5 &&
+        Pmin <= p && p <= PMAX5)
         return 5;
 }
 
@@ -72,14 +69,14 @@ int ph_region(double p, double h)
 
     // 压力Pmin - Ps_623- pc_water- 100升序，分3段判断区域
     //    每个压力区域 hmin  hmax 分段判断区域
-    double hmin = pT2h_reg1(p, 273.15);
-    double hmax = pT2h_reg5(p, 2273.15);
+    double hmin = pT2h_reg1(p, TMIN1);
+    double hmax = pT2h_reg5(p, TMAX5);
 
     if (Pmin <= p && p <= Ps_623) // Ps_623 PMIN3 3区的最小压力
     {
         double h14 = pT2h_reg1(p, TSat(p));
         double h24 = pT2h_reg2(p, TSat(p));
-        double h25 = pT2h_reg2(p, 1073.15);
+        double h25 = pT2h_reg2(p, TMAX2);
 
         if (hmin <= h && h <= h14)
             return 1;
@@ -94,9 +91,9 @@ int ph_region(double p, double h)
     if (Ps_623 < p && p < pc_water)
     {
 
-        double h13 = pT2h_reg1(p, 623.15);
+        double h13 = pT2h_reg1(p, TMAX1);
         double h32 = pT2h_reg2(p, B23_p2T(p));
-        double h25 = pT2h_reg2(p, 1073.15);
+        double h25 = pT2h_reg2(p, TMIN5);
 
         if (hmin <= h && h <= h13)
             return 1;
@@ -116,11 +113,11 @@ int ph_region(double p, double h)
             return 5;
     };
 
-    if (pc_water <= p && p <= 100)
+    if (pc_water <= p && p <= PMAX1)
     {
-        double h13 = pT2h_reg1(p, 623.15);
+        double h13 = pT2h_reg1(p, TMAX1);
         double h32 = pT2h_reg2(p, B23_p2T(p));
-        double h25 = pT2h_reg2(p, 1073.15);
+        double h25 = pT2h_reg2(p, TMAX2);
 
         if (hmin <= h && h <= h13)
             return 1;
@@ -128,10 +125,10 @@ int ph_region(double p, double h)
             return 3;
         if (h32 <= h && h <= h25)
             return 2;
-        if ((p <= 50) && (h25 <= h && h <= hmax))
+        if ((p <= PMAX5) && (h25 <= h && h <= hmax))
             return 5;
     };
-    return (-1000);
+    return (INVALID_OUTID);
 }
 
 int ps_region(double p, double s)
@@ -139,14 +136,14 @@ int ps_region(double p, double s)
 
     // 压力Pmin - Ps_623- pc_water- 100升序，分3段判断区域
     //    每个压力区域 smin  smax 分段判断区域
-    double smin = pT2s_reg1(p, 273.15);
-    double smax = pT2s_reg5(p, 2273.15);
+    double smin = pT2s_reg1(p, TMIN1);
+    double smax = pT2s_reg5(p, TMAX5);
     if (Pmin <= p && p <= Ps_623)
     {
 
         double s14 = pT2s_reg1(p, TSat(p));
         double s24 = pT2s_reg2(p, TSat(p));
-        double s25 = pT2s_reg2(p, 1073.15);
+        double s25 = pT2s_reg2(p, TMAX2);
 
         if (smin <= s && s <= s14)
             return 1;
@@ -160,9 +157,9 @@ int ps_region(double p, double s)
 
     if (Ps_623 < p && p < pc_water)
     {
-        double s13 = pT2s_reg1(p, 623.15);
+        double s13 = pT2s_reg1(p, TMAX1);
         double s32 = pT2s_reg2(p, B23_p2T(p));
-        double s25 = pT2s_reg2(p, 1073.15);
+        double s25 = pT2s_reg2(p, TMAX2);
         if (smin <= s && s <= s13)
             return 1;
         if (s13 < s && s < s32)
@@ -180,11 +177,11 @@ int ps_region(double p, double s)
             return 5;
     };
 
-    if (pc_water <= p && p <= 100)
+    if (pc_water <= p && p <= PMAX1)
     {
-        double s13 = pT2s_reg1(p, 623.15);
+        double s13 = pT2s_reg1(p, TMAX1);
         double s32 = pT2s_reg2(p, B23_p2T(p));
-        double s25 = pT2s_reg2(p, 1073.15);
+        double s25 = pT2s_reg2(p, TMAX2);
         if (smin <= s && s <= s13)
             return 1;
         if (s13 < s && s < s32)
@@ -192,7 +189,7 @@ int ps_region(double p, double s)
         if (s32 <= s && s <= s25)
             return 2;
 
-        if (p <= 50 && s25 <= s && s <= smax)
+        if (p <= PMAX5 && s25 <= s && s <= smax)
             return 5;
     };
 }
@@ -201,34 +198,34 @@ int hs_region(double h, double s)
 
 // 1,2,3,4 区 smin ->smax。5区另外处理
 {
-    double s13 = pT2s_reg1(100, 623.15);
-    double s13s = pT2s_reg1(Ps_623, 623.15);
-    double sTPmax = pT2s_reg2(100, 1073.15);
-    double s2ab = pT2s_reg2(4, 1073.15); // TODO： p=4 2ab s2ab 的意义？
+    double s13 = pT2s_reg1(PMAX1, TMAX1);
+    double s13s = pT2s_reg1(Ps_623, TMAX1);
+    double sTPmax = pT2s_reg2(PMAX1, TMAX2);
+    double s2ab = pT2s_reg2(4, TMAX2); // TODO： p=4 2ab s2ab 的意义？
 
     // Left point in h-s plot
-    double smin = pT2s_reg1(100, 273.15);
-    double hmin = pT2h_reg1(Pmin, 273.15);
+    double smin = pT2s_reg1(PMAX1, TMIN1);
+    double hmin = pT2h_reg1(Pmin, TMIN1);
 
     // Right point in h-s plot
-    double hmax = pT2h_reg2(Pmin, 1073.15);
-    double smax = pT2s_reg2(Pmin, 1073.15);
+    double hmax = pT2h_reg2(Pmin, TMAX2);
+    double smax = pT2s_reg2(Pmin, TMAX2);
 
     // Region 4 left and right point
-    double h4l = pT2h_reg1(Pmin, 273.15);
-    double s4l = pT2s_reg1(Pmin, 273.15);
+    double h4l = pT2h_reg1(Pmin, TMIN1);
+    double s4l = pT2s_reg1(Pmin, TMIN1);
 
-    double h4v = pT2h_reg2(Pmin, 273.15);
-    double s4v = pT2s_reg2(Pmin, 273.15);
+    double h4v = pT2h_reg2(Pmin, TMIN2);
+    double s4v = pT2s_reg2(Pmin, TMIN2);
 
     // !!!! Check region 5 MUST On TOP !!!
     // if （s4v <= s && s<= smax） (h,s)may be setup to error region2
-    if (pT2s_reg5(50, 1073.15) < s && s <= pT2s_reg5(Pmin, 2273.15) &&
-        pT2h_reg5(50, 1073.15) < h && h <= pT2h_reg5(Pmin, 2273.15))
+    if (pT2s_reg5(50, TMIN5) < s && s <= pT2s_reg5(Pmin, TMAX5) &&
+        pT2h_reg5(50, TMIN5) < h && h <= pT2h_reg5(Pmin, TMAX5))
     {
         double P = hs2p_reg5(h, s);
         double T = ph2T_reg5(P, h);
-        if (1073.15 < T && T <= 2273.15 && Pmin <= P && P <= 50)
+        if (TMIN5 < T && T <= TMAX5 && Pmin <= P && P <= 50)
             return 5;
     };
 
@@ -236,8 +233,8 @@ int hs_region(double h, double s)
     {
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h1_s(s);
-        double T = ps2T_reg1(100, s) - 0.0218;
-        double hmax = pT2h_reg1(100.0, T);
+        double T = ps2T_reg1(PMAX1, s) - 0.0218;
+        double hmax = pT2h_reg1(PMAX1, T);
         if (hmin <= h && h < hs)
             return 4;
         if (hs <= h && h <= hmax)
@@ -249,8 +246,8 @@ int hs_region(double h, double s)
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h1_s(s);
         double h13 = _h13_s(s);
-        double v = ps2v_reg3(100, s) * (1 + 9.6e-5);
-        double T = ps2T_reg3(100, s) - 0.0248;
+        double v = ps2v_reg3(PMAX1, s) * (1 + 9.6e-5);
+        double T = ps2T_reg3(PMAX1, s) - 0.0248;
         double hmax = Td2h_reg3(T, 1 / v);
         if (hmin <= h && h < hs)
             return 4;
@@ -264,8 +261,8 @@ int hs_region(double h, double s)
     {
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h3a_s(s);
-        double v = ps2v_reg3(100, s) * (1 + 9.6e-5);
-        double T = ps2T_reg3(100, s) - 0.0248;
+        double v = ps2v_reg3(PMAX1, s) * (1 + 9.6e-5);
+        double T = ps2T_reg3(PMAX1, s) - 0.0248;
         double hmax = Td2h_reg3(T, 1 / v);
         if (hmin <= h && h < hs)
             return 4;
@@ -277,8 +274,8 @@ int hs_region(double h, double s)
     {
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h2c3b_s(s);
-        double v = ps2v_reg3(100, s) * (1 + 9.6e-5);
-        double T = ps2T_reg3(100, s) - 0.0248;
+        double v = ps2v_reg3(PMAX1, s) * (1 + 9.6e-5);
+        double T = ps2T_reg3(PMAX1, s) - 0.0248;
         double hmax = Td2h_reg3(T, 1 / v);
         if (hmin <= h && h < hs)
             return 4;
@@ -291,10 +288,10 @@ int hs_region(double h, double s)
         // Specific zone with 2-3 boundary in s shape
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h2c3b_s(s);
-        double h23max = pT2h_reg2(100, 863.15);
-        double h23min = pT2h_reg2(Ps_623, 623.15);
-        double T = ps2T_reg2(100, s) - 0.019;
-        double hmax = pT2h_reg2(100, T);
+        double h23max = pT2h_reg2(PMAX1, TMAX3);
+        double h23min = pT2h_reg2(Ps_623, TMIN3);
+        double T = ps2T_reg2(PMAX1, s) - 0.019;
+        double hmax = pT2h_reg2(PMAX1, T);
 
         if (hmin <= h && h < hs)
             return 4;
@@ -315,20 +312,20 @@ int hs_region(double h, double s)
     {
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h2c3b_s(s);
-        double T = ps2T_reg2(100, s) - 0.019;
-        double hmax = pT2h_reg2(100, T);
+        double T = ps2T_reg2(PMAX1, s) - 0.019;
+        double hmax = pT2h_reg2(PMAX1, T);
         if (hmin <= h && h < hs)
             return 4;
         if (hs <= h && h <= hmax)
             return 2;
     }
 
-    if (5.85 <= s && s < sTPmax)
+    if (st_water <= s && s < sTPmax)
     {
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h2ab_s(s);
-        double T = ps2T_reg2(100, s) - 0.019;
-        double hmax = pT2h_reg2(100, T);
+        double T = ps2T_reg2(PMAX1, s) - 0.019;
+        double hmax = pT2h_reg2(PMAX1, T);
         if (hmin <= h && h < hs)
             return 4;
         if (hs <= h && h <= hmax)
@@ -340,7 +337,7 @@ int hs_region(double h, double s)
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h2ab_s(s);
         double P = hs2p_reg2(h, s);
-        double hmax = pT2h_reg2(P, 1073.15);
+        double hmax = pT2h_reg2(P, TMAX2);
         if (hmin <= h && h < hs)
             return 4;
         if (hs <= h && h <= hmax)
@@ -352,7 +349,7 @@ int hs_region(double h, double s)
         double hmin = h4l + (s - s4l) / (s4v - s4l) * (h4v - h4l);
         double hs = _h2ab_s(s);
         double P = hs2p_reg2(h, s);
-        double hmax = pT2h_reg2(P, 1073.15);
+        double hmax = pT2h_reg2(P, TMAX2);
         if (hmin <= h && h < hs)
             return 4;
         if (hs <= h && h <= hmax)
@@ -361,14 +358,14 @@ int hs_region(double h, double s)
 
     if (s4v <= s && s <= smax)
     {
-        double hmin = pT2h_reg2(Pmin, 273.15);
+        double hmin = pT2h_reg2(Pmin, TMIN2);
         double P = hs2p_reg2a(h, s);
-        double hmax = pT2h_reg2(P, 1073.15);
-        if (Pmin <= P && P <= 100 && hmin <= h && h <= hmax)
+        double hmax = pT2h_reg2(P, TMAX2);
+        if (Pmin <= P && P <= PMAX1 && hmin <= h && h <= hmax)
             return 2;
     }
 
-    return -1000;
+    return INVALID_OUTID;
 }
 
 //--------------------------------------------
@@ -377,14 +374,14 @@ int hs_region(double h, double s)
 
 int pv_region(double p, double v)
 {
-    double x, T1, vt273, vT1073, vt2273, vt623, vB23, vsw, vss;
+    double T1, vt273, vT1073, vt2273, vt623, vB23, vsw, vss;
     if ((p < PMIN2) || (p > PMAX2))
         return INVALID_VALUE;
-    vt273 = pT2v_reg1(p, 273.15);   // T=273.15
-    vT1073 = pT2v_reg2(p, 1073.15); // T=1073.15
+    vt273 = pT2v_reg1(p, TMIN1);   // T=273.15
+    vT1073 = pT2v_reg2(p, TMAX2); // T=1073.15
     if ((p >= PMIN5) && (p <= PMAX5))
-        vt2273 = pT2v_reg5(p, 2273.15); // T=2273.15
-    if ((p > 0.000611213) && (p <= PMIN3))
+        vt2273 = pT2v_reg5(p, TMAX5); // T=2273.15
+    if ((p > Pmin) && (p <= PMIN3))
     {
         T1 = TSat(p);
         vsw = pT2v_reg1(p, T1); //
@@ -392,7 +389,7 @@ int pv_region(double p, double v)
     }
     else if ((p > PMIN3) && (p <= PMAX3))
     {
-        vt623 = pT2v_reg1(p, 623.15); // T=623.15
+        vt623 = pT2v_reg1(p, TMAX1); // T=623.15
         T1 = B23_p2T(p);
         vB23 = pT2v_reg2(p, T1); //
         if (p <= pc_water)
@@ -431,9 +428,9 @@ int pv_region(double p, double v)
 //---------------- T ---------------------------
 int Th_region(double T, double h)
 {
-    double x, v, p1, hpmax2, hpmax5, hpm50, hp100, hsw, hss, hB23;
-    if ((T < 273.15) || (T > 2273.15))
-        return (-1);
+    double v, p1, hpmax2, hpmax5, hpm50, hp100, hsw, hss, hB23;
+    if ((T < TMIN1) || (T > TMAX5))
+        return INVALID_T;
     //  if ((h>HMAX)||(h<HMIN)) return (-2);
     if ((T >= TMIN2) && (T <= TMAX2))
         hpmax2 = pT2h_reg2(PMIN2, T);
@@ -444,9 +441,9 @@ int Th_region(double T, double h)
     }
     // p=100MPa
     if ((T >= TMIN1) && (T <= TMAX1))
-        hp100 = pT2h_reg1(100, T);
+        hp100 = pT2h_reg1(PMAX1, T);
     if ((T > TMIN3) && (T <= TMAX3))
-        hp100 = pT_reg3(100, T, OH);
+        hp100 = pT_reg3(PMAX1, T, OH);
     if ((T >= TMIN1) && (T <= TMAX1))
     {
         p1 = pSat(T);
@@ -491,7 +488,7 @@ int Th_region(double T, double h)
                     HminFounded = 1;
             }
             if (h >= Hmin)
-                return (1.0);
+                return 1;
             else
                 return (INVALID_VALUE);
         }
@@ -527,11 +524,11 @@ int Th_region(double T, double h)
 
 int Ts_region(double T, double s)
 {
-    double x, v, p1, spmax2, spmax5, sp50, sp100, ssw, sss, sB23;
-    if ((T < 273.15) || (T > 2273.15))
-        return (-1);
+    double v, p1, spmax2, spmax5, sp50, sp100, ssw, sss, sB23;
+    if ((T < TMIN1) || (T > TMAX5))
+        return INVALID_T;
     if ((s > SMAX) || (s < SMIN))
-        return (-2);
+        return INVALID_S;
 
     if ((T >= TMIN2) && (T <= TMAX2))
         spmax2 = pT2s_reg2(PMIN2, T);
@@ -542,11 +539,11 @@ int Ts_region(double T, double s)
     }
     // p=100MPa
     if ((T >= TMIN1) && (T <= TMAX1))
-        sp100 = pT2s_reg1(100, T);
+        sp100 = pT2s_reg1(PMAX1, T);
     if ((T > TMIN3) && (T <= TMAX3))
-        sp100 = pT_reg3(100, T, OS);
+        sp100 = pT_reg3(PMAX1, T, OS);
     if ((T > TMAX3) && (T <= TMAX2))
-        sp100 = pT2s_reg2(100, T);
+        sp100 = pT2s_reg2(PMAX1, T);
     if ((T >= TMIN1) && (T <= TMAX1))
     {
         p1 = pSat(T);
@@ -593,9 +590,9 @@ int Ts_region(double T, double s)
 
 int Tv_region(double T, double v)
 {
-    double x, p1, vpmax2, vpmax5, vp50, vp100, vsw, vss, vB23;
-    if ((T < 273.15) || (T > 2273.15))
-        return (-1);
+    double p1, vpmax2, vpmax5, vp50, vp100, vsw, vss, vB23;
+    if ((T < TMIN1) || (T > TMAX5))
+        return INVALID_T;
     if ((T >= TMIN2) && (T <= TMAX2))
         vpmax2 = pT2v_reg2(PMIN2, T);
     if ((T >= TMIN5) && (T <= TMAX5))
@@ -605,11 +602,11 @@ int Tv_region(double T, double v)
     }
     // p=100MPa
     if ((T >= TMIN1) && (T <= TMAX1))
-        vp100 = pT2v_reg1(100, T);
+        vp100 = pT2v_reg1(PMAX1, T);
     if ((T > TMIN3) && (T <= TMAX3))
-        vp100 = pT2v_reg3(100, T); //
+        vp100 = pT2v_reg3(PMAX1, T); //
     if ((T > TMAX3) && (T <= TMAX2))
-        vp100 = pT2v_reg2(100, T);
+        vp100 = pT2v_reg2(PMAX1, T);
     if ((T >= TMIN1) && (T <= TMAX1))
     {
         p1 = pSat(T);

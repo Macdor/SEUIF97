@@ -2,60 +2,7 @@
 //
 //  Td_ext_reg3(T: f64, d: f64, o_id: i32) -> f64
 //
-#include "../common/constand.h"
-#include "../common/propertry_id.h"
-#include "../algo/algorithm.h"
 #include "region3.h"
-#include "region3_coff.h"
-#include "region3_solo_ij.h"
-
-double Td_ext_reg3(double T, double d, int o_id)
-{
-    double r = 0.0;
-    switch (o_id)
-    {
-    case OE:
-        r = Td2e_reg3(T, d);
-        break;
-    case OKISE:
-        r = Td2k_reg3(T, d);
-        break;
-    case OF:
-        r = Td2f_reg3(T, d);
-        break;
-    case OG:
-        r = Td2g_reg3(T, d);
-        break;
-    case OZ:
-        r = Td2z_reg3(T, d);
-        break;
-    case OKT:
-        r = Td2kt_reg3(T, d);
-        break;
-    case OIPCEC:
-        r = Td2ipcec_reg3(T, d);
-        break;
-    case ODVDP:
-        r = Td2dvdpct_reg3(T, d);
-        break;
-
-    case ODVDT:
-        r = Td2dvdtcp_reg3(T, d);
-        break;
-    case ODPDT:
-        r = Td2dpdtcv_reg3(T, d);
-        break;
-    case OJTC:
-        r = Td2joule_reg3(T, d);
-        break;
-    case OIJTC:
-        r = Td2ijoule_reg3(T, d);
-        break;
-    default:
-        r = INVALID_OUTID;
-    }
-    return r;
-}
 
 //  the specific Gibbs free energy,
 //    g=R*T*(phi+delta* phi_delta )

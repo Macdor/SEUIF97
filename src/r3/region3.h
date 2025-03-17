@@ -2,6 +2,8 @@
 
 #include "../common/common.h"
 
+void solo_i_j_power_reg3(double vi, double vj, double soI_pow[], double soJ_pow[]);
+
 double phi_reg3(double tau, double delta);
 double phi_delta_reg3(double tau, double delta);
 double phi_deltadelta_reg3(double tau, double delta);

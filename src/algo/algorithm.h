@@ -5,13 +5,11 @@
 
 #include <math.h>
 
-#include "../common/common.h"
-
-#define IPOW ipowsac
-// #define IPOW ipowrqm
-// #define IPOW powf
-
-#define SIGN(a, b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
+typedef struct
+{
+  int I, J;
+  double n;
+} IJnData;
 
 double ipowsac(double x, int n);
 double ipowrqm(double x, int n);

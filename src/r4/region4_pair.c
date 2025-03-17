@@ -1,4 +1,8 @@
-﻿
+/*
+ Region 4 - The extended input pairs: (p,v)->x, (t,v),(t,h),(t,s) ->x
+    x: Steam quality
+*/
+
 /*
  Region4 : http://www.iapws.org/relguide/Supp-phs3-2014.pdf. Eq 9
        Page30  Supp-phs3-2014.pdf Page25
@@ -6,22 +10,105 @@
                s> 5.210 887 825
          temperature range is T （273.15 ， 623.15 ）
 */
-
 #include <math.h>
 #include <stdio.h>
-#include "../algo/algorithm.h"
-#include "../common/common.h"
-#include "../common/constand.h"
 #include "../r1/region1.h"
 #include "../r2/region2.h"
 #include "../r3/region3.h"
 #include "region4.h"
 
-static double s4L_623 = 3.778281340;       // T=623.16 ，Sature Liquid s
-static double s4V_623 = 5.210887825;       // T=623.16 ，Sature steam   s
-static double h4V_623 = 2.5635920043 + 03; // Page 25  Sature steam   h
-static double s4L_273 = -1.545495919e-04;  // T=273.15 ，Sature Liquid
-static double s4V_273 = 9.155759395;       // T=273.15 ，Sature steam
+/// Region 4: (p,v)-> x
+double pv2x_reg4(double p, double v)
+{
+    double v_sat_w = p2SatWater(p, OV);
+    double v_sat_s = p2SatSteam(p, OV);
+    return (v - v_sat_w) / (v_sat_s - v_sat_w);
+}
+
+/// Region 4: (T,v)-> x
+double Tv2x_reg4(double T, double v)
+{
+    double v_sat_w = T2SatWater(T, OV);
+    double v_sat_s = T2SatSteam(T, OV);
+    return (v - v_sat_w) / (v_sat_s - v_sat_w);
+}
+
+/// Region 4: (T,h)-> x
+double Th2x_reg4(double T, double h)
+{
+    double h_sat_w = T2SatWater(T, OH);
+    double h_sat_s = T2SatSteam(T, OH);
+    return (h - h_sat_w) / (h_sat_s - h_sat_w);
+}
+
+/// Region 4: (T,s)-> x
+double Ts2x_reg4(double T, double s)
+{
+    double s_sat_w = T2SatWater(T, OS);
+    double s_sat_s = T2SatSteam(T, OS);
+    return (s - s_sat_w) / (s_sat_s - s_sat_w);
+}
+
+//
+//  Initialize coefficients for region 4
+//
+static double n[11] = {0, 0.11670521452767E+04, -0.72421316703206E+06, -0.17073846940092E+02,
+    0.12020824702470E+05, -0.32325550322333E+07, 0.14915108613530E+02,
+    -0.48232657361591E+04, 0.40511340542057E+06, -0.23855557567849E+00,
+    0.65017534844798E+03};
+
+double pSat(double T)
+// saturation pressure of water
+// pSatW in bar
+// T :temperaturein K
+//
+// pSat = -1: temperature outside range
+//
+{
+double pS;
+if (T < TMIN4 || T > tc_water) // tc_water=647.096
+pS = -1.0;
+else
+{
+double del = T + n[9] / (T - n[10]);
+double aco = del * (del + n[1]) + n[2];
+double bco = del * (n[3] * del + n[4]) + n[5];
+double cco = del * (n[6] * del + n[7]) + n[8];
+pS = ipowsac(2 * cco / (-bco + sqrt(bco * bco - 4 * aco * cco)), 4);
+}
+return pS;
+}
+
+double TSat(double p)
+//
+// saturation temperature of water
+// tSatW in K
+// p :pressure in bar
+//
+// tSatW=-1: pressure outside range
+//
+{
+double TS;
+if (p < Pmin || p > pc_water)
+TS = -1.0;
+else
+{
+double bet = pow(p, 0.25);
+double eco = bet * (bet + n[3]) + n[6];
+double fco = bet * (n[1] * bet + n[4]) + n[7];
+double gco = bet * (n[2] * bet + n[5]) + n[8];
+double dco = 2.0 * gco / (-fco - sqrt(fco * fco - 4.0 * eco * gco));
+TS = 0.5 * (n[10] + dco - sqrt((n[10] + dco) * (n[10] + dco) - 4.0 * (n[9] + n[10] * dco)));
+}
+return TS;
+}
+
+
+static double s4L_623 = 3.778281340;       // T=623.16 ，Sature Liquid s=3.778281340
+static double s4V_623 = 5.210887825;       // T=623.16 ，Sature steam s=5.210887825
+static double h4V_623 = 2.5635920043 + 03; // Page 25  Sature steam h=2.5635920043 + 03
+static double s4L_273 = -1.545495919e-04;  // T=273.15 ，Sature Liquid s=-1.545495919e-04
+static double s4V_273 = 9.155759395;       // T=273.15 ，Sature steam s=9.155759395
 
 double hs2T_reg43(double h, double s)
 /* Backward equation for region 4, T=f(h,s)
@@ -74,7 +161,7 @@ double hs2T_reg43(double h, double s)
     double sigma = s / 9.2;
     // double suma = 0;
     // for (int i = 0; i < 36; i++)
-    //    suma += IJn[i].n * IPOW(nu - 0.119, IJn[i].I) * IPOW(sigma - 1.07, IJn[i].J);
+    //    suma += IJn[i].n * ipowsac(nu - 0.119, IJn[i].I) * ipowsac(sigma - 1.07, IJn[i].J);
     return 550.0 * poly(nu - 0.119, sigma - 1.07, 36, IJn);
 }
 
@@ -98,7 +185,7 @@ double hs2T_reg4(double h, double s)
         Low_Bound = Pmin;
         High_Bound = Ps_623;
 
-        double hL = -1000;
+        double hL = INVALID_OUTID;
         while (fabs(hL - h) > 1.0e-04 && fabs(High_Bound - Low_Bound) > 1.0e-4)
         {
             PL = (Low_Bound + High_Bound) / 2;
@@ -124,7 +211,7 @@ double hs2T_reg4(double h, double s)
         High_Bound = PL;
     }
 
-    double sss = -1000;
+    double sss = INVALID_OUTID;
     double p, xs, s4v, s4L, v4v, v4L;
 
     while (fabs(s - sss) > 1.0e-6)

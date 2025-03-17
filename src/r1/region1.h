@@ -13,7 +13,12 @@
 */
 #pragma once
 #include "../common/common.h"
-#include "../common/propertry_id.h"
+
+void solo_ij_pow_reg1(double vi, double vj, double *soI_pow, double *soJ_pow);
+
+static const double r1pstar = 16.53;  // MPa
+static const double r1Tstar = 1386.0; // K
+
 
 double gamma_reg1(double pi, double tau);
 double gamma_pi_reg1(double pi, double tau);
@@ -57,6 +62,8 @@ double pT2e_reg1(double p, double T);
 double pT2dpdtcv_reg1(double p, double T);
 double pT2dvdpct_reg1(double p, double T);
 double pT2dvdtcp_reg1(double p, double T);
+// double pT2dvdhcp_reg1(double p, double h);
+// double pT2dvdpch_reg1(double p, double h);
 
 // IF97 backward: (p,h)->T, (p,s)->T,（h,s)->p
 double ph2T_reg1(double p, double h);

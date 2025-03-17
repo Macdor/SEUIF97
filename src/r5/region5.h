@@ -2,6 +2,9 @@
 
 #include "../common/common.h"
 
+static const double r5Pstar = 1.0;	  // MPa
+static const double r5Tstar = 1000.0; // K
+
 double gamma0_reg5(double pi, double tau);
 double gamma0_pi_reg5(double pi);
 double gamma0_pipi_reg5(double pi);

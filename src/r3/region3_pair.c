@@ -1,9 +1,1220 @@
 /*
-   region3: sub-region (p,T)->v
+  The extended pairs:
+     (p,v) ->t
+    (T,h) ->d  (T,s)->d
 */
 #include <math.h>
+#include <stdint.h>
+#include <string.h>
 #include "region3.h"
-#include "../algo/algorithm.h"
+
+// Region 3  (p,v)->T using the secant method and refine adjust
+// * p: pressure  MPa
+// * v: specific volume m^3/kg
+// * T: temperature  K
+double pv2T_reg3(double p, double v)
+{
+  double T1, T2, d, f1, f2;
+  T1 = TMIN3;
+  T2 = B23_p2T(p);
+  d = 1.0 / v;
+  f1 = p - Td2p_reg3(T1, d);
+  f2 = p - Td2p_reg3(T2, d);
+  return rtsec1(Td2p_reg3, d, p, T1, T2, f1, f2, xacc, iMAX);
+}
+
+//     (t,h) ->d
+double Th2d_reg3(double T, double h)
+{
+  double p1 = B23_T2p(T);
+  double d1 = 1.0 / pT2v_reg3(p1, T);
+  double p2 = PMAX3;
+  double d2 = 1.0 / pT2v_reg3(p2, T);
+  double f1 = h - Td2h_reg3(T, d1);
+  double f2 = h - Td2h_reg3(T, d2);
+  return rtsec2(Td2h_reg3, T, h, d1, d2, f1, f2, xacc, iMAX);
+}
+
+// Region 3  (T,s)->d using the secant method
+//  * T: temperature  K
+//  * s: specific entropy  kJ/(kg K)
+//  * d: density    kg/m^3
+double Ts2d_reg3(double T, double s)
+{
+  double d1 = 100.0;
+  double d2 = 1.1 * d1;
+  double ft = s - Td2s_reg3(T, d1);
+  double f = s - Td2s_reg3(T, d2);
+  return rtsec2(Td2s_reg3, T, s, d1, d2, ft, f, xacc, iMAX);
+}
+
+double hs2p3a_reg3(double h, double s)
+/*  Backward equation for region 3a, P=f(h,s)
+     h : Specific enthalpy [kJ/kg]
+     s : Specific entropy [kJ/kgK]
+      P : Pressure [MPa] */
+{
+    IJnData IJn[33] = {{0, 0, 0.770889828326934e1},
+                       {0, 1, -0.260835009128688e2},
+                       {0, 5, 0.267416218930389e3},
+                       {1, 0, 0.172221089496844e2},
+                       {1, 3, -0.293542332145970e3},
+                       {1, 4, 0.614135601882478e3},
+                       {1, 8, -0.610562757725674e5},
+                       {1, 14, -0.651272251118219e8},
+                       {2, 6, 0.735919313521937e5},
+                       {2, 16, -0.116646505914191e11},
+                       {3, 0, 0.355267086434461e2},
+                       {3, 2, -0.596144543825955e3},
+                       {3, 3, -0.475842430145708e3},
+                       {4, 0, 0.696781965359503e2},
+                       {4, 1, 0.335674250377312e3},
+                       {4, 4, 0.250526809130882e5},
+                       {4, 5, 0.146997380630766e6},
+                       {5, 28, 0.538069315091534e20},
+                       {6, 28, 0.143619827291346e22},
+                       {7, 24, 0.364985866165994e20},
+                       {8, 1, -0.254741561156775e4},
+                       {10, 32, 0.240120197096563e28},
+                       {10, 36, -0.393847464679496e30},
+                       {14, 22, 0.147073407024852e25},
+                       {18, 28, -0.426391250432059e32},
+                       {20, 36, 0.194509340621077e39},
+                       {22, 16, 0.666212132114896e24},
+                       {22, 28, 0.706777016552858e34},
+                       {24, 36, 0.175563621975576e42},
+                       {28, 16, 0.108408607429124e29},
+                       {28, 36, 0.730872705175151e44},
+                       {32, 10, 0.159145847398870e25},
+                       {32, 28, 0.377121605943324e41}};
+
+    double nu = h / 2300 - 1.01;
+    double sigma = s / 4.4 - 0.75;
+    // double suma = 0;
+    // for (int i = 0; i < 33; i++)
+    // {
+    //    suma += n[i] * pow(nu, I[i]) * pow(sigma, J[i]);
+    // }
+    double suma = poly(nu, sigma, 33, IJn);
+    return (99 * suma);
+}
+
+double hs2p3b_reg3(double h, double s)
+/*Backward equation for region 3b, P=f(h,s)
+    h :  Specific enthalpy [kJ/kg]
+    s : Specific entropy [kJ/kgK]
+    P : Pressure [MPa]*/
+{
+    IJnData IJn[35] = {
+        {-12, 2, 0.125244360717979e-12},
+        {-12, 10, -0.126599322553713e-1},
+        {-12, 12, 0.506878030140626e1},
+        {-12, 14, 0.317847171154202e2},
+        {-12, 20, -0.391041161399932e6},
+        {-10, 2, -0.975733406392044e-10},
+        {-10, 10, -0.186312419488279e2},
+        {-10, 14, 0.510973543414101e3},
+        {-10, 18, 0.373847005822362e6},
+        {-8, 2, 0.299804024666572e-7},
+        {-8, 8, 0.200544393820342e2},
+        {-6, 2, -0.498030487662829e-5},
+        {-6, 6, -0.102301806360030e2},
+        {-6, 7, 0.552819126990325e2},
+        {-6, 8, -0.206211367510878e3},
+        {-5, 10, -0.794012232324823e4},
+        {-4, 4, 0.782248472028153e1},
+        {-4, 5, -0.586544326902468e2},
+        {-4, 8, 0.355073647696481e4},
+        {-3, 1, -0.115303107290162e-3},
+        {-3, 3, -0.175092403171802e1},
+        {-3, 5, 0.257981687748160e3},
+        {-3, 6, -0.727048374179467e3},
+        {-2, 0, 0.121644822609198e-3},
+        {-2, 1, 0.393137871762692e-1},
+        {-1, 0, 0.704181005909296e-2},
+        {0, 3, -0.829108200698110e2},
+        {2, 0, -0.265178818131250},
+        {2, 1, 0.137531682453991e2},
+        {5, 0, -0.522394090753046e2},
+        {6, 1, 0.240556298941048e4},
+        {8, 1, -0.227361631268929e5},
+        {10, 1, 0.890746343932567e5},
+        {14, 3, -0.239234565822486e8},
+        {14, 7, 0.568795808129714e10},
+    };
+
+    double nu = h / 2800 - 0.681;
+    double sigma = s / 5.3 - 0.792;
+    // double suma = 0;
+    // for (int i = 0; i < 35; i++)
+    //{
+    //     suma += n[i] * pow(nu, I[i]) * pow(sigma, J[i]);
+    // }
+    double suma = poly(nu, sigma, 35, IJn);
+    return (16.6 / suma);
+}
+
+double hs2p_reg3(double h, double s)
+/*  Backward equation for region 3, P=f(h,s)
+        h : Specific enthalpy [kJ/kg]
+        s : Specific entropy [kJ/kgK]
+        P : Pressure [MPa]
+  */
+{
+
+    double p;
+    if (s <= sc_water)
+        p = hs2p3a_reg3(h, s);
+    else
+        p = hs2p3b_reg3(h, s);
+
+    return (p);
+}
+
+double Td2p_reg3(double T, double d)
+//
+// pressure in region 3
+// preg3 in bar
+// T: temperature in K
+// density in kg/m^3
+//
+{
+    double tau = tc_water / T;
+    double delta = d / dc_water;
+    // return 0.001 * d * rgas_water * T * delta * phidelta_reg3(delta,tau);
+    double phidelta = phi_delta_reg3(delta, tau);
+    return 0.001 * d * rgas_water * T * delta * phidelta;
+}
+
+double Td2u_reg3(double T, double d)
+// speciphic internal energy in region 3
+// energyreg3 in kJ/kg
+{
+    double tau = tc_water / T;
+    double delta = d / dc_water;
+    // return rgas_water * T * tau * phi_tau_reg3(delta,tau);
+    double phi_tau = phi_tau_reg3(delta, tau);
+    return rgas_water * T * tau * phi_tau;
+}
+
+double Td2s_reg3(double T, double d)
+// speciphic entropy in region 3
+// entropyreg3 in kJ/(kg K)
+{
+    double tau = tc_water / T;
+    double delta = d / dc_water;
+    // return rgas_water * (tau * phi_tau_reg3(delta,tau) - phi_reg3(delta,tau));
+
+    double phi = 0.0;
+    double phi_tau = 0.0;
+    polys_solo_0_j_reg3(delta, tau, &phi, &phi_tau);
+    return rgas_water * (tau * phi_tau - phi);
+}
+
+double Td2h_reg3(double T, double d)
+// speciphic enthalpy in region 3
+// enthalpyreg3 in kJ/kg
+{
+    double tau = tc_water / T;
+    double delta = d / dc_water;
+    // return rgas_water * T * (tau * phi_tau_reg3(delta,tau) + delta * phidelta_reg3(delta,tau));
+    double phidelta = 0.0;
+    double phi_tau = 0.0;
+    polys_solo_i_j_reg3(delta, tau, &phidelta, &phi_tau);
+    return rgas_water * T * (tau * phi_tau + delta * phidelta);
+}
+
+double Td2cp_reg3(double T, double d)
+// speciphic isobaric heat capacity in region 3
+// cpreg3 in kJ/(kg K)
+{
+    double tau = tc_water / T;
+    double delta = d / dc_water;
+
+    // double a = delta * (phidelta_reg3(delta,tau) - tau * phideltatau_reg3(delta,tau));
+    // a *= a;
+    // double b = delta * (2.0 * phidelta_reg3(delta,tau) + delta * phideltadelta_reg3(delta,tau));
+    // return rgas_water * (-tau * tau * phi_tautau_reg3(delta,tau) + a / b);
+
+    double poly_delta = 0;
+    double poly_deltatau = 0;
+    double poly_deltadelta = 0;
+    double poly_tautau = 0;
+    polys_solo_i_ii_ij_jj_reg3(delta, tau, &poly_delta, &poly_deltadelta, &poly_deltatau, &poly_tautau);
+
+    double a = delta * (poly_delta - tau * poly_deltatau);
+    a *= a;
+    double b = delta * (2.0 * poly_delta + delta * poly_deltadelta);
+    return rgas_water * (-tau * tau * poly_tautau + a / b);
+}
+
+double Td2cv_reg3(double T, double d)
+// speciphic isochoric heat capacity in region 3
+// cvreg3 in kJ/(kg K)
+{
+    double tau = tc_water / T;
+    double delta = d / dc_water;
+    // return rgas_water * (-tau * tau * phi_tautau_reg3(delta,tau));
+
+    double phi_tautau = phi_tautau_reg3(delta, tau);
+    return rgas_water * (-tau * tau * phi_tautau);
+}
+
+double Td2w_reg3(double T, double d)
+// speed of sound in region 3 in m/s
+{
+    double tau = tc_water / T;
+    double delta = d / dc_water;
+    /*
+
+        double a = delta * phidelta_reg3(delta,tau) - delta * tau * phideltatau_reg3(delta,tau);
+        a *= a;
+        double r=1000.0 * rgas_water * T * (2 * delta * phidelta_reg3(delta,tau) + delta * delta * phideltadelta_reg3(delta,tau) - a / (tau * tau * phi_tautau_reg3(delta,tau)));
+        return sqrt(1000.0 * rgas_water * T * (2 * delta * phidelta_reg3(delta,tau) + delta * delta * phideltadelta_reg3(delta,tau) - a / (tau * tau * phi_tautau_reg3(delta,tau))));
+    */
+    double poly_delta = 0;
+    double poly_deltatau = 0;
+    double poly_deltadelta = 0;
+    double poly_tautau = 0;
+
+    polys_solo_i_ii_ij_jj_reg3(delta, tau, &poly_delta, &poly_deltadelta, &poly_deltatau, &poly_tautau);
+    double a = delta * (poly_delta - tau * poly_deltatau);
+    a *= a;
+    double r = 1000.0 * rgas_water * T * (delta * (2.0 * poly_delta + delta * poly_deltadelta) - a / (tau * tau * poly_tautau));
+    return sqrt(r);
+}
+
+
+double T_atRegionBoundary(double p, char *boundary)
+{
+    // p is pressure in MPa
+    // boundary is one of 3ab, 3cd, ...
+    // returns the temperature at the boundary in K
+
+    double t = 0.0; // temperature at the boundary in K
+
+    int I3ab[] = {0, 0, 1, 2, -1, -2};
+    int I3cd[] = {0, 0, 1, 2, 3};
+    int I3gh[] = {0, 0, 1, 2, 3, 4};
+    int I3ij[] = {0, 0, 1, 2, 3, 4};
+    int I3jk[] = {0, 0, 1, 2, 3, 4};
+    int I3mn[] = {0, 0, 1, 2, 3};
+    int I3op[] = {0, 0, 1, 2, -1, -2};
+    int I3qu[] = {0, 0, 1, 2, 3};
+    int I3rx[] = {0, 0, 1, 2, 3};
+    int I3uv[] = {0, 0, 1, 2, 3};
+    int I3wx[] = {0, 0, 1, 2, -1, -2};
+
+    double n3ab[] = {0.0, 0.154793642129415e4, -0.187661219490113e3, 0.213144632222113e2,
+                     -0.191887498864292e4, 0.918419702359447e3};
+    double n3cd[] = {0.0, 0.585276966696349e3, 0.278233532206915e1, -0.127283549295878e-1,
+                     0.159090746562729e-3};
+    double n3gh[] = {0.0, -0.249284240900418e5, 0.428143584791546e4, -0.269029173140130e3,
+                     0.751608051114157e1, -0.787105249910383e-1};
+    double n3ij[] = {0.0, 0.584814781649163e3, -0.616179320924617, 0.260763050899562,
+                     -0.587071076864459e-2, 0.515308185433082e-4};
+    double n3jk[] = {0.0, 0.617229772068439e3, -0.770600270141675e1, 0.697072596851896,
+                     -0.157391839848015e-1, 0.137897492684194e-3};
+    double n3mn[] = {0.0, 0.535339483742384e3, 0.761978122720128e1, -0.158365725441648,
+                     0.192871054508108e-2};
+    double n3op[] = {0.0, 0.969461372400213e3, -0.332500170441278e3, 0.642859598466067e2,
+                     0.773845935768222e3, -0.152313732937084e4};
+    double n3qu[] = {0.0, 0.565603648239126e3, 0.529062258221222e1, -0.102020639611016,
+                     0.122240301070145e-2};
+    double n3rx[] = {0.0, 0.584561202520006e3, -0.102961025163669e1, 0.243293362700452,
+                     -0.294905044740799e-2};
+    double n3uv[] = {0.0, 0.528199646263062e3, 0.890579602135307e1, -0.222814134903755,
+                     0.286791682263697e-2};
+    double n3wx[] = {0.0, 0.728052609145380e1, 0.973505869861952e2, 0.147370491183191e2,
+                     0.329196213998375e3, 0.873371668682417e3};
+
+    if (strcmp(boundary, "3ab") == 0)
+    {
+        for (int i = 1; i <= 5; i++)
+            t += n3ab[i] * ipowsac(log(p), I3ab[i]);
+    }
+    else if (strcmp(boundary, "3op") == 0)
+    {
+        for (int i = 1; i <= 5; i++)
+            t += n3op[i] * ipowsac(log(p), I3op[i]);
+    }
+    else if (strcmp(boundary, "3ef") == 0)
+    {
+        t = 3.727888004 * (p - 22.064) + 647.096;
+    }
+    else if (strcmp(boundary, "3cd") == 0)
+    {
+        for (int i = 1; i <= 4; i++)
+            t += n3cd[i] * ipowsac(p, I3cd[i]);
+    }
+    else if (strcmp(boundary, "3gh") == 0)
+    {
+        for (int i = 1; i <= 5; i++)
+            t += n3gh[i] * ipowsac(p, I3gh[i]);
+    }
+    else if (strcmp(boundary, "3ij") == 0)
+    {
+        for (int i = 1; i <= 5; i++)
+            t += n3ij[i] * ipowsac(p, I3ij[i]);
+    }
+    else if (strcmp(boundary, "3jk") == 0)
+    {
+        for (int i = 1; i <= 5; i++)
+            t += n3jk[i] * ipowsac(p, I3jk[i]);
+    }
+    else if (strcmp(boundary, "3mn") == 0)
+    {
+        for (int i = 1; i <= 4; i++)
+            t += n3mn[i] * ipowsac(p, I3mn[i]);
+    }
+    else if (strcmp(boundary, "3qu") == 0)
+    {
+        for (int i = 1; i <= 4; i++)
+            t += n3qu[i] * ipowsac(p, I3qu[i]);
+    }
+    else if (strcmp(boundary, "3rx") == 0)
+    {
+        for (int i = 1; i <= 4; i++)
+            t += n3rx[i] * ipowsac(p, I3rx[i]);
+    }
+    else if (strcmp(boundary, "3uv") == 0)
+    {
+        for (int i = 1; i <= 4; i++)
+            t += n3uv[i] * ipowsac(p, I3uv[i]);
+    }
+    else if (strcmp(boundary, "3wx") == 0)
+    {
+        for (int i = 1; i <= 5; i++)
+            t += n3wx[i] * ipowsac(log(p), I3wx[i]);
+    }
+
+    return t;
+}
+
+double pT2vSat_reg3(double p, double T, double x)
+{
+    // p is pressure in MPa
+    // t is temperature in K
+    // x = 0 is liquid, =1 is steam]  x : integer    Vapor quality [-]
+    // returns density in kg/m3
+
+    double v;
+    char subRegion;
+    // set the region
+    // force the region if density of saturated water is asked for
+    if (x == 0)
+    {
+        if (p < 19.0088)
+        {
+            subRegion = 'c';
+        }
+        else
+        {
+            if (p < 21.0434)
+            {
+                subRegion = 's';
+            }
+            else
+            {
+                if (p < 21.9316)
+                    subRegion = 'u';
+                else
+                    subRegion = 'y';
+            }
+        }
+    }
+    else
+    {
+        if (p < 20.5)
+        {
+            subRegion = 't';
+        }
+        else
+        {
+            if (p < 21.0434)
+                subRegion = 'r';
+            else if (p < 21.9009)
+                subRegion = 'x';
+            else
+                subRegion = 'z';
+        }
+    }
+
+    v = Vpt_3subreg(p, T, subRegion);
+    return v;
+}
+
+//-------------------------------------------------------------------------
+
+char SubRegion3(double p, double t)
+{
+    // p is pressure in MPa
+    // T is temperature in K
+    // sets the subregion
+
+    char subRegion;
+
+    if (p > 40.0 && p <= 100.0)
+    {
+        double tB = T_atRegionBoundary(p, "3ab");
+        if (t > tB)
+            subRegion = 'b';
+        else
+            subRegion = 'a';
+    }
+    else if (p > 25.0)
+    {
+        double tBab = T_atRegionBoundary(p, "3ab");
+        double tBcd = T_atRegionBoundary(p, "3cd");
+        double tBef = T_atRegionBoundary(p, "3ef");
+
+        if (t <= tBcd)
+            subRegion = 'c';
+        else if (t <= tBab)
+            subRegion = 'd';
+        else if (t <= tBef)
+            subRegion = 'e';
+        else
+            subRegion = 'f';
+    }
+    else if (p > 23.5)
+    {
+        double tBcd = T_atRegionBoundary(p, "3cd");
+        double tBef = T_atRegionBoundary(p, "3ef");
+        double tBgh = T_atRegionBoundary(p, "3gh");
+        double tBij = T_atRegionBoundary(p, "3ij");
+        double tBjk = T_atRegionBoundary(p, "3jk");
+
+        if (t <= tBcd)
+            subRegion = 'c';
+        else if (t <= tBgh)
+            subRegion = 'g';
+        else if (t <= tBef)
+            subRegion = 'h';
+        else if (t <= tBij)
+            subRegion = 'i';
+        else if (t <= tBjk)
+            subRegion = 'j';
+        else
+            subRegion = 'k';
+    }
+    else if (p > 23.0)
+    {
+        double tBcd = T_atRegionBoundary(p, "3cd");
+        double tBef = T_atRegionBoundary(p, "3ef");
+        double tBgh = T_atRegionBoundary(p, "3gh");
+        double tBij = T_atRegionBoundary(p, "3ij");
+        double tBjk = T_atRegionBoundary(p, "3jk");
+
+        if (t <= tBcd)
+            subRegion = 'c';
+        else if (t <= tBgh)
+            subRegion = 'l';
+        else if (t <= tBef)
+            subRegion = 'h';
+        else if (t <= tBij)
+            subRegion = 'i';
+        else if (t <= tBjk)
+            subRegion = 'j';
+        else
+            subRegion = 'k';
+    }
+    else if (p > 22.5)
+    {
+        double tBcd = T_atRegionBoundary(p, "3cd");
+        double tBef = T_atRegionBoundary(p, "3ef");
+        double tBgh = T_atRegionBoundary(p, "3gh");
+        double tBij = T_atRegionBoundary(p, "3ij");
+        double tBjk = T_atRegionBoundary(p, "3jk");
+        double tBmn = T_atRegionBoundary(p, "3mn");
+        double tBop = T_atRegionBoundary(p, "3op");
+
+        if (t <= tBcd)
+            subRegion = 'c';
+        else if (t <= tBgh)
+            subRegion = 'l';
+        else if (t <= tBmn)
+            subRegion = 'm';
+        else if (t <= tBef)
+            subRegion = 'n';
+        else if (t <= tBop)
+            subRegion = 'o';
+        else if (t <= tBij)
+            subRegion = 'p';
+        else if (t <= tBjk)
+            subRegion = 'j';
+        else
+            subRegion = 'k';
+    }
+    else
+    {
+        double pSat97 = pSat(643.15);
+        if (p > pSat97)
+        {
+            double tBcd = T_atRegionBoundary(p, "3cd");
+            double tBqu = T_atRegionBoundary(p, "3qu");
+            double tBrx = T_atRegionBoundary(p, "3rx");
+            double tBjk = T_atRegionBoundary(p, "3jk");
+
+            if (t <= tBcd)
+                subRegion = 'c';
+            else if (t <= tBqu)
+            {
+                subRegion = 'q';
+                // 这里的判断算法有点问题，下面这个 subRegion会被重新设定u
+                //  简便处理，这个判断后，立即返回
+                return subRegion;
+            }
+
+            if (t > tBrx && t <= tBjk)
+            {
+                subRegion = 'r';
+                // 这里的判断算法有点问题，下面这个 subRegion会被重新设定u
+                // 简便处理，这个判断后，立即返回
+                return subRegion;
+            }
+
+            if (t > tBjk)
+                subRegion = 'k';
+
+            // tBqu < T <= tBrx
+            // small regions right around critical point
+            // 3u, 3x, 3y, 3z, 3v and 3w
+
+            double tBuv = T_atRegionBoundary(p, "3uv");
+            double tBwx = T_atRegionBoundary(p, "3wx");
+            double tBef = T_atRegionBoundary(p, "3ef");
+
+            if (p > 22.11)
+            {
+                if (t <= tBuv)
+                    subRegion = 'u';
+                else if (t < tBef)
+                    subRegion = 'v';
+                else if (t < tBwx)
+                    subRegion = 'w';
+                else
+                    subRegion = 'x';
+            }
+            else if (p > 22.064)
+            {
+                double tBwx = T_atRegionBoundary(p, "3wx");
+                double tBuv = T_atRegionBoundary(p, "3uv");
+                if (t <= tBuv)
+                    subRegion = 'u';
+                else if (t <= tBef)
+                    subRegion = 'y';
+                else if (t <= tBwx)
+                    subRegion = 'z';
+                else
+                    subRegion = 'x';
+            }
+            else
+            {
+                double tSat97 = TSat(p);
+
+                if (t <= tSat97)
+                {
+                    if (p > 21.93161551)
+                    {
+                        if (t < tBuv)
+                            subRegion = 'u';
+                        else
+                            subRegion = 'y';
+                    }
+                    else
+                        subRegion = 'u';
+                }
+                else
+                {
+                    if (p > 21.90096265)
+                    {
+                        if (t < tBwx)
+                            subRegion = 'z';
+                        else
+                            subRegion = 'x';
+                    }
+                    else
+                        subRegion = 'x';
+                }
+            }
+        }
+        else if (p > 20.5)
+        {
+            double tBcd = T_atRegionBoundary(p, "3cd");
+            double tBjk = T_atRegionBoundary(p, "3jk");
+            double tSat97 = TSat(p);
+
+            if (t <= tBcd)
+                subRegion = 'c';
+            else if (t <= tSat97)
+                subRegion = 's';
+            else if (t <= tBjk)
+                subRegion = 'r';
+            else
+                subRegion = 'k';
+        }
+        else if (p > 19.00881189173929)
+        {
+            double tBcd = T_atRegionBoundary(p, "3cd");
+            double tSat97 = TSat(p);
+
+            if (t <= tBcd)
+                subRegion = 'c';
+            else if (t <= tSat97)
+                subRegion = 's';
+            else
+                subRegion = 't';
+        }
+        else
+        {
+            double tSat97 = TSat(p);
+            if (t <= tSat97)
+                subRegion = 'c';
+            else
+                subRegion = 't';
+        }
+    }
+    return subRegion;
+}
+
+double pT2v_reg3(double p, double T)
+{
+    // p is pressure in MPa
+    // t is temperature in K
+    // returns density in kg/m3
+    char subRegion;
+    // set the region
+    subRegion = SubRegion3(p, T);
+    double v = Vpt_3subreg(p, T, subRegion);
+    return v;
+}
+
+
+//  Initialize coefphicients and exponents for region 3
+
+double p2h3ab(double p)
+{
+  // Page 6 Table 2. Numerical values of the coefficients of the equation h3ab(p) in
+  // its dimensionless form, Eq. (1), for defining the boundary
+  // between subregions 3a and 3b
+  static double n[4] = {0.201464004206875E+04,
+                        0.374696550136983E+01,
+                        -0.219921901054187E-01,
+                        0.875131686009950E-04};
+  double eta, pi;
+  pi = p / 1.0;
+  eta = n[0] + pi * (n[1] + pi * (n[2] + n[3] * pi));
+  return (eta * 1.0);
+}
+
+double theta3aph(double pi, double eta)
+{
+  // (p,h)->T for region 3a
+  // Page7 Table 3. Coefficients and exponents of the backward equation T3a(p,h) for subregion 3a in its
+  // dimensionless form, Eq. (2)
+  IJnData IJn[31] = {
+      {-12, 0, -1.33645667811215e-7},
+      {-12, 1, 4.55912656802978e-6},
+      {-12, 2, -1.46294640700979e-5},
+      {-12, 6, 6.39341312970080e-3},
+      {-12, 14, 3.72783927268847e2},
+
+      {-12, 16, -7.18654377460447e3},
+      {-12, 20, 5.73494752103400e5},
+      {-12, 22, -2.67569329111439e6},
+      {-10, 1, -3.34066283302614e-5},
+      {-10, 5, -2.45479214069597e-2},
+
+      {-10, 12, 4.78087847764996e1},
+      {-8, 0, 7.64664131818904e-6},
+      {-8, 2, 1.28350627676972e-3},
+      {-8, 4, 1.71219081377331e-2},
+      {-8, 10, -8.51007304583213},
+
+      {-5, 2, -1.36513461629781e-2},
+      {-3, 0, -3.84460997596657e-6},
+      {-2, 1, 3.37423807911655e-3},
+      {-2, 3, -5.51624873066791e-1},
+      {-2, 4, 7.29202277107470e-1},
+
+      {-1, 0, -9.92522757376041e-3},
+      {-1, 2, -1.19308831407288e-1},
+      {0, 0, 7.93929190615421e-1},
+      {0, 1, 4.54270731799386e-1},
+      {1, 1, 2.09998591259910e-1},
+
+      {3, 0, -6.42109823904738e-3},
+      {3, 1, -2.35155868604540e-2},
+      {4, 0, 2.52233108341612e-3},
+      {4, 3, -7.64885133368119e-3},
+      {10, 4, 1.36176427574291e-2},
+
+      {12, 5, -1.33027883575669e-2}};
+
+  pi = pi + 0.240;
+  eta = eta - 0.615;
+  // theta = 0.0;
+  // for (int k = 0; k < 31; k++)
+  //   theta += IJn[k].n * pow(pi, IJn[k].I) * pow(eta, IJn[k].J);
+
+  double theta = poly(pi, eta, 31, IJn);
+  return (theta);
+}
+
+double ph2T3a_reg3(double p, double h)
+{
+  double eta, pi;
+  pi = p / 100.0;
+  eta = h / 2300.0;
+  return (760.0 * theta3aph(pi, eta));
+}
+//-------------------------------------------------
+// (p,h)   3b
+//--------------------------------------------------
+double theta3bph(double pi, double eta)
+{
+  // Table 4. Coefficients and exponents of the backward equation T3b=(p,h) for subregion 3b in its
+  // dimensionless form, Eq. (3)
+  IJnData IJn[33] = {
+      {-12, 0, 3.23254573644920e-5},
+      {-12, 1, -1.27575556587181e-4},
+      {-10, 0, -4.75851877356068e-4},
+      {-10, 1, 1.56183014181602e-3},
+      {-10, 5, 1.05724860113781e-1},
+
+      {-10, 10, -8.58514221132534e1},
+      {-10, 12, 7.24140095480911e2},
+      {-8, 0, 2.96475810273257e-3},
+      {-8, 1, -5.92721983365988e-3},
+      {-8, 2, -1.26305422818666e-2},
+
+      {-8, 4, -1.15716196364853e-1},
+      {-8, 10, 8.49000969739595e1},
+      {-6, 0, -1.08602260086615e-2},
+      {-6, 1, 1.54304475328851e-2},
+      {-6, 2, 7.50455441524466e-2},
+
+      {-4, 0, 2.52520973612982e-2},
+      {-4, 1, -6.02507901232996e-2},
+      {-3, 5, -3.07622221350501},
+      {-2, 0, -5.74011959864879e-2},
+      {-2, 4, 5.03471360939849},
+
+      {-1, 2, -9.25081888584834e-1},
+      {-1, 4, 3.91733882917546},
+      {-1, 6, -7.73146007130190e1},
+      {-1, 10, 9.49308762098587e3},
+      {-1, 14, -1.41043719679409e6},
+
+      {-1, 16, 8.49166230819026e6},
+      {0, 0, 8.61095729446704e-1},
+      {0, 2, 3.23346442811720e-1},
+      {1, 1, 8.73281936020439e-1},
+      {3, 1, -4.36653048526683e-1},
+
+      {5, 1, 2.86596714529479e-1},
+      {6, 1, -1.31778331276228e-1},
+      {8, 1, 6.76682064330275e-3}};
+
+  pi = pi + 0.298;
+  eta = eta - 0.720;
+  // theta = 0.0;
+  // for (int k = 0; k < 33; k++)
+  // theta += IJn[k].n * pow(pi, IJn[k].I) * pow(eta, IJn[k].J);
+  double theta = poly(pi, eta, 33, IJn);
+  return (theta);
+}
+
+double ph2T3b_reg3(double p, double h)
+{
+  double eta, pi;
+  pi = p / 100.0;
+  eta = h / 2800.0;
+  return (860.0 * theta3bph(pi, eta));
+}
+//----------------------------------------------
+// Region 3a (p,h)->v
+//----------------------------------------------
+double omega3aph(double pi, double eta)
+{
+  // Page9 Table 6. Coefficients and exponents of the backward equation v3a(p,h) for subregion 3a in its
+  // dimensionless form, Eq. (4)
+  IJnData IJn[] = {
+      {-12, 6, 5.29944062966028e-3},
+      {-12, 8, -1.70099690234461e-1},
+      {-12, 12, 1.11323814312927e1},
+      {-12, 18, -2.17898123145125e3},
+      {-10, 4, -5.06061827980875e-4},
+      {-10, 7, 5.56495239685324e-1},
+      {-10, 10, -9.43672726094016},
+      {-8, 5, -2.97856807561527e-1},
+      {-8, 12, 9.39353943717186e1},
+      {-6, 3, 1.92944939465981e-2},
+      {-6, 4, 4.21740664704763e-1},
+      {-6, 22, -3.68914126282330e6},
+      {-4, 2, -7.37566847600639e-3},
+      {-4, 3, -3.54753242424366e-1},
+      {-3, 7, -1.99768169338727},
+      {-2, 3, 1.15456297059049},
+      {-2, 16, 5.68366875815960e3},
+      {-1, 0, 8.08169540124668e-3},
+      {-1, 1, 1.72416341519307e-1},
+      {-1, 2, 1.04270175292927},
+      {-1, 3, -2.97691372792847e-1},
+      {0, 0, 5.60394465163593e-1},
+      {0, 1, 2.75234661176914e-1},
+      {1, 0, -1.48347894866012e-1},
+      {1, 1, -6.51142513478515e-2},
+      {1, 2, -2.92468715386302},
+      {2, 0, 6.64876096952665e-2},
+      {2, 2, 3.52335014263844},
+      {3, 0, -1.46340792313332e-2},
+      {4, 2, -2.24503486668184},
+      {5, 2, 1.10533464706142},
+      {8, 2, -4.08757344495612e-2}};
+  pi = pi + 0.128;
+  eta = eta - 0.727;
+  // omega = 0.0;
+  // for (int k = 0; k < 32; k++)
+  //   omega += IJn[k].n * pow(pi, IJn[k].I) * pow(eta, IJn[k].J);
+  double omega = poly(pi, eta, 32, IJn);
+  return (omega);
+}
+
+double ph2v3a_reg3(double p, double h)
+{
+  double eta, pi;
+  pi = p / 100.0;
+  eta = h / 2100.0;
+  return (0.0028 * omega3aph(pi, eta));
+}
+//-------------------------------------------------
+// (p,h)->v 3b
+//--------------------------------------------------
+double omega3bph(double pi, double eta)
+{
+  // Page 9
+  // Table 7. Coefficients and exponents of the backward equation v3b (p,h) for subregion 3b in its
+  // dimensionless form, Eq. (5)
+  IJnData IJn[30] = {
+      {-12, 0, -2.25196934336318e-9},
+      {-12, 1, 1.40674363313486e-8},
+      {-8, 0, 2.33784085280560e-6},
+      {-8, 1, -3.31833715229001e-5},
+      {-8, 3, 1.07956778514318e-3},
+      {-8, 6, -2.71382067378863e-1},
+      {-8, 7, 1.07202262490333},
+      {-8, 8, -8.53821329075382e-1},
+      {-6, 0, -2.15214194340526e-5},
+      {-6, 1, 7.69656088222730e-4},
+      {-6, 2, -4.31136580433864e-3},
+      {-6, 5, 4.53342167309331e-1},
+      {-6, 6, -5.07749535873652e-1},
+      {-6, 10, -1.00475154528389e2},
+      {-4, 3, -2.19201924648793e-1},
+      {-4, 6, -3.21087965668917},
+      {-4, 10, 6.07567815637771e2},
+      {-3, 0, 5.57686450685932e-4},
+      {-3, 2, 1.87499040029550e-1},
+      {-2, 1, 9.05368030448107e-3},
+      {-2, 2, 2.85417173048685e-1},
+      {-1, 0, 3.29924030996098e-2},
+      {-1, 1, 2.39897419685483e-1},
+      {-1, 4, 4.82754995951394},
+      {-1, 5, -1.18035753702231e1},
+      {0, 0, 1.69490044091791e-1},
+      {1, 0, -1.79967222507787e-2},
+      {1, 1, 3.71810116332674e-2},
+      {2, 2, -5.36288335065096e-2},
+      {2, 6, 1.60697101092520}};
+  pi = pi + 0.0661;
+  eta = eta - 0.720;
+  // omega = 0.0;
+  // for (int k = 0; k < 30; k++)
+  //  omega += IJn[k].n * pow(pi, IJn[k].I) * pow(eta, IJn[k].J);
+  double omega = poly(pi, eta, 30, IJn);
+  return (omega);
+}
+
+double ph2v3b_reg3(double p, double h)
+{
+  double eta, pi;
+  pi = p / 100.0;
+  eta = h / 2800.0;
+  return (0.0088 * omega3bph(pi, eta));
+}
+
+//------------------------------------------------------------
+// Region 3(3a,3b)  (p,h)->T
+//------------------------------------------------------------
+
+double ph2T_reg3(double p, double h)
+{
+  double T;
+  double h3ab = p2h3ab(p);
+  if (h <= h3ab)
+  {
+    T = ph2T3a_reg3(p, h);
+  }
+  else
+  {
+    T = ph2T3b_reg3(p, h);
+  }
+  return (T);
+}
+
+double ph2v_reg3(double p, double h)
+{
+  double v;
+  double h3ab = p2h3ab(p);
+  if (h <= h3ab)
+  {
+    v = ph2v3a_reg3(p, h);
+  }
+  else
+  {
+    v = ph2v3b_reg3(p, h);
+  }
+  return (v);
+}
+
+//------------------------------------------------------------
+// (p,s)->T   3a Page 13, Table 11  Page 12 Eq(7)
+//---------------------------------------------------------------
+double theta3aps(double pi, double sigma)
+{
+  IJnData IJn[] = {{-12, 28, 0.150042008263875E+10},
+                   {-12, 32, -0.159397258480424E+12},
+                   {-10, 4, 0.502181140217975E-03},
+                   {-10, 10, -0.672057767855466E+02},
+                   {-10, 12, 0.145058545404456E+04},
+                   {-10, 14, -0.823889534888890E+04},
+                   {-8, 5, -0.154852214233853E+00},
+                   {-8, 7, 0.112305046746695E+02},
+                   {-8, 8, -0.297000213482822E+02},
+                   {-8, 28, 0.438565132635495E+11},
+                   {-6, 2, 0.137837838635464E-02},
+                   {-6, 6, -0.297478527157462E+01},
+                   {-6, 32, 0.971777947349413E+13},
+                   {-5, 0, -0.571527767052398E-04},
+                   {-5, 14, 0.288307949778420E+05},
+                   {-5, 32, -0.744428289262703E+14},
+                   {-4, 6, 0.128017324848921E+02},
+                   {-4, 10, -0.368275545889071E+03},
+                   {-4, 36, 0.664768904779177E+16},
+                   {-2, 1, 0.449359251958880E-01},
+                   {-2, 4, -0.422897836099655E+01},
+                   {-1, 1, -0.240614376434179E+00},
+                   {-1, 6, -0.474341365254924E+01},
+                   {0, 0, 0.724093999126110E+00},
+                   {0, 1, 0.923874349695897E+00},
+                   {0, 4, 0.399043655281015E+01},
+                   {1, 0, 0.384066651868009E-01},
+                   {2, 0, -0.359344365571848E-02},
+                   {2, 3, -0.735196448821653E+00},
+                   {3, 2, 0.188367048396131E+00},
+                   {8, 0, 0.141064266818704E-03},
+                   {8, 1, -0.257418501496337E-02},
+                   {10, 2, 0.123220024851555E-02}};
+  pi = pi + 0.240;
+  sigma = sigma - 0.703;
+  // theta = 0.0;
+  // for (int k = 0; k < 33; k++)
+  //   theta += n[k] * pow(pi, i[k]) * pow(sigma, j[k]);
+  double theta = poly(pi, sigma, 33, IJn);
+  return (theta);
+}
+
+double ps2T3a_reg3(double p, double s)
+{
+  double pi, sigma;
+  pi = p / 100.0;
+  sigma = s / 4.4;
+  return (760.0 * theta3aps(pi, sigma));
+}
+//------------------------------------------------------------
+// (p,s)->T   3b  Page 13, Table 12, Page 12 Eq(7)
+//---------------------------------------------------------------
+double theta3bps(double pi, double sigma)
+{
+  IJnData IJn[28] = {{-12, 1, 0.527111701601660E+00},
+                     {-12, 3, -0.401317830052742E+02},
+                     {-12, 4, 0.153020073134484E+03},
+                     {-12, 7, -0.224799398218827E+04},
+                     {-8, 0, -0.193993484669048E+00},
+                     {-8, 1, -0.140467557893768E+01},
+                     {-8, 3, 0.426799878114024E+02},
+                     {-6, 0, 0.752810643416743E+00},
+                     {-6, 2, 0.226657238616417E+02},
+                     {-6, 4, -0.622873556909932E+03},
+                     {-5, 0, -0.660823667935396E+00},
+                     {-5, 1, 0.841267087271658E+00},
+                     {-5, 2, -0.253717501764397E+02},
+                     {-5, 4, 0.485708963532948E+03},
+                     {-5, 6, 0.880531517490555E+03},
+                     {-4, 12, 0.265015592794626E+07},
+                     {-3, 1, -0.359287150025783E+00},
+                     {-3, 6, -0.656991567673753E+03},
+                     {-2, 2, 0.241768149185367E+01},
+                     {0, 0, 0.856873461222588E+00},
+                     {2, 1, 0.655143675313458E+00},
+                     {3, 1, -0.213535213206406E+00},
+                     {4, 0, 0.562974957606348E-02},
+                     {5, 24, -0.316955725450471E+15},
+                     {6, 0, -0.699997000152457E-03},
+                     {8, 3, 0.119845803210767E-01},
+                     {12, 1, 0.193848122022095E-04},
+                     {14, 2, -0.215095749182309E-04}};
+  pi = pi + 0.760;
+  sigma = sigma - 0.818;
+  // theta = 0.0;
+  // for (int k = 0; k < 28; k++)
+  //   theta += n[k] * pow(pi, i[k]) * pow(sigma, j[k]);
+  double theta = poly(pi, sigma, 28, IJn);
+  return (theta);
+}
+
+double ps2T3b_reg3(double p, double s)
+{
+  double pi, sigma;
+  pi = p / 100.0;
+  sigma = s / 5.3;
+  return (860.0 * theta3bps(pi, sigma));
+}
+//------------------------------------------------------------
+// (p,s)->v  3a Page 15, Table 14  Page 14, Eq(8), Ok! 2003.12.18
+//---------------------------------------------------------------
+double omega3aps(double pi, double sigma)
+{
+  IJnData IJn[28] = {{-12, 10, 0.795544074093975E+02},
+                     {-12, 12, -0.238261242984590E+04},
+                     {-12, 14, 0.176813100617787E+05},
+                     {-10, 4, -0.110524727080379E-02},
+                     {-10, 8, -0.153213833655326E+02},
+                     {-10, 10, 0.297544599376982E+03},
+                     {-10, 20, -0.350315206871242E+08},
+                     {-8, 5, 0.277513761062119},
+                     {-8, 6, -0.523964271036888},
+                     {-8, 14, -0.148011182995403E+06},
+                     {-8, 16, 0.160014899374266E+07},
+                     {-6, 28, 0.170802322663427E+13},
+                     {-5, 1, 0.246866996006494E-03},
+                     {-4, 5, 0.165326084797980E+01},
+                     {-3, 2, -0.118008384666987},
+                     {-3, 4, 0.253798642355900E+01},
+                     {-2, 3, 0.965127704669424},
+                     {-2, 8, -0.282172420532826E+02},
+                     {-1, 1, 0.203224612353823},
+                     {-1, 2, 0.110648186063513E+01},
+                     {0, 0, 0.526127948451280},
+                     {0, 1, 0.277000018736321},
+                     {0, 3, 0.108153340501132E+01},
+                     {1, 0, -0.744127885357893E-01},
+                     {2, 0, 0.164094443541384E-01},
+                     {4, 2, -0.680468275301065E-01},
+                     {5, 2, 0.257988576101640E-01},
+                     {6, 0, -0.145749861944416E-03}};
+
+  pi = pi + 0.187;
+  sigma = sigma - 0.755;
+  // omega = 0.0;
+  // for (int k = 0; k < 28; k++)
+  //   omega += n[k] * pow(pi, i[k]) * pow(sigma, j[k]);
+  double omega = poly(pi, sigma, 28, IJn);
+  return (omega);
+}
+
+double ps2v3a_reg3(double p, double s)
+{
+  double pi, sigma;
+  pi = p / 100.0;
+  sigma = s / 4.4;
+  return (0.0028 * omega3aps(pi, sigma));
+}
+//-------------------------------------------------------------------
+// (p,s)->v  3b Page 15, Table 15  Page 14, Eq(9)   OK! 2003.12.18
+//-------------------------------------------------------------------
+double omega3bps(double pi, double sigma)
+{
+  IJnData IJn[] = {{-12, 0, 0.591599780322238E-04},
+                   {-12, 1, -0.185465997137856E-02},
+                   {-12, 2, 0.104190510480013E-01},
+                   {-12, 3, 0.598647302038590E-02},
+                   {-12, 5, -0.771391189901699},
+                   {-12, 6, 0.172549765557036E+01},
+                   {-10, 0, -0.467076079846526E-03},
+                   {-10, 1, 0.134533823384439E-01},
+                   {-10, 2, -0.808094336805495E-01},
+                   {-10, 4, 0.508139374365767},
+                   {-8, 0, 0.128584643361683E-02},
+                   {-5, 1, -0.163899353915435E+01},
+                   {-5, 2, 0.586938199318063E+01},
+                   {-5, 3, -0.292466667918613E+01},
+                   {-4, 0, -0.614076301499537E-02},
+                   {-4, 1, 0.576199014049172E+01},
+                   {-4, 2, -0.121613320606788E+02},
+                   {-4, 3, 0.167637540957944E+01},
+                   {-3, 1, -0.744135838773463E+01},
+                   {-2, 0, 0.378168091437659E-01},
+                   {-2, 1, 0.401432203027688E+01},
+                   {-2, 2, 0.160279837479185E+02},
+                   {-2, 3, 0.317848779347728E+01},
+                   {-2, 4, -0.358362310304853E+01},
+                   {-2, 12, -0.115995260446827E+07},
+                   {0, 0, 0.199256573577909},
+                   {0, 1, -0.122270624794624},
+                   {0, 2, -0.191449143716586E+02},
+                   {1, 0, -0.150448002905284E-01},
+                   {1, 2, 0.146407900162154E+02},
+                   {2, 2, -0.327477787188230E+01}};
+
+  pi = pi + 0.298;
+  sigma = sigma - 0.816;
+  // omega = 0.0;
+  // for (int k = 0; k < 31; k++)
+  //   omega += n[k] * pow(pi, i[k]) * pow(sigma, j[k]);
+  double omega = poly(pi, sigma, 31, IJn);
+  return (omega);
+}
+
+double ps2v3b_reg3(double p, double s)
+{
+  double pi, sigma;
+  pi = p / 100.0;
+  sigma = s / 5.3;
+  return (0.0088 * omega3bps(pi, sigma));
+}
+
+double ps2T_reg3(double p, double s)
+{
+  double T;
+  if (s <= sc_water)
+  {
+    T = ps2T3a_reg3(p, s);
+  }
+  else
+  {
+    T = ps2T3b_reg3(p, s);
+  }
+  return (T);
+}
+
+double ps2v_reg3(double p, double s)
+{
+  double v;
+
+  if (s <= sc_water)
+  {
+    v = ps2v3a_reg3(p, s);
+  }
+  else
+  {
+    v = ps2v3b_reg3(p, s);
+  }
+  return (v);
+}
+
 
 // The helper function to sum the sub-region (p,T)->v
 // p is pressure in MPa

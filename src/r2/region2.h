@@ -13,6 +13,11 @@
 
 #include "../common/common.h"
 
+void solo_i_j_power_reg2(double vi, double vj, double soI_pow[], double soJ_pow[]);
+
+static const double r2Tstar = 540.0; // K
+static const double r2pstar = 1.0;   // Mpa 为减少计算，没有使用这个变量
+
 double gamma0_reg2(double tau, double pi);
 double gamma0_pi_reg2(double pi);
 double gamma0_pipi_reg2(double pi);

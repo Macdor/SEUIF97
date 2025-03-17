@@ -29,67 +29,7 @@
 
 #include <math.h>
 #include <stdint.h>
-#include "../common/constand.h"
-#include "../common/propertry_id.h"
-#include "../algo/algorithm.h"
 #include "region1.h"
-#include "region1_coff.h"
-#include "region1_solo_ij.h"
-
-// Region1: the extended properties
-double pT_ext_reg1(double p, double T, int o_id)
-{
-    double r = 0.0;
-    switch (o_id)
-    {
-    case OKISE:
-        r = pT2k_reg1(p, T);
-        break;
-    case OIPCEC:
-        r = pT2ipcec_reg1(p, T);
-        break;
-    case OKT:
-        r = pT2kt_reg1(p, T);
-        break;
-    case OG:
-        r = pT2g_reg1(p, T);
-        break;
-    case OF:
-        r = pT2f_reg1(p, T);
-        break;
-    case OJTC:
-        r = pT2joule_reg1(p, T);
-        break;
-        break;
-    case OIJTC:
-        r = pT2ijoule_reg1(p, T);
-        break;
-    case OZ:
-        r = pT2z_reg1(p, T);
-        break;
-    case OE:
-        r = pT2e_reg1(p, T);
-        break;
-    case ODPDT:
-        r = pT2dpdtcv_reg1(p, T);
-        break;
-    case ODVDP:
-        r = pT2dvdpct_reg1(p, T);
-        break;
-    case ODVDT:
-        r = pT2dvdtcp_reg1(p, T);
-        break;
-    /*
-       OPC => pT2pc_reg1(p, T),
-       OBETAP => pT2batap_reg1(p, T),
-       OFI => pT2fi_reg1(p, T),
-       OFU => pT2fu_reg1(p, T),
-       OALFAP => pT2alfap_reg1(p, T),*/
-    default:
-        r = INVALID_OUTID;
-    }
-    return r;
-}
 
 // k:Isentropic exponent OKISE 11
 // * k= -(v/p)*/1000*(dp/dv)s
@@ -253,3 +193,29 @@ double pT2dvdtcp_reg1(double p, double T)
     polys_solo_i_ij_reg1(pi, tau, &gamma_pi, &gamma_pitau);
     return 0.001 * rgas_water * (gamma_pi - tau * gamma_pitau) / r1pstar;
 }
+
+// // (dv/dh)p m3/(kg.K)
+// double pT2dvdhcp_reg1(double p, double T)
+// {
+//     double tau = r1Tstar / T;
+//     double pi = p / r1pstar;
+//     // 0.001 * RGAS_WATER * (gamma_pi_reg1(tau, pi) - tau * gamma_pitau_reg1(tau, pi)) / r1pstar
+//     double gamma_pi = 0.0;
+//     double gamma_pitau = 0.0;
+
+//     polys_solo_i_ij_reg1(pi, tau, &gamma_pi, &gamma_pitau);
+//     return 1000 * rgas_water * (gamma_pi - tau * gamma_pitau) / r1pstar;
+// }
+
+// // (dv/dp)h m3/(kg.K)
+// double pT2dvdpch_reg1(double p, double T)
+// {
+//     double tau = r1Tstar / T;
+//     double pi = p / r1pstar;
+//     // 0.001 * RGAS_WATER * (gamma_pi_reg1(tau, pi) - tau * gamma_pitau_reg1(tau, pi)) / r1pstar
+//     double gamma_pi = 0.0;
+//     double gamma_pitau = 0.0;
+
+//     polys_solo_i_ij_reg1(pi, tau, &gamma_pi, &gamma_pitau);
+//     return 0.001 * rgas_water * (gamma_pi - tau * gamma_pitau) / r1pstar;
+// }

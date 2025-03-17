@@ -14,8 +14,6 @@
 #include <math.h>
 #include "../common/constand.h"
 #include "../common/common.h"
-#include "../common/propertry_id.h"
-#include "../algo/algorithm.h"
 
 // Prandtl number=dv*cp/tc
 // * dv: Dynamic viscosity Pa.s
@@ -61,7 +59,7 @@ double viscosity(double rho, double T)
     double suma = 0.0;
     for (int i = 0; i < 4; i++)
     {
-        suma += no[i] / IPOW(Tr, i);
+        suma += no[i] / ipowsac(Tr, i);
     }
     double fi0 = 100.0 * sqrt(Tr) / suma;
 
@@ -122,7 +120,7 @@ double thCond(double rho, double T)
     double suma = 0.0;
     for (int i = 0; i < 5; i++)
     {
-        suma += no[i] / IPOW(Tr, i);
+        suma += no[i] / ipowsac(Tr, i);
     }
     double L0 = sqrt(Tr) / suma;
     // Page 6 Table 2.  Coefficients Lij in Eq(17)
@@ -141,9 +139,9 @@ double thCond(double rho, double T)
         for (int j = 0; j < 6; j++)
 
         {
-            suma2 += nij[i][j] * IPOW(d - 1.0, j);
+            suma2 += nij[i][j] * ipowsac(d - 1.0, j);
         }
-        suma += IPOW(1.0 / Tr - 1.0, i) * suma2;
+        suma += ipowsac(1.0 / Tr - 1.0, i) * suma2;
     };
 
     double L1 = exp(d * suma);

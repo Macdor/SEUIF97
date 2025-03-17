@@ -6,8 +6,26 @@
 */
 #include <math.h>
 #include "region5.h"
-#include "region5_coff.h"
-#include "../algo/algorithm.h"
+
+static const int Jo[6] = {0, 1, -3, -2, -1, 2};
+
+static const double no[6] = {
+	-0.13179983674201e+2,
+	0.68540841634434e+1,
+	-0.24805148933466e-1,
+	0.36901534980333,
+	-0.31161318213925e+1,
+	-0.32961626538917};
+
+// Table 38. coefficients and exponents of the residual part r of the dimensionless Gibbs free energy for region 5, Eq.(34)
+static IJnData IJn[] = {
+	{1, 1, 0.15736404855259e-2},
+	{1, 2, 0.90153761673944e-3},
+	{1, 3, -0.50270077677648e-2},
+	{2, 3, 0.22440037409485e-5},
+	{2, 9, -0.41163275453471e-5},
+	{3, 7, 0.37919454822955e-7}};
+
 
 //	P37 Table 37
 //  Ideal properties for Region 5
@@ -19,7 +37,7 @@ double gamma0_reg5(double pi, double tau)
 {
 	double value = log(pi);
 	for (unsigned i = 0; i < 6; i++)
-		value += no[i] * IPOW(tau, Jo[i]);
+		value += no[i] * ipowsac(tau, Jo[i]);
 	return value;
 }
 
@@ -39,7 +57,7 @@ double gamma0_tau_reg5(double tau)
 {
 	double value = 0.0;
 	for (unsigned i = 0; i < 6; i++)
-		value += no[i] * Jo[i] * IPOW(tau, Jo[i] - 1);
+		value += no[i] * Jo[i] * ipowsac(tau, Jo[i] - 1);
 	return value;
 }
 
@@ -47,7 +65,7 @@ double gamma0_tautau_reg5(double tau)
 {
 	double value = 0.0;
 	for (unsigned i = 0; i < 6; i++)
-		value += no[i] * Jo[i] * (Jo[i] - 1) * IPOW(tau, Jo[i] - 2);
+		value += no[i] * Jo[i] * (Jo[i] - 1) * ipowsac(tau, Jo[i] - 2);
 	return value;
 }
 
@@ -60,7 +78,7 @@ double gammar_reg5(double pi, double tau)
 {
 	double value = 0.0;
 	for (int i = 0; i < 6; i++)
-		value += IJn[i].n * IPOW(pi, IJn[i].I) * IPOW(tau, IJn[i].J);
+		value += IJn[i].n * ipowsac(pi, IJn[i].I) * ipowsac(tau, IJn[i].J);
 	return value;
 }
 
@@ -70,7 +88,7 @@ double gammar_pi_reg5(double pi, double tau)
 {
 	double value = 0.0;
 	for (unsigned i = 0; i < 6; i++)
-		value += IJn[i].n * IJn[i].I * IPOW(pi, IJn[i].I - 1) * IPOW(tau, IJn[i].J);
+		value += IJn[i].n * IJn[i].I * ipowsac(pi, IJn[i].I - 1) * ipowsac(tau, IJn[i].J);
 	return value;
 }
 
@@ -78,7 +96,7 @@ double gammar_pipi_reg5(double pi, double tau)
 {
 	double value = 0.0;
 	for (unsigned i = 0; i < 6; i++)
-		value += IJn[i].n * IJn[i].I * (IJn[i].I - 1) * IPOW(pi, IJn[i].I - 2) * IPOW(tau, IJn[i].J);
+		value += IJn[i].n * IJn[i].I * (IJn[i].I - 1) * ipowsac(pi, IJn[i].I - 2) * ipowsac(tau, IJn[i].J);
 	return value;
 }
 
@@ -86,7 +104,7 @@ double gammar_tau_reg5(double pi, double tau)
 {
 	double value = 0.0;
 	for (unsigned i = 0; i < 6; i++)
-		value += IJn[i].n * IPOW(pi, IJn[i].I) * IJn[i].J * IPOW(tau, IJn[i].J - 1);
+		value += IJn[i].n * ipowsac(pi, IJn[i].I) * IJn[i].J * ipowsac(tau, IJn[i].J - 1);
 	return value;
 }
 
@@ -95,7 +113,7 @@ double gammar_tautau_reg5(double pi, double tau)
 {
 	double value = 0.0;
 	for (unsigned i = 0; i < 6; i++)
-		value += IJn[i].n * IPOW(pi, IJn[i].I) * IJn[i].J * (IJn[i].J - 1) * IPOW(tau, IJn[i].J - 2);
+		value += IJn[i].n * ipowsac(pi, IJn[i].I) * IJn[i].J * (IJn[i].J - 1) * ipowsac(tau, IJn[i].J - 2);
 	return value;
 }
 
@@ -103,6 +121,6 @@ double gammar_pitau_reg5(double pi, double tau)
 {
 	double value = 0.0;
 	for (unsigned i = 0; i < 6; i++)
-		value += IJn[i].n * IJn[i].I * IPOW(pi, IJn[i].I - 1) * IJn[i].J * IPOW(tau, IJn[i].J - 1);
+		value += IJn[i].n * IJn[i].I * ipowsac(pi, IJn[i].I - 1) * IJn[i].J * ipowsac(tau, IJn[i].J - 1);
 	return value;
 }
