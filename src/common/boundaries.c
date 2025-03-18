@@ -4,6 +4,10 @@
 */
 #include <math.h>
 #include "common.h"
+#include "../r1/region1.h"
+#include "../r2/region2.h"
+#include "../r3/region3.h"
+#include "../r4/region4.h"
 
 double B23_T2p(double T)
 // IF97-rev Boundary between Regions 2 and 3

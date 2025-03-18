@@ -39,3 +39,5 @@ double Th_reg4(double T, double h, int o_id);
 double hx_reg4(double h, double x, int o_id);
 double sx_reg4(double s, double x, int o_id);
 
+double Ty2x_residuals(double T, double x, double y, int y_id);
+double bisection_reg4(double x, double y, int y_id, double Tl, double Tr, double tol, int maxiter);

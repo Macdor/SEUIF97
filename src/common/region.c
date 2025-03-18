@@ -58,6 +58,7 @@ int pT_region(double p, double T)
     if (TMIN5 < T && T <= TMAX5 &&
         Pmin <= p && p <= PMAX5)
         return 5;
+    return INVALID_VALUE;
 }
 
 //-----------------------------------------------------------------
@@ -192,6 +193,7 @@ int ps_region(double p, double s)
         if (p <= PMAX5 && s25 <= s && s <= smax)
             return 5;
     };
+    return INVALID_VALUE;
 }
 
 int hs_region(double h, double s)

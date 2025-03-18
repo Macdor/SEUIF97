@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "region3.h"
+#include "../r4/region4.h"
 
 // Region 3  (p,v)->T using the secant method and refine adjust
 // * p: pressure  MPa
@@ -1232,7 +1233,7 @@ double pT2v_sum(double p, double T, int size, IJnData *IJn, para d)
     double p1 = pow((p / d.PS - d.a), d.c);
     double t1 = pow((T / d.TS - d.b), d.d);
     double v = poly(p1, t1, size, IJn);
-    return powf(v, d.e) * d.VS;
+    return pow(v, d.e) * d.VS;
 }
 
 double Vpt_3a(double p, double T)

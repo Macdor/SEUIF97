@@ -95,7 +95,7 @@ double Ts2p_reg5(double T, double s)
 {
     double p, p1, p2, s1, s2, f1, f2;
     p1 = PMIN5; //
-    s1 == pT2s_reg5(p1, T);
+    s1 = pT2s_reg5(p1, T);
     f1 = s - s1;
     p2 = PMAX5;
     s2 = pT2s_reg5(p2, T);
