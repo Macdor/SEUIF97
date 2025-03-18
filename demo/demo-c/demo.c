@@ -22,18 +22,16 @@ Author: Cheng Maohua
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "seuif97.h"
+#include "../../src/common/seuif97.h"
 
 int main(void)
 {
 
     double p = 16.13;
-    double t = 535;
-    double h, s, v;
+    double x = 0.5;
+    double r;
 
-    h = pt(p, t, 4);
-    s = pt(p, t, 5);
-    v = pt(p, t, 3);
-    printf("(p,t)(%.2f,%.2f) h= %.2f, s= %.4f, v= %.4f\n", p, t, h, s, v);
+    r = px(p, x, 30);
+    printf("(p,x)(%.2f,%.2f) r= %.2f", p, x, r);
     return EXIT_SUCCESS;
 }

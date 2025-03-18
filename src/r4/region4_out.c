@@ -164,23 +164,26 @@ double px_reg4(double p, double x, int o_id)
 
    if (o_id == OP)
    return p;
+   if (o_id == OX)
+   return x;
    if (o_id == OT)
    return TSat(p);
    if (o_id == OR)
    return 4.0;
 
-   if (x == 0)
+   if (x == 0.0)
    {
       return p2SatWater(p, o_id);
    }
-   else if (x == 1)
+   else if (x == 1.0)
    {
       return p2SatSteam(p, o_id);
    }
 
-   if (x > 0 && x < 1)
+   if (x > 0.0 && x < 1.0)
    {
-      int cond = o_id == OV || o_id == OD || o_id == OH || o_id == OS || o_id == OU || o_id == OF || o_id == OG;
+      int cond;
+      cond = o_id == OV || o_id == OD || o_id == OH || o_id == OS || o_id == OU || o_id == OF || o_id == OG;
       if(cond)
       {
          double rL = p2SatWater(p, o_id);
@@ -188,17 +191,19 @@ double px_reg4(double p, double x, int o_id)
          r = rL + x * (rV - rL);
       }
       cond = o_id == ODVDPCH;
-      if(o_id == cond)
+      if(cond)
       {
          double hL = p2SatWater(p, OH);
          double hV = p2SatSteam(p, OH);
+         double vL = p2SatWater(p, OV);
+         double vV = p2SatSteam(p, OV);
          double rL = p2SatWater(p, o_id);
          double rV = p2SatSteam(p, o_id);
          double dx = (x*rV + (1-x)*rL)/(hL-hV);
-         r = rL + dx * (hV - hL) + x * (rV - rL);
+         r = rL + dx * (vV - vL) + x * (rV - rL);
       }
       cond = o_id == ODVDHCP;
-      if(o_id == cond)
+      if(cond)
       {
          double hL = p2SatWater(p, OH);
          double hV = p2SatSteam(p, OH);
@@ -216,23 +221,26 @@ double Tx_reg4(double T, double x, int o_id)
 
    if (o_id == OT)
    return T;
-   if (o_id == OT)
+   if (o_id == OX)
+   return x;
+   if (o_id == OP)
    return pSat(T);
    if (o_id == OR)
    return 4.0;
 
-   if (x == 0)
+   if (x == 0.0)
    {
       return T2SatWater(T, o_id);
    }
-   else if (x == 1)
+   else if (x == 1.0)
    {
       return T2SatSteam(T, o_id);
    }
 
-   if (x > 0 && x < 1)
+   if (x > 0.0 && x < 1.0)
    {
-      int cond = o_id == OV || o_id == OD || o_id == OH || o_id == OS || o_id == OU || o_id == OF || o_id == OG;
+      int cond;
+      cond = o_id == OV || o_id == OD || o_id == OH || o_id == OS || o_id == OU || o_id == OF || o_id == OG;
       if(cond)
       {
          double r1 = T2SatWater(T, o_id);
@@ -240,17 +248,19 @@ double Tx_reg4(double T, double x, int o_id)
          r = r1 + x * (r2 - r1);
       }
       cond = o_id == ODVDPCH;
-      if(o_id == cond)
+      if(cond)
       {
          double hL = T2SatWater(T, OH);
          double hV = T2SatSteam(T, OH);
+         double vL = T2SatWater(T, OV);
+         double vV = T2SatSteam(T, OV);
          double rL = T2SatWater(T, o_id);
          double rV = T2SatSteam(T, o_id);
          double dx = (x*rV + (1-x)*rL)/(hL-hV);
-         r = rL + dx * (hV - hL) + x * (rV - rL);
+         r = rL + dx * (vV - vL) + x * (rV - rL);
       }
       cond = o_id == ODVDHCP;
-      if(o_id == cond)
+      if(cond)
       {
          double hL = T2SatWater(T, OH);
          double hV = T2SatSteam(T, OH);
