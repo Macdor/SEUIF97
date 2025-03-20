@@ -16,7 +16,7 @@ In addition to the source code, the repository provides
 
 * the compiled shared libraries using GCC: [/shared_lib/](./shared_lib/)
 
-* the interfaces and examples of multiple programming languages:  [/demo/](./demo)
+* the interfaces and examples of the programming languages:  [/demo/](./demo)
 
    *  C/C++, Python, C#, Java, Excel VBA, MATLAB,  Rust, Fortran, Pascal, Modelica, Golang
 
