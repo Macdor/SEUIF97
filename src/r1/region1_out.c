@@ -176,6 +176,12 @@ double pT_thermal_reg1(double p, double T, int o_id)
     case OR:
         value = 1.0;
         break;
+    case OD:
+        value = 1.0/pT2v_reg1(p, T);
+        break;
+    case OV:
+        value = pT2v_reg1(p, T);
+        break;
     case OH:
         value = pT2h_reg1(p, T);
         break;
