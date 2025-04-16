@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8242452.svg)](https://doi.org/10.5281/zenodo.8242452)
 
-This is the C implementation of the high-speed IAPWS-IF97 package **seuif97**. It is suitable for computation-intensive calculations，such as heat cycle calculations, simulations of non-stationary processes, real-time process monitoring and optimizations.   
+This is the C implementation of the high-speed IAPWS-IF97 package **seuif97**. It is suitable for computation-intensive calculations，such as the simulation of non-stationary processes, on-line process monitoring and optimizations.
  
 Through the high-speed library, the results of the IAPWS-IF97 are accurately produced several times faster than repeated squaring method and `math.pow()` of the C standard library.   
 
