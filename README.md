@@ -6,6 +6,8 @@ This is the C implementation of the high-speed IAPWS-IF97 package **seuif97**. I
  
 Through the high-speed library, the results of the IAPWS-IF97 are accurately produced several times faster than repeated squaring method and `math.pow()` of the C standard library.   
 
+The speed of SETIF97 is also far faster than various approximate equations and algorithms for a fast calculation of the properties for water and steam.
+
 **The Fast Methods**
 
 * the shortest addition chain algorithm computes the integer power of a number quickly
