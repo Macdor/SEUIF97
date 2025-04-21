@@ -13,16 +13,14 @@
 
 #include "../common/common.h"
 
-void solo_i_j_power_reg2(double vi, double vj, double soI_pow[], double soJ_pow[]);
-
 static const double r2Tstar = 540.0; // K
 static const double r2pstar = 1.0;   // Mpa 为减少计算，没有使用这个变量
 
-double gamma0_reg2(double tau, double pi);
+double gamma0_reg2(double pi, double tau);
 double gamma0_pi_reg2(double pi);
 double gamma0_pipi_reg2(double pi);
 double gamma0_tau_reg2(double tau);
-double gamma0_tautau_reg2(double tau, double pi);
+double gamma0_tautau_reg2(double pi, double tau);
 double gamma0_pitau_reg2();
 
 double gammar_reg2(double pi, double tau);
@@ -31,14 +29,7 @@ double gammar_pipi_reg2(double pi, double tau);
 double gammar_pitau_reg2(double pi, double tau);
 double gammar_tau_reg2(double pi, double tau);
 double gammar_tautau_reg2(double pi, double tau);
-void polys_solo_0_i_reg2(double pi, double tau, double *poly, double *poly_pi);
-void polys_solo_0_j_reg2(double pi, double tau, double *poly, double *poly_tau);
-void polys_solo_i_j_reg2(double pi, double tau, double *poly_pi, double *poly_tau);
-void polys_solo_i_ii_reg2(double pi, double tau, double *poly_pi, double *poly_pipi);
-void polys_solo_i_ij_reg2(double pi, double tau, double *poly_pi, double *poly_pitau);
-void polys_solo_i_ii_ij_reg2(double pi, double tau, double *poly_pi, double *poly_pipi, double *poly_pitau);
-void polys_solo_i_ij_jj_reg2(double pi, double tau, double *poly_pi, double *poly_pitau, double *poly_tautau);
-void polys_solo_i_ii_ij_jj_reg2(double pi, double tau, double *poly_pi, double *poly_pipi, double *poly_pitau, double *poly_tautau);
+void polys_0_i_ii_j_jj_ij_reg2(double pi, double tau, double *gamma, double *gamma_pi, double *gamma_pipi, double *gamma_tau, double *gamma_tautau, double *gamma_pitau);
 
 // IF97 fundamental: (p,t)
 double pT2v_reg2(double p, double T);
@@ -66,6 +57,8 @@ double pT2e_reg2(double p, double T);
 double pT2dpdtcv_reg2(double p, double T);
 double pT2dvdpct_reg2(double p, double T);
 double pT2dvdtcp_reg2(double p, double T);
+double pT2dvdhcp_reg2(double p, double T);
+double pT2dvdpch_reg2(double p, double T);
 
 double pT2v_reg2(double p, double T);
 double pT2u_reg2(double p, double T);

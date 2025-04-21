@@ -291,11 +291,17 @@ double pT2u_reg2(double p, double T)
 {
     double tau = r2Tstar / T;
     double pi = p;
-    // return rgas_water * T * (tau * (gamma0_tau_reg2(tau) + gammartau_reg2(pi,tau)) - pi * (gamma0_pi_reg2(pi) + gammarpi_reg2(pi,tau)));
-    double gammar_pi = 0;
-    double gammar_tau = 0.0;
-    polys_solo_i_j_reg2(pi, tau, &gammar_pi, &gammar_tau);
-    return rgas_water * T * (tau * (gamma0_tau_reg2(tau) + gammar_tau) - pi * (gamma0_pi_reg2(pi) + gammar_pi));
+
+    double gammar = 0.0;
+    double gammarpi = 0.0;
+    double gammarpipi = 0.0;
+    double gammartau = 0.0;
+    double gammartautau = 0.0;
+    double gammarpitau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+
+    return rgas_water * T * (tau * (gamma0_tau_reg2(tau) + gammartau) - pi * (gamma0_pi_reg2(pi) + gammarpi));
 }
 
 double pT2cp_reg2(double p, double T)
@@ -321,16 +327,18 @@ double pT2cv_reg2(double p, double T)
 {
     double tau = r2Tstar / T;
     double pi = p;
-    // double a = 1 + pi * gammarpi_reg2(pi,tau) - tau * pi * gammarpitau_reg2(pi,tau);
-    // return rgas_water * (-tau * tau * (gamma0_tautau_reg2(pi,tau) + gammartautau_reg2(pi,tau)) - a * a / (1 - pi * pi * gammarpipi_reg2(pi,tau)));
+    
+    double gammar = 0.0;
+    double gammarpi = 0.0;
+    double gammarpipi = 0.0;
+    double gammartau = 0.0;
+    double gammartautau = 0.0;
+    double gammarpitau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
-    double poly_pi = 0;
-    double poly_pitau = 0;
-    double poly_pipi = 0;
-    double poly_tautau = 0;
-    polys_solo_i_ii_ij_jj_reg2(pi, tau, &poly_pi, &poly_pipi, &poly_pitau, &poly_tautau);
-    double a = 1 + pi * (poly_pi - tau * poly_pitau);
-    return rgas_water * (-tau * tau * (gamma0_tautau_reg2(pi, tau) + poly_tautau) - a * a / (1 - pi * pi * poly_pipi));
+    double a = 1 + pi * (gammarpi - tau * gammarpitau);
+    return rgas_water * (-tau * tau * (gamma0_tautau_reg2(pi, tau) + gammartautau) - a * a / (1 - pi * pi * gammarpipi));
 }
 
 double pT2w_reg2(double p, double T)
@@ -344,25 +352,19 @@ double pT2w_reg2(double p, double T)
     double tau = r2Tstar / T;
     double pi = p;
 
-    // double a = pi * gammarpi_reg2(pi,tau);
-    // a *= a;
-    // double b = 1 + pi * gammarpi_reg2(pi,tau) - tau * pi * gammarpitau_reg2(pi,tau);
-    //  b *= b;
-    //  return sqrt(1000.0 * rgas_water * T * (1 + 2 * pi * gammarpi_reg2(pi,tau) + a) /
-    //              ((1 - pi * pi * gammarpipi_reg2(pi,tau)) + b / (tau * tau * (gamma0_tautau_reg2(pi,tau) + gammartautau_reg2(pi,tau)))));
+    double gammar = 0.0;
+    double gammarpi = 0.0;
+    double gammarpipi = 0.0;
+    double gammartau = 0.0;
+    double gammartautau = 0.0;
+    double gammarpitau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
-    double poly_pi = 0;
-    double poly_pitau = 0;
-    double poly_pipi = 0;
-    double poly_tautau = 0;
-    polys_solo_i_ii_ij_jj_reg2(pi, tau, &poly_pi, &poly_pipi, &poly_pitau, &poly_tautau);
-
-    double a = pi * poly_pi;
-    a *= a;
-    double b = 1 + pi * (poly_pi - tau * poly_pitau);
-    b *= b;
-    return sqrt(1000.0 * rgas_water * T * (1 + 2 * pi * poly_pi + a) /
-                ((1 - pi * pi * poly_pipi) + b / (tau * tau * (gamma0_tautau_reg2(pi, tau) + poly_tautau))));
+    double a = pi * gammarpi;
+    double b = 1 + pi * (gammarpi - tau * gammarpitau);
+    return sqrt(1000.0 * rgas_water * T * (1 + 2 * pi * gammarpi + a * a) /
+                ((1 - pi * pi * gammarpipi) + b * b / (tau * tau * (gamma0_tautau_reg2(pi, tau) + gammartautau))));
 }
 
 
@@ -412,12 +414,8 @@ double pi2aHS(double eta, double sigma)
                    {6, 3, -0.558919224465760E+01},
                    {7, 1, 0.400645798472063E-01}};
   double pi, pi2;
-  eta = eta - 0.5;
-  sigma = sigma - 1.2;
-  // pi=0.0;
-  // for(int k=0; k<29; k++)
-  //   pi += n[k]*ipowsac(eta,i[k])*ipowsac(sigma,j[k]);
-  pi = poly(eta, sigma, 29, IJn);
+
+  pi = poly(eta - 0.5, sigma - 1.2, 29, IJn);
   pi2 = pi * pi;
   return (pi2 * pi2);
 }
@@ -469,12 +467,8 @@ double pi2bHS(double eta, double sigma)
                    {12, 10, 0.188801906865134E+10},
                    {14, 16, -0.123651009018773E+15}};
   double pi, pi2;
-  eta = eta - 0.6;
-  sigma = sigma - 1.01;
-  // pi = 0.0;
-  // for (int k = 0; k < 33; k++)
-  //   pi += n[k] * ipowsac(eta, i[k]) * ipowsac(sigma, j[k]);
-  pi = poly(eta, sigma, 33, IJn);
+
+  pi = poly(eta - 0.6, sigma - 1.01, 33, IJn);
   pi2 = pi * pi;
   return (pi2 * pi2);
 }
@@ -525,14 +519,8 @@ double pi2cHS(double eta, double sigma)
                    {12, 7, -0.296492620980124E+11},
                    {16, 10, -0.111754907323424E+16}};
   double pi, pi2;
-  eta = eta - 0.7;
-  sigma = sigma - 1.1;
-  // pi = 0.0;
-  // for (int k = 0; k < 31; k++)
-  // {
-  //  pi += n[k] * ipowsac(eta, i[k]) * ipowsac(sigma, j[k]);
-  // }
-  pi = poly(eta, sigma, 31, IJn);
+
+  pi = poly(eta - 0.7, sigma - 1.1, 31, IJn);
   pi2 = pi * pi;
   return (pi2 * pi2);
 }
@@ -726,10 +714,10 @@ double ph2T_reg2b(double p, double h)
   return poly(pi, eta, 38, IJn);
 };
 
+// Table 22. Numerical values of the coefficients and exponents of
+// the backward   #equation T ( p,h ) for subregion 2c, Eq. (24)
 double ph2T_reg2c(double p, double h)
 {
-  // Table 22. Numerical values of the coefficients and exponents of
-  // the backward   #equation T ( p,h ) for subregion 2c, Eq. (24)
   IJnData IJn[23] = {
       {-7, 0, -3236839855524.2},
       {-7, 4, 7326335090218.1},
@@ -770,8 +758,8 @@ double ph2T_reg2c(double p, double h)
   return poly(pi, eta, 23, IJn);
 }
 
-double enthalpy2bc(double p)
 // http://www.iapws.org/relguide/IF97-Rev.html, Eq 21
+double enthalpy2bc(double p)
 {
   const double n[] = {0.12809002730136e-3,
                       0.26526571908428e4,
@@ -819,11 +807,11 @@ typedef struct
 
 //-----  the backward equation T( p,s ) ---------------------
 
+// Table 25. Numerical values of the coefficients and exponents of
+// the backward equation T( p,s ) for
+// subregion 2a, Eq. (25)
 double ps2T_reg2a(double p, double s)
 {
-    // Table 25. Numerical values of the coefficients and exponents of
-    // the backward equation T( p,s ) for
-    // subregion 2a, Eq. (25)
     dIJnData IJn[46] = {
         {-1.5, -24, -0.39235983861984E+06},
         {-1.5, -23, 0.51526573827270E+06},
@@ -893,11 +881,11 @@ double ps2T_reg2a(double p, double s)
     return 1.0 * theta;
 }
 
+// Table 26. Numerical values of the coefficients and exponents of
+// the backward equation T( p,s ) for
+// subregion 2b, Eq. (26)
 double ps2T_reg2b(double p, double s)
 {
-    // Table 26. Numerical values of the coefficients and exponents of
-    // the backward equation T( p,s ) for
-    // subregion 2b, Eq. (26)
     IJnData IJn[44] = {
         {-6, 0, 0.31687665083497e6},
         {-6, 11, 0.20864175881858e2},
@@ -955,18 +943,16 @@ double ps2T_reg2b(double p, double s)
     double pi, sigma;
     pi = p / 1.0;
     sigma = 10 - s / 0.7853;
-    // double heta = 0.0;
-    // for (int k = 0; k < 44; k++)
-    //     theta += IJn[k].n * pow(pi, IJn[k].I) * pow(sigma, IJn[k].J);
+    
     double theta = poly(pi, sigma, 44, IJn);
     return 1.0 * theta;
 }
 
+// Table 27. Numerical values of the coefficient s and exponents of
+//  the backward equation T( p,s ) for
+// subregion 2c, Eq. (27)
 double ps2T_reg2c(double p, double s)
 {
-    // Table 27. Numerical values of the coefficient s and exponents of
-    //  the backward equation T( p,s ) for
-    // subregion 2c, Eq. (27)
     IJnData IJn[30] = {
         {-2, 0, 0.90968501005365e3},
         {-2, 1, 0.24045667088420e4},
@@ -1007,9 +993,7 @@ double ps2T_reg2c(double p, double s)
     double pi, sigma;
     pi = p / 1.0;
     sigma = 2 - s / 2.9251;
-    // theta = 0.0;
-    // for (int k = 0; k < 30; k++)
-    //    theta += IJn[k].n * pow(pi, IJn[k].I) * pow(sigma, IJn[k].J);
+    
     double theta = poly(pi, sigma, 30, IJn);
     return 1.0 * theta;
 }
@@ -1052,4 +1036,30 @@ double ps2T_reg2(double p, double s)
             T = T1;
 
         return T;*/
+}
+
+// specific entropy in region 2
+// sreg2 in kJ/(kg K)
+// temperature in K
+// pressure in Mpa
+double pT2s_reg2(double p, double T)
+{
+    double tau = r2Tstar / T;
+    double pi = p;
+
+    // gamma0_
+    double gamma0 = gamma0_reg2(pi, tau);
+    double gamma0tau = gamma0_tau_reg2(tau);
+
+    // gammar
+    double gammar = 0.0;
+    double gammarpi = 0.0;
+    double gammarpipi = 0.0;
+    double gammartau = 0.0;
+    double gammartautau = 0.0;
+    double gammarpitau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+
+    return rgas_water * (tau * (gamma0tau + gammartau) - (gamma0 + gammar));
 }
