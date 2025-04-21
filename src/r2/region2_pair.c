@@ -12,13 +12,13 @@
 double p2Tmin_reg2(double p)
 {
     double Tmin = TMIN2;
-    if (p > 0.0 && p < 0.000611213)
+    if (p > 0.0 && p < PMIN1)
     {
         Tmin = TMIN2;
     }
     else
     {
-        if (p >= 0.000611213 && p <= pSat(623.15))
+        if (p >= PMIN1 && p <= pSat(TMAX1))
         {
             Tmin = TSat(p);
         }
@@ -33,21 +33,21 @@ double p2Tmin_reg2(double p)
 double T2pmax_reg2(double T)
 {
     double pmax = PMAX2;
-    if (T >= 273.15 && T <= 623.15)
+    if (T >= TMIN1 && T <= TMAX1)
     {
         pmax = pSat(T);
     }
     else
     {
-        if (T > 623.15 && T <= 863.15)
+        if (T > TMAX1 && T <= TMAX3)
         {
             pmax = B23_T2p(T);
         }
         else
         {
-            if (T > 863.15 && T <= 1073.15)
+            if (T > TMAX3 && T <= TMAX2)
             {
-                pmax = 100.0;
+                pmax = PMAX3;
             };
         };
     };
@@ -256,38 +256,33 @@ double Th2p_reg2(double T, double h)
     return (p);
 }
 
-double pT2v_reg2(double p, double T)
-//
 // specific volume in region 2
 // vreg2 in m^3/kg
 // temperature in K
 // pressure in MPa
-//
+double pT2v_reg2(double p, double T)
 {
     double tau = r2Tstar / T;
     double pi = p;
     return 0.001 * rgas_water * T * pi * (gamma0_pi_reg2(pi) + gammar_pi_reg2(pi, tau)) / p;
 }
 
-double pT2h_reg2(double p, double T)
 // specific enthalpy in region 2
 // hreg2 in kJ/kg
 // temperature in K
 // pressure in Map
-//
+double pT2h_reg2(double p, double T)
 {
     double tau = r2Tstar / T;
     double pi = p;
     return rgas_water * T * tau * (gamma0_tau_reg2(tau) + gammar_tau_reg2(pi, tau));
 }
 
-double pT2u_reg2(double p, double T)
-//
 // specific internal energy in region 2
 // ureg2 in kJ/kg
 // temperature in K
 // pressure in Mpa
-//
+double pT2u_reg2(double p, double T)
 {
     double tau = r2Tstar / T;
     double pi = p;
@@ -299,31 +294,27 @@ double pT2u_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     return rgas_water * T * (tau * (gamma0_tau_reg2(tau) + gammartau) - pi * (gamma0_pi_reg2(pi) + gammarpi));
 }
 
-double pT2cp_reg2(double p, double T)
-//
 // specific isobaric heat capacity in region 2
 // cpreg2 in kJ/(kg K)
 // temperature in K
 // pressure in Mpa
-//
+double pT2cp_reg2(double p, double T)
 {
     double tau = r2Tstar / T;
     double pi = p;
     return -rgas_water * tau * tau * (gamma0_tautau_reg2(pi, tau) + gammar_tautau_reg2(pi, tau));
 }
 
-double pT2cv_reg2(double p, double T)
-//
 // specific isochoric heat capacity in region 2
 // cvreg2 in kJ/(kg K)
 // temperature in K
 // pressure in bar
-//
+double pT2cv_reg2(double p, double T)
 {
     double tau = r2Tstar / T;
     double pi = p;
@@ -335,19 +326,17 @@ double pT2cv_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     double a = 1 + pi * (gammarpi - tau * gammarpitau);
     return rgas_water * (-tau * tau * (gamma0_tautau_reg2(pi, tau) + gammartautau) - a * a / (1 - pi * pi * gammarpipi));
 }
 
-double pT2w_reg2(double p, double T)
-//
 // speed of sound in region 2
 // wreg2 in m/s
 // temperature in K
 // pressure in Mpa
-//
+double pT2w_reg2(double p, double T)
 {
     double tau = r2Tstar / T;
     double pi = p;
@@ -359,7 +348,7 @@ double pT2w_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     double a = pi * gammarpi;
     double b = 1 + pi * (gammarpi - tau * gammarpitau);
@@ -646,10 +635,7 @@ double ph2T_reg2a(double p, double h)
   double pi, eta, theta;
   pi = p / 1.0;
   eta = h / 2000.0 - 2.1;
-  // theta = 0;
-  // for (int k = 0; k < 34; k++)
-  //   theta += IJn[k].n * ipowsac(pi, IJn[k].I) * ipowsac(eta, IJn[k].J);
-  // return 1.0 * theta;
+
   return poly(pi, eta, 34, IJn);
 }
 
@@ -706,10 +692,6 @@ double ph2T_reg2b(double p, double h)
   double pi, eta, theta;
   pi = p / 1.0 - 2;
   eta = h / 2000.0 - 2.6;
-  // theta = 0;
-  // for (int k = 0; k < 38; k++)
-  //   theta += IJn[k].n * ipowsac(pi, IJn[k].I) * ipowsac(eta, IJn[k].J);
-  //  return 1.0 * theta;
 
   return poly(pi, eta, 38, IJn);
 };
@@ -750,10 +732,6 @@ double ph2T_reg2c(double p, double h)
   double pi, eta, theta;
   pi = p / 1.0 + 25;
   eta = h / 2000.0 - 1.8;
-  // theta = 0;
-  // for (int k = 0; k < 23; k++)
-  //   theta += IJn[k].n * ipowsac(pi, IJn[k].I) * ipowsac(eta, IJn[k].J);
-  // return 1.0 * theta;
 
   return poly(pi, eta, 23, IJn);
 }
@@ -1059,7 +1037,7 @@ double pT2s_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     return rgas_water * (tau * (gamma0tau + gammartau) - (gamma0 + gammar));
 }

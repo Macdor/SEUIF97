@@ -49,11 +49,11 @@ double Ts2d_reg3(double T, double s)
   return rtsec2(Td2s_reg3, T, s, d1, d2, ft, f, xacc, iMAX);
 }
 
-double hs2p3a_reg3(double h, double s)
 /*  Backward equation for region 3a, P=f(h,s)
      h : Specific enthalpy [kJ/kg]
      s : Specific entropy [kJ/kgK]
       P : Pressure [MPa] */
+double hs2p3a_reg3(double h, double s)
 {
     IJnData IJn[33] = {{0, 0, 0.770889828326934e1},
                        {0, 1, -0.260835009128688e2},
@@ -91,20 +91,15 @@ double hs2p3a_reg3(double h, double s)
 
     double nu = h / 2300 - 1.01;
     double sigma = s / 4.4 - 0.75;
-    // double suma = 0;
-    // for (int i = 0; i < 33; i++)
-    // {
-    //    suma += n[i] * pow(nu, I[i]) * pow(sigma, J[i]);
-    // }
     double suma = poly(nu, sigma, 33, IJn);
     return (99 * suma);
 }
 
-double hs2p3b_reg3(double h, double s)
 /*Backward equation for region 3b, P=f(h,s)
     h :  Specific enthalpy [kJ/kg]
     s : Specific entropy [kJ/kgK]
     P : Pressure [MPa]*/
+double hs2p3b_reg3(double h, double s)
 {
     IJnData IJn[35] = {
         {-12, 2, 0.125244360717979e-12},
@@ -146,23 +141,17 @@ double hs2p3b_reg3(double h, double s)
 
     double nu = h / 2800 - 0.681;
     double sigma = s / 5.3 - 0.792;
-    // double suma = 0;
-    // for (int i = 0; i < 35; i++)
-    //{
-    //     suma += n[i] * pow(nu, I[i]) * pow(sigma, J[i]);
-    // }
     double suma = poly(nu, sigma, 35, IJn);
     return (16.6 / suma);
 }
 
-double hs2p_reg3(double h, double s)
 /*  Backward equation for region 3, P=f(h,s)
         h : Specific enthalpy [kJ/kg]
         s : Specific entropy [kJ/kgK]
         P : Pressure [MPa]
-  */
+*/
+double hs2p_reg3(double h, double s)
 {
-
     double p;
     if (s <= sc_water)
         p = hs2p3a_reg3(h, s);
@@ -172,125 +161,124 @@ double hs2p_reg3(double h, double s)
     return (p);
 }
 
-double Td2p_reg3(double T, double d)
-//
 // pressure in region 3
 // preg3 in bar
 // T: temperature in K
 // density in kg/m^3
-//
+double Td2p_reg3(double T, double d)
 {
     double tau = tc_water / T;
     double delta = d / dc_water;
-    // return 0.001 * d * rgas_water * T * delta * phidelta_reg3(delta,tau);
     double phidelta = phi_delta_reg3(delta, tau);
     return 0.001 * d * rgas_water * T * delta * phidelta;
 }
 
-double Td2u_reg3(double T, double d)
 // speciphic internal energy in region 3
 // energyreg3 in kJ/kg
+double Td2u_reg3(double T, double d)
 {
     double tau = tc_water / T;
     double delta = d / dc_water;
-    // return rgas_water * T * tau * phi_tau_reg3(delta,tau);
     double phi_tau = phi_tau_reg3(delta, tau);
     return rgas_water * T * tau * phi_tau;
 }
 
-double Td2s_reg3(double T, double d)
 // speciphic entropy in region 3
 // entropyreg3 in kJ/(kg K)
+double Td2s_reg3(double T, double d)
 {
     double tau = tc_water / T;
     double delta = d / dc_water;
-    // return rgas_water * (tau * phi_tau_reg3(delta,tau) - phi_reg3(delta,tau));
 
     double phi = 0.0;
-    double phi_tau = 0.0;
-    polys_solo_0_j_reg3(delta, tau, &phi, &phi_tau);
-    return rgas_water * (tau * phi_tau - phi);
+    double phidelta = 0.0;
+    double phideltadelta = 0.0;
+    double phitau = 0.0;
+    double phitautau = 0.0;
+    double phideltatau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phidelta, &phideltadelta, &phitau, &phitautau, &phideltatau);
+
+    return rgas_water * (tau * phitau - phi);
 }
 
-double Td2h_reg3(double T, double d)
 // speciphic enthalpy in region 3
 // enthalpyreg3 in kJ/kg
+double Td2h_reg3(double T, double d)
 {
     double tau = tc_water / T;
     double delta = d / dc_water;
-    // return rgas_water * T * (tau * phi_tau_reg3(delta,tau) + delta * phidelta_reg3(delta,tau));
+
+    double phi = 0.0;
     double phidelta = 0.0;
-    double phi_tau = 0.0;
-    polys_solo_i_j_reg3(delta, tau, &phidelta, &phi_tau);
-    return rgas_water * T * (tau * phi_tau + delta * phidelta);
+    double phideltadelta = 0.0;
+    double phitau = 0.0;
+    double phitautau = 0.0;
+    double phideltatau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phidelta, &phideltadelta, &phitau, &phitautau, &phideltatau);
+
+    return rgas_water * T * (tau * phitau + delta * phidelta);
 }
 
-double Td2cp_reg3(double T, double d)
 // speciphic isobaric heat capacity in region 3
 // cpreg3 in kJ/(kg K)
+double Td2cp_reg3(double T, double d)
 {
     double tau = tc_water / T;
     double delta = d / dc_water;
 
-    // double a = delta * (phidelta_reg3(delta,tau) - tau * phideltatau_reg3(delta,tau));
-    // a *= a;
-    // double b = delta * (2.0 * phidelta_reg3(delta,tau) + delta * phideltadelta_reg3(delta,tau));
-    // return rgas_water * (-tau * tau * phi_tautau_reg3(delta,tau) + a / b);
+    double phi = 0.0;
+    double phidelta = 0.0;
+    double phideltadelta = 0.0;
+    double phitau = 0.0;
+    double phitautau = 0.0;
+    double phideltatau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phidelta, &phideltadelta, &phitau, &phitautau, &phideltatau);
 
-    double poly_delta = 0;
-    double poly_deltatau = 0;
-    double poly_deltadelta = 0;
-    double poly_tautau = 0;
-    polys_solo_i_ii_ij_jj_reg3(delta, tau, &poly_delta, &poly_deltadelta, &poly_deltatau, &poly_tautau);
-
-    double a = delta * (poly_delta - tau * poly_deltatau);
-    a *= a;
-    double b = delta * (2.0 * poly_delta + delta * poly_deltadelta);
-    return rgas_water * (-tau * tau * poly_tautau + a / b);
+    double a = delta * (phidelta - tau * phideltatau);
+    double b = delta * (2.0 * phidelta + delta * phideltadelta);
+    return rgas_water * (-tau * tau * phitautau + a * a / b);
 }
 
-double Td2cv_reg3(double T, double d)
 // speciphic isochoric heat capacity in region 3
 // cvreg3 in kJ/(kg K)
+double Td2cv_reg3(double T, double d)
 {
     double tau = tc_water / T;
     double delta = d / dc_water;
-    // return rgas_water * (-tau * tau * phi_tautau_reg3(delta,tau));
 
     double phi_tautau = phi_tautau_reg3(delta, tau);
     return rgas_water * (-tau * tau * phi_tautau);
 }
 
-double Td2w_reg3(double T, double d)
 // speed of sound in region 3 in m/s
+double Td2w_reg3(double T, double d)
 {
     double tau = tc_water / T;
     double delta = d / dc_water;
-    /*
 
-        double a = delta * phidelta_reg3(delta,tau) - delta * tau * phideltatau_reg3(delta,tau);
-        a *= a;
-        double r=1000.0 * rgas_water * T * (2 * delta * phidelta_reg3(delta,tau) + delta * delta * phideltadelta_reg3(delta,tau) - a / (tau * tau * phi_tautau_reg3(delta,tau)));
-        return sqrt(1000.0 * rgas_water * T * (2 * delta * phidelta_reg3(delta,tau) + delta * delta * phideltadelta_reg3(delta,tau) - a / (tau * tau * phi_tautau_reg3(delta,tau))));
-    */
-    double poly_delta = 0;
-    double poly_deltatau = 0;
-    double poly_deltadelta = 0;
-    double poly_tautau = 0;
+    double phi = 0.0;
+    double phidelta = 0.0;
+    double phideltadelta = 0.0;
+    double phitau = 0.0;
+    double phitautau = 0.0;
+    double phideltatau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phidelta, &phideltadelta, &phitau, &phitautau, &phideltatau);
 
-    polys_solo_i_ii_ij_jj_reg3(delta, tau, &poly_delta, &poly_deltadelta, &poly_deltatau, &poly_tautau);
-    double a = delta * (poly_delta - tau * poly_deltatau);
-    a *= a;
-    double r = 1000.0 * rgas_water * T * (delta * (2.0 * poly_delta + delta * poly_deltadelta) - a / (tau * tau * poly_tautau));
+    double a = delta * (phidelta - tau * phideltatau);
+    double r = 1000.0 * rgas_water * T * (delta * (2.0 * phidelta + delta * phideltadelta) - a * a / (tau * tau * phitautau));
     return sqrt(r);
 }
 
 
+// p is pressure in MPa
+// boundary is one of 3ab, 3cd, ...
+// returns the temperature at the boundary in K
 double T_atRegionBoundary(double p, char *boundary)
 {
-    // p is pressure in MPa
-    // boundary is one of 3ab, 3cd, ...
-    // returns the temperature at the boundary in K
 
     double t = 0.0; // temperature at the boundary in K
 
@@ -392,12 +380,12 @@ double T_atRegionBoundary(double p, char *boundary)
     return t;
 }
 
+// p is pressure in MPa
+// t is temperature in K
+// x = 0 is liquid, =1 is steam]  x : integer    Vapor quality [-]
+// returns density in kg/m3
 double pT2vSat_reg3(double p, double T, double x)
 {
-    // p is pressure in MPa
-    // t is temperature in K
-    // x = 0 is liquid, =1 is steam]  x : integer    Vapor quality [-]
-    // returns density in kg/m3
 
     double v;
     char subRegion;
@@ -447,11 +435,11 @@ double pT2vSat_reg3(double p, double T, double x)
 
 //-------------------------------------------------------------------------
 
+// p is pressure in MPa
+// T is temperature in K
+// sets the subregion
 char SubRegion3(double p, double t)
 {
-    // p is pressure in MPa
-    // T is temperature in K
-    // sets the subregion
 
     char subRegion;
 
@@ -679,11 +667,11 @@ char SubRegion3(double p, double t)
     return subRegion;
 }
 
+// p is pressure in MPa
+// t is temperature in K
+// returns density in kg/m3
 double pT2v_reg3(double p, double T)
 {
-    // p is pressure in MPa
-    // t is temperature in K
-    // returns density in kg/m3
     char subRegion;
     // set the region
     subRegion = SubRegion3(p, T);
@@ -694,11 +682,11 @@ double pT2v_reg3(double p, double T)
 
 //  Initialize coefphicients and exponents for region 3
 
+// Page 6 Table 2. Numerical values of the coefficients of the equation h3ab(p) in
+// its dimensionless form, Eq. (1), for defining the boundary
+// between subregions 3a and 3b
 double p2h3ab(double p)
 {
-  // Page 6 Table 2. Numerical values of the coefficients of the equation h3ab(p) in
-  // its dimensionless form, Eq. (1), for defining the boundary
-  // between subregions 3a and 3b
   static double n[4] = {0.201464004206875E+04,
                         0.374696550136983E+01,
                         -0.219921901054187E-01,
@@ -709,11 +697,11 @@ double p2h3ab(double p)
   return (eta * 1.0);
 }
 
+// (p,h)->T for region 3a
+// Page7 Table 3. Coefficients and exponents of the backward equation T3a(p,h) for subregion 3a in its
+// dimensionless form, Eq. (2)
 double theta3aph(double pi, double eta)
 {
-  // (p,h)->T for region 3a
-  // Page7 Table 3. Coefficients and exponents of the backward equation T3a(p,h) for subregion 3a in its
-  // dimensionless form, Eq. (2)
   IJnData IJn[31] = {
       {-12, 0, -1.33645667811215e-7},
       {-12, 1, 4.55912656802978e-6},
@@ -753,13 +741,7 @@ double theta3aph(double pi, double eta)
 
       {12, 5, -1.33027883575669e-2}};
 
-  pi = pi + 0.240;
-  eta = eta - 0.615;
-  // theta = 0.0;
-  // for (int k = 0; k < 31; k++)
-  //   theta += IJn[k].n * pow(pi, IJn[k].I) * pow(eta, IJn[k].J);
-
-  double theta = poly(pi, eta, 31, IJn);
+  double theta = poly(pi + 0.240, eta - 0.615, 31, IJn);
   return (theta);
 }
 
@@ -773,10 +755,11 @@ double ph2T3a_reg3(double p, double h)
 //-------------------------------------------------
 // (p,h)   3b
 //--------------------------------------------------
+
+// Table 4. Coefficients and exponents of the backward equation T3b=(p,h) for subregion 3b in its
+// dimensionless form, Eq. (3)
 double theta3bph(double pi, double eta)
 {
-  // Table 4. Coefficients and exponents of the backward equation T3b=(p,h) for subregion 3b in its
-  // dimensionless form, Eq. (3)
   IJnData IJn[33] = {
       {-12, 0, 3.23254573644920e-5},
       {-12, 1, -1.27575556587181e-4},
@@ -818,12 +801,7 @@ double theta3bph(double pi, double eta)
       {6, 1, -1.31778331276228e-1},
       {8, 1, 6.76682064330275e-3}};
 
-  pi = pi + 0.298;
-  eta = eta - 0.720;
-  // theta = 0.0;
-  // for (int k = 0; k < 33; k++)
-  // theta += IJn[k].n * pow(pi, IJn[k].I) * pow(eta, IJn[k].J);
-  double theta = poly(pi, eta, 33, IJn);
+  double theta = poly(pi + 0.298, eta - 0.720, 33, IJn);
   return (theta);
 }
 
@@ -837,10 +815,11 @@ double ph2T3b_reg3(double p, double h)
 //----------------------------------------------
 // Region 3a (p,h)->v
 //----------------------------------------------
+
+// Page9 Table 6. Coefficients and exponents of the backward equation v3a(p,h) for subregion 3a in its
+// dimensionless form, Eq. (4)
 double omega3aph(double pi, double eta)
 {
-  // Page9 Table 6. Coefficients and exponents of the backward equation v3a(p,h) for subregion 3a in its
-  // dimensionless form, Eq. (4)
   IJnData IJn[] = {
       {-12, 6, 5.29944062966028e-3},
       {-12, 8, -1.70099690234461e-1},
@@ -893,11 +872,12 @@ double ph2v3a_reg3(double p, double h)
 //-------------------------------------------------
 // (p,h)->v 3b
 //--------------------------------------------------
+
+// Page 9
+// Table 7. Coefficients and exponents of the backward equation v3b (p,h) for subregion 3b in its
+// dimensionless form, Eq. (5)
 double omega3bph(double pi, double eta)
 {
-  // Page 9
-  // Table 7. Coefficients and exponents of the backward equation v3b (p,h) for subregion 3b in its
-  // dimensionless form, Eq. (5)
   IJnData IJn[30] = {
       {-12, 0, -2.25196934336318e-9},
       {-12, 1, 1.40674363313486e-8},
@@ -929,12 +909,8 @@ double omega3bph(double pi, double eta)
       {1, 1, 3.71810116332674e-2},
       {2, 2, -5.36288335065096e-2},
       {2, 6, 1.60697101092520}};
-  pi = pi + 0.0661;
-  eta = eta - 0.720;
-  // omega = 0.0;
-  // for (int k = 0; k < 30; k++)
-  //  omega += IJn[k].n * pow(pi, IJn[k].I) * pow(eta, IJn[k].J);
-  double omega = poly(pi, eta, 30, IJn);
+
+  double omega = poly(pi + 0.0661, eta - 0.720, 30, IJn);
   return (omega);
 }
 
@@ -1018,12 +994,8 @@ double theta3aps(double pi, double sigma)
                    {8, 0, 0.141064266818704E-03},
                    {8, 1, -0.257418501496337E-02},
                    {10, 2, 0.123220024851555E-02}};
-  pi = pi + 0.240;
-  sigma = sigma - 0.703;
-  // theta = 0.0;
-  // for (int k = 0; k < 33; k++)
-  //   theta += n[k] * pow(pi, i[k]) * pow(sigma, j[k]);
-  double theta = poly(pi, sigma, 33, IJn);
+
+  double theta = poly(pi + 0.240, sigma - 0.703, 33, IJn);
   return (theta);
 }
 
@@ -1069,9 +1041,7 @@ double theta3bps(double pi, double sigma)
                      {14, 2, -0.215095749182309E-04}};
   pi = pi + 0.760;
   sigma = sigma - 0.818;
-  // theta = 0.0;
-  // for (int k = 0; k < 28; k++)
-  //   theta += n[k] * pow(pi, i[k]) * pow(sigma, j[k]);
+
   double theta = poly(pi, sigma, 28, IJn);
   return (theta);
 }
@@ -1117,12 +1087,7 @@ double omega3aps(double pi, double sigma)
                      {5, 2, 0.257988576101640E-01},
                      {6, 0, -0.145749861944416E-03}};
 
-  pi = pi + 0.187;
-  sigma = sigma - 0.755;
-  // omega = 0.0;
-  // for (int k = 0; k < 28; k++)
-  //   omega += n[k] * pow(pi, i[k]) * pow(sigma, j[k]);
-  double omega = poly(pi, sigma, 28, IJn);
+  double omega = poly(pi + 0.187, sigma - 0.755, 28, IJn);
   return (omega);
 }
 
@@ -1170,12 +1135,7 @@ double omega3bps(double pi, double sigma)
                    {1, 2, 0.146407900162154E+02},
                    {2, 2, -0.327477787188230E+01}};
 
-  pi = pi + 0.298;
-  sigma = sigma - 0.816;
-  // omega = 0.0;
-  // for (int k = 0; k < 31; k++)
-  //   omega += n[k] * pow(pi, i[k]) * pow(sigma, j[k]);
-  double omega = poly(pi, sigma, 31, IJn);
+  double omega = poly(pi + 0.298, sigma - 0.816, 31, IJn);
   return (omega);
 }
 

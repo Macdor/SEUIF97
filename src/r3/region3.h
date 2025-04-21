@@ -2,8 +2,6 @@
 
 #include "../common/common.h"
 
-void solo_i_j_power_reg3(double vi, double vj, double soI_pow[], double soJ_pow[]);
-
 double phi_reg3(double tau, double delta);
 double phi_delta_reg3(double tau, double delta);
 double phi_deltadelta_reg3(double tau, double delta);
@@ -11,14 +9,9 @@ double phi_tau_reg3(double tau, double delta);
 double phi_tautau_reg3(double tau, double delta);
 double phi_deltatau_reg3(double tau, double delta);
 
-void polys_solo_0_j_reg3(double delta, double tau, double *poly, double *poly_tau);
-void polys_solo_i_j_reg3(double delta, double tau, double *poly_delta, double *poly_tau);
-void polys_solo_i_ii_ij_jj_reg3(double delta, double tau,
-                                double *poly_delta,
-                                double *poly_deltatau,
-                                double *poly_deltadelta, double *poly_tautau);
-
-
+void polys_0_i_ii_j_jj_ij_reg3(double delta, double tau, double *poly,
+	double *poly_delta, double *poly_deltadelta, double *poly_deltatau,
+	double *poly_tautau);
 
 double Td2p_reg3(double T, double d);
 double Td2u_reg3(double T, double d);
