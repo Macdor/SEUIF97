@@ -14,11 +14,8 @@
 #pragma once
 #include "../common/common.h"
 
-void solo_ij_pow_reg1(double vi, double vj, double *soI_pow, double *soJ_pow);
-
 static const double r1pstar = 16.53;  // MPa
 static const double r1Tstar = 1386.0; // K
-
 
 double gamma_reg1(double pi, double tau);
 double gamma_pi_reg1(double pi, double tau);
@@ -27,14 +24,7 @@ double gamma_pitau_reg1(double pi, double tau);
 double gamma_tau_reg1(double pi, double tau);
 double gamma_tautau_reg1(double pi, double tau);
 
-void polys_solo_0_i_reg1(double pi, double tau, double *poly, double *poly_pi);
-void polys_solo_0_j_reg1(double pi, double tau, double *poly, double *poly_tau);
-void polys_solo_i_j_reg1(double pi, double tau, double *poly_pi, double *poly_tau);
-void polys_solo_i_ii_reg1(double pi, double tau, double *poly_pi, double *poly_pipi);
-void polys_solo_i_ij_reg1(double pi, double tau, double *poly_pi, double *poly_pitau);
-void polys_solo_i_ii_ij_reg1(double pi, double tau, double *poly_pi, double *poly_pipi, double *poly_pitau);
-void polys_solo_i_ij_jj_reg1(double pi, double tau, double *poly_pi, double *poly_pitau, double *poly_tautau);
-void polys_solo_i_ii_ij_jj_reg1(double pi, double tau, double *poly_pi, double *poly_pipi, double *poly_pitau, double *poly_tautau);
+void polys_0_i_ii_j_jj_ij_reg1(double pi, double tau, double *gamma, double *gamma_pi, double *gamma_pipi, double *gamma_tau, double *gamma_tautau, double *gamma_pitau);
 
 // IF97 fundamental: (p,t)
 double pT2v_reg1(double p, double T);
@@ -62,8 +52,8 @@ double pT2e_reg1(double p, double T);
 double pT2dpdtcv_reg1(double p, double T);
 double pT2dvdpct_reg1(double p, double T);
 double pT2dvdtcp_reg1(double p, double T);
-// double pT2dvdhcp_reg1(double p, double h);
-// double pT2dvdpch_reg1(double p, double h);
+double pT2dvdhcp_reg1(double p, double T);
+double pT2dvdpch_reg1(double p, double T);
 
 // IF97 backward: (p,h)->T, (p,s)->T,（h,s)->p
 double ph2T_reg1(double p, double h);

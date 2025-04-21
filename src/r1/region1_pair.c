@@ -289,14 +289,16 @@ double pT2u_reg1(double p, double T)
   double pi, tau;
   tau = r1Tstar / T;
   pi = p / r1pstar;
-  // return rgas_water * T *
-  //       (tau * gammatau_reg1(pi,tau) - pi * gammapi_reg1(pi,tau));
 
+  double gamma = 0.0;
   double gammapi = 0.0;
+  double gammapipi = 0.0;
   double gammatau = 0.0;
-  //polys_solo_i_j(7.1 - pi, tau - 1.222, 34, IJn, i2soI, j2soJ, solo_ij_pow_reg1, &gammapi, &gammatau);
+  double gammatautau = 0.0;
+  double gammapitau = 0.0;
 
-  polys_solo_i_j_reg1(pi, tau, &gammapi, &gammatau);
+  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gammapi, &gammapipi, &gammatau, &gammatautau, &gammapitau);
+
   return rgas_water * T * (tau * gammatau - pi * gammapi);
 }
 
@@ -307,13 +309,15 @@ double pT2s_reg1(double p, double T)
   double pi, tau;
   tau = r1Tstar / T;
   pi = p / r1pstar;
-  // return rgas_water * (tau * gammatau_reg1(pi,tau) - gamma_reg1(pi,tau));
 
   double gamma = 0.0;
+  double gammapi = 0.0;
+  double gammapipi = 0.0;
   double gammatau = 0.0;
+  double gammatautau = 0.0;
+  double gammapitau = 0.0;
 
-  // polys_0_j(7.1 - pi, tau - 1.222,34,IJn,&gamma,&gammatau);
-  polys_solo_0_j_reg1(pi, tau, &gamma, &gammatau);  
+  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gammapi, &gammapipi, &gammatau, &gammatautau, &gammapitau); 
   return rgas_water * (tau * gammatau - gamma);
 }
 
@@ -324,9 +328,6 @@ double pT2h_reg1(double p, double T)
   tau = r1Tstar / T;
   pi = p / r1pstar;
   return rgas_water * T * tau * gamma_tau_reg1(pi,tau);
-
-  //double gammatau = poly_solo_j(7.1 - pi, tau - 1.222, 34, IJn, i2soI, j2soJ, solo_ij_pow_reg1);
-  //return rgas_water * T * tau * gammatau;
 }
 
 double pT2cp_reg1(double p, double T)
@@ -336,9 +337,6 @@ double pT2cp_reg1(double p, double T)
   tau = r1Tstar / T;
   pi = p / r1pstar;
    return -rgas_water * tau * tau * gamma_tautau_reg1(pi, tau);
-
-  //double gammatautau = poly_solo_jj(7.1 - pi, tau - 1.222, 34, IJn, i2soI, j2soJ, solo_ij_pow_reg1);
-  //return -rgas_water * tau * tau * gammatautau;
 }
 
 double pT2cv_reg1(double p, double T)
@@ -350,23 +348,17 @@ double pT2cv_reg1(double p, double T)
   tau = r1Tstar / T;
   pi = p / r1pstar;
 
-  // a = -tau * tau * gammatautau_reg1(pi,tau);
-  // b = gammapi_reg1(pi,tau) - tau * gammapitau_reg1(pi,tau);
-  // b *= b;
-  // return rgas_water * (a + b / gammapipi_reg1(pi,tau));
+  double gamma = 0.0;
+  double gammapi = 0.0;
+  double gammapipi = 0.0;
+  double gammatau = 0.0;
+  double gammatautau = 0.0;
+  double gammapitau = 0.0;
 
-  double poly_pi = 0;
-  double poly_pitau = 0;
-  double poly_pipi = 0;
-  double poly_tautau = 0;
-  // polys_i_ii_ij_jj(7.1 - pi, tau - 1.222, 34, IJn, &poly_pi, &poly_pipi, &poly_pitau, &poly_tautau);
-
-  //polys_solo_i_ii_ij_jj(7.1 - pi, tau - 1.222, 34, IJn, i2soI, j2soJ, solo_ij_pow_reg1, &poly_pi, &poly_pipi, &poly_pitau, &poly_tautau);
-  polys_solo_i_ii_ij_jj_reg1(pi, tau, &poly_pi, &poly_pipi, &poly_pitau, &poly_tautau);
-  a = -tau * tau * poly_tautau;
-  b = poly_pi - tau * poly_pitau;
-  b *= b;
-  return rgas_water * (a + b / poly_pipi);
+  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gammapi, &gammapipi, &gammatau, &gammatautau, &gammapitau);
+  a = -tau * tau * gammatautau;
+  b = gammapi - tau * gammapitau;
+  return rgas_water * (a + b * b / gammapipi);
 }
 
 double pT2w_reg1(double p, double T)
@@ -377,27 +369,136 @@ double pT2w_reg1(double p, double T)
   tau = r1Tstar / T;
   pi = p / r1pstar;
 
+  double gamma = 0.0;
+  double gammapi = 0.0;
+  double gammapipi = 0.0;
+  double gammatau = 0.0;
+  double gammatautau = 0.0;
+  double gammapitau = 0.0;
+
+  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gammapi, &gammapipi, &gammatau, &gammatautau, &gammapitau);
+  a = gammapi - tau * gammapitau;
+  b = a * a  / (tau * tau * gammatautau);
+  return gammapi * sqrt(1000.0 * rgas_water * T / (b - gammapipi));
+}
+
+
+
+//---------------------------------------------------------------------------
+//  August 2007 IF97: IF97-Rev.pdf: P6-9
+// IAPWS -IF 97 Backware Equation for Region 1:
+//            Backward (p,h)->T, (p,s)->T
+//    (P,S)->T (P,H)->T
+//-------------------------------------------------------------
+// Backward equation T(p,h) for region 1
+//--------------------------------------------------------------
+double ph2T_reg1(double p, double h)
+{
+  // Page 11, Table6 :Initialize coefficients and exponents (P,H)->T for region 1
+  IJnData IJn[] = {
+      {0, 0, -238.72489924521},
+      {0, 1, 404.21188637945},
+      {0, 2, 113.49746881718},
+      {0, 6, -5.8457616048039},
+      {0, 22, -1.528548241314E-04},
+      {0, 32, -1.0866707695377E-06},
+      {1, 0, -13.391744872602},
+      {1, 1, 43.211039183559},
+      {1, 2, -54.010067170506},
+      {1, 3, 30.535892203916},
+      {1, 4, -6.5964749423638},
+      {1, 10, 9.3965400878363E-03},
+      {1, 32, 1.157364750534E-07},
+      {2, 10, -2.5858641282073E-05},
+      {2, 32, -4.0644363084799E-09},
+      {3, 10, 6.6456186191635E-08},
+      {3, 32, 8.0670734103027E-11},
+      {4, 32, -9.3477771213947E-13},
+      {5, 32, 5.8265442020601E-15},
+      {6, 32, -1.5020185953503E-17}};
+
+  double pi, eta;
+  double theta;
+  pi = p / 1.0;
+  eta = h / 2500.0 + 1.0;
+  theta = poly(pi, eta, 20, IJn);
+  return (1.0 *theta);
+
+  /*double T1, T2, T, f1, f2;
+  T1 = (1.0 * theta);
+  f1 = h - pT2h_reg1(p, T1);
+  if (fabs(f1) > xacc)
+  {
+    if (f1 > 0)
+      T2 = (1.0 + f1 / h) * T1; // TODO： 1.05 用 1+f1/h 是不是更快，没有测试
+    else
+      T2 = (1.0 - f1 / h) * T1;
+
+    f2 = h - pT2h_reg1(p, T2);
+
+    T = rtsec2(pT2h_reg1, p, h, T1, T2, f1, f2, xacc, iMAX);
+  }
+  else
+    T = T1;
+
+  return T;*/
+}
+
+//----------------------------------------------------------------
+//  Backward equation T(p,s) for region 1
+//----------------------------------------------------------------
+double ps2T_reg1(double p, double s)
+// Page 12, Table 8 : Initialize coefficients and exponents (P,S)->T for region 1
+{
+  IJnData IJn[] = {
+      {0, 0, 0.17478268058307e3},
+      {0, 1, 0.34806930892873e2},
+      {0, 2, 0.65292584978455e1},
+      {0, 3, 0.33039981775489},
+      {0, 11, -0.19281382923196e-6},
+
+      {0, 31, -0.24909197244573e-22},
+      {1, 0, -0.26107636489332},
+      {1, 1, 0.22592965981586},
+      {1, 2, -0.64256463395226e-1},
+      {1, 3, 0.78876289270526e-2},
+
+      {1, 12, 0.35672110607366e-9},
+      {1, 31, 0.17332496994895e-23},
+      {2, 0, 0.56608900654837e-3},
+      {2, 1, -0.32635483139717e-3},
+      {2, 2, 0.44778286690632e-4},
+
+      {2, 9, -0.51322156908507e-9},
+      {2, 31, -0.42522657042207e-25},
+      {3, 10, 0.26400441360689e-12},
+      {3, 32, 0.78124600459723e-28},
+      {4, 32, -0.30732199903668e-30}};
+
+  double pi, sigma;
+  double theta;
+  pi = p / 1.0;
+  sigma = s / 1.0 + 2.0;
+  theta = poly(pi, sigma, 20, IJn);
+   return (1.0*theta);
+
   /*
-  gammapi = gammapi_reg1(pi,tau);
-  a = gammapi - tau * gammapitau_reg1(pi,tau);
-  a *= a;
-  b = a / (tau * tau * gammatautau_reg1(pi,tau));
-  b = b - gammapipi_reg1(pi,tau);
-  return gammapi * sqrt(1000.0 * rgas_water * T / b);
-*/
+  // iteration: refine
+  double T1, T2, T, f1, f2;
+  T1 = (1.0 * theta);
+  f1 = s - pT2s_reg1(p, T1);
+  if (fabs(f1) > xacc)
+  {
+    if (f1 > 0) // pT2s_reg1(p,T1)< s ,the T1< expt T，so， T2=1.05*T1 T（T1,T2)
+      T2 = (1.0 + f1 / s) * T1;
+    else
+      T2 = (1.0 - f1 / s) * T1;
 
-  double poly_pi = 0;
-  double poly_pitau = 0;
-  double poly_pipi = 0;
-  double poly_tautau = 0;
-//  polys_i_ii_ij_jj(7.1 - pi, tau - 1.222, 34, IJn, &poly_pi, &poly_pipi, &poly_pitau, &poly_tautau);
+    f2 = s - pT2s_reg1(p, T2);
+    T = rtsec2(pT2s_reg1, p, s, T1, T2, f1, f2, xacc, iMAX);
+  }
+  else
+    T = T1;
 
-  //polys_solo_i_ii_ij_jj(7.1 - pi, tau - 1.222, 34, IJn, i2soI, j2soJ, solo_ij_pow_reg1, &poly_pi, &poly_pipi, &poly_pitau, &poly_tautau);
-
-  polys_solo_i_ii_ij_jj_reg1(pi, tau, &poly_pi, &poly_pipi, &poly_pitau, &poly_tautau);
-  a = poly_pi - tau * poly_pitau;
-  a *= a;
-  b = a / (tau * tau * poly_tautau);
-  b = b - poly_pipi;
-  return poly_pi * sqrt(1000.0 * rgas_water * T / b);
+  return T;*/
 }
