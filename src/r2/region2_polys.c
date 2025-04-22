@@ -156,7 +156,13 @@ double gammar_tautau_reg2(double pi, double tau)
 //  multiple polynominal with solo i,j
 //--------------------------------------------------------------------------------
 
-void polys_0_i_ii_j_jj_ij_reg2(double pi, double tau, double *gamma, double *gamma_pi, double *gamma_pipi, double *gamma_tau, double *gamma_tautau, double *gamma_pitau)
+void polys_0_i_ii_j_jj_ij_reg2(double pi, double tau, double *gammar, double *gammar_pi, double *gammar_pipi, double *gammar_tau, double *gammar_tautau, double *gammar_pitau)
 {
-    polys_0_i_ii_j_jj_ij(pi, tau - 0.5, 43, IJn, gamma, gamma_pi, gamma_pipi, gamma_tau, gamma_tautau, gamma_pitau);
+    *gammar = 0;
+	*gammar_pi = 0;
+	*gammar_pipi = 0;
+	*gammar_tau = 0;
+	*gammar_tautau = 0;
+	*gammar_pitau = 0;
+    polys_0_i_ii_j_jj_ij(pi, tau - 0.5, 43, IJn, gammar, gammar_pi, gammar_pipi, gammar_tau, gammar_tautau, gammar_pitau);
 }

@@ -9,21 +9,21 @@
 #include "../r3/region3.h"
 #include "../r4/region4.h"
 
-double B23_T2p(double T)
 // IF97-rev Boundary between Regions 2 and 3
 // T in K
 // returns p between regions 2 and 3 in MPa
+double B23_T2p(double T)
 {
     const double n23[] = {0.34805185628969e3, -0.11671859879975e1, 0.10192970039326e-2};
     double result = n23[0] + (n23[1] + n23[2] * T) * T;
     return result;
 }
 
-double B23_p2T(double p)
 //IF97-rev Table 5, pag 9
 // Auxiliary equation for the boundary 2-3
 // p is pressure in MPa
 // returns temperature between regions 2 and 3 in K
+double B23_p2T(double p)
 {
     const double n23[] = {0.10192970039326e-2, 0.57254459862746e3, 0.13918839778870e2};
     double result = n23[1] + pow((p - n23[2]) / n23[0], 0.5);
@@ -34,7 +34,6 @@ double B23_p2T(double p)
 //  http://www.iapws.org/relguide/Supp-Tv(ph,ps)-2014.pdf
 //----------------------------------------------------------
 
-double h2pSat_reg3(double h)
 /* 
    03 – IAPWS-IF97-S03 rev :supp tv(ph,ps)2 2014 supplementary 03 for region 3 
   http://www.iapws.org/relguide/Supp-Tv(ph,ps)-2014.pdf, Eq 10
@@ -46,6 +45,7 @@ saturated vapor line including the critical point in the enthalpy range (see Fig
      _PSat_h(1700)    17.24175718
      _PSat_h(2400)    20.18090839
 */
+double h2pSat_reg3(double h)
 {
     // Table 18 page 18
     const int I[] = {0, 1, 1, 1, 1, 5, 7, 8, 14, 20, 22, 24, 28, 36};
@@ -56,8 +56,8 @@ saturated vapor line including the critical point in the enthalpy range (see Fig
                         -0.333775713645296e23, 0.356499469636328e11, -0.148547544720641e27,
                         0.330611514838798e19, 0.813641294467829e38};
 
-    double hmin_Ps3 = pT2h_reg1(Ps_623, 623.15);
-    double hmax_Ps3 = pT2h_reg2(Ps_623, 623.15);
+    double hmin_Ps3 = pT2h_reg1(Ps_623, TMAX1);
+    double hmax_Ps3 = pT2h_reg2(Ps_623, TMAX1);
     if (h < hmin_Ps3 || h > hmax_Ps3)
         return INVALID_H;
 
@@ -68,13 +68,13 @@ saturated vapor line including the critical point in the enthalpy range (see Fig
     return 22 * suma;
 }
 
-double s2pSat_reg3(double s)
 /* http://www.iapws.org/relguide/Supp-Tv%28ph,ps%293-2014.pdf, Eq 11
    Define the saturated line, P=f(s) for region 3
     s'(623.15K) ≤ s ≤ s''(623.15K)
     _PSat_s(3.8)  ->  16.87755057
     _PSat_s(5.2)  -> 16.68968482
  */
+double s2pSat_reg3(double s)
 {
     double sigma = s / 5.2;
     const int I[] = {0, 1, 1, 4, 12, 12, 16, 24, 28, 32};
@@ -85,8 +85,8 @@ double s2pSat_reg3(double s)
                         0.110649277244882e37};
 
     // Check input parameters
-    double smin_Ps3 = pT2s_reg1(Ps_623, 623.15);
-    double smax_Ps3 = pT2s_reg2(Ps_623, 623.15);
+    double smin_Ps3 = pT2s_reg1(Ps_623, TMAX1);
+    double smax_Ps3 = pT2s_reg2(Ps_623, TMAX1);
     if (s < smin_Ps3 || s > smax_Ps3)
         return INVALID_S;
 
@@ -100,15 +100,14 @@ double s2pSat_reg3(double s)
 //   http://www.iapws.org/relguide/Supp-phs3-2014.pdf. region3 （h,s) ->p
 //---------------------------------------------------------------------
 
-double _h1_s(double s)
 /* Define the saturated line boundary between Region 1 and 4, h=f(s)
    http://www.iapws.org/relguide/Supp-phs3-2014.pdf. Eq 3
 
     >>> _h1_s(1) 308.5509647
     >>> _h1_s(3)  1198.359754
 */
+double _h1_s(double s)
 {
-
     const int I[] = {0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5, 7, 8, 12, 12, 14, 14, 16, 20,
                      20, 22, 24, 28, 32, 32};
     const int J[] = {14, 36, 3, 16, 0, 5, 4, 36, 4, 16, 24, 18, 24, 1, 4, 2, 4, 1, 22, 10,
@@ -134,7 +133,6 @@ double _h1_s(double s)
     return 1700 * suma;
 }
 
-double _h3a_s(double s) // _h3a_s
 /*  Supp-phs3-2014.pdf. Eq 4
     the saturated line boundary between Region 4 and 3a, h=f(s)
    * s'(623.15K) ≤ s ≤ sc
@@ -143,6 +141,7 @@ double _h3a_s(double s) // _h3a_s
     >>> _h3a_s(4.2)
     1949.352563
   */
+double _h3a_s(double s) // _h3a_s
 {
     double sigma = s / 3.8;
     const int I[] = {0, 0, 0, 0, 2, 3, 4, 4, 5, 5, 6, 7, 7, 7, 10, 10, 10, 32, 32};
@@ -164,12 +163,12 @@ double _h3a_s(double s) // _h3a_s
     return 1700 * suma;
 }
 
-double _h2ab_s(double s)
 /*  http://www.iapws.org/relguide/Supp-phs3-2014.pdf. Eq 5
     Define the saturated line boundary between Region 4 and 2a-2b, h=f(s)
     _h2ab_s(7)  2723.729985
     _h2ab_s(9)  2511.861477
 */
+double _h2ab_s(double s)
 {
     double sigma1 = s / 5.21;
     double sigma2 = s / 9.2;
@@ -198,13 +197,13 @@ double _h2ab_s(double s)
     return 2800 * exp(suma);
 }
 
-double _h2c3b_s(double s)
 /*  http://www.iapws.org/relguide/Supp-phs3-2014.pdf. Eq 6
      Define the saturated line boundary between Region 4 and 2c-3b, h=f(s)
     * sc ≤ s ≤ 5.85
    >>> _h2c3b_s(5.5)     2687.693850
     >>> _h2c3b_s(4.5)     2144.360448
  */
+double _h2c3b_s(double s)
 {
     double sigma = s / 5.9;
     const int I[] = {0, 0, 0, 1, 1, 5, 6, 7, 8, 8, 12, 16, 22, 22, 24, 36};
@@ -226,12 +225,12 @@ double _h2c3b_s(double s)
     return 2800 * pow(suma, 4);
 }
 
-double _h13_s(double s)
 /*   Supp-phs3-2014.pdf. Eq 7
     Define the boundary between Region 1 and 3, h=f(s)
      _h13_s(3.7)    1632.525047
      _h13_s(3.5)     1566.104611
 */
+double _h13_s(double s)
 {
     if (s < 3.397782955 || s > 3.77828134)
         return INVALID_S;
@@ -248,15 +247,15 @@ double _h13_s(double s)
     return 1700 * suma;
 }
 
-double _t_hs(double h, double s) // _t23_hs(h, s)
-                                 /* 
-   http://www.iapws.org/relguide/Supp-phs3-2014.pdf. Eq 8 
-   Page25
-     4.6 Equation TB23(h,s) for the Boundary between Regions 2 and 3
-    Define the boundary between Region 2 and 3, T=f(h,s)
-    >>> _t_hs(2600, 5.1)  713.5259364
-    >>> _t_hs(2800, 5.2)   817.6202120
- */
+/* 
+http://www.iapws.org/relguide/Supp-phs3-2014.pdf. Eq 8 
+Page25
+4.6 Equation TB23(h,s) for the Boundary between Regions 2 and 3
+Define the boundary between Region 2 and 3, T=f(h,s)
+>>> _t_hs(2600, 5.1)  713.5259364
+>>> _t_hs(2800, 5.2)   817.6202120
+*/
+double _t_hs(double h, double s)
 {
 
     const int I[] = {-12, -10, -8, -4, -3, -2, -2, -2, -2, 0, 1, 1, 1, 3, 3, 5, 6, 6, 8, 8,

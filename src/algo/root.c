@@ -15,15 +15,7 @@
 // x2. The root returned as rtsec, is refined until its accuracy is ABS(xacc)
 //----------------------------------------------------------------------------
 
-double rtsec2(callfunc func, double cVar1,double fr,double x1,
-             double x2, double fl,double f, double xacc, int iMAX)
-// rtsec2 :(*func)(cVar1，x)所求解是方程的第二个参数：x，x={x1,x2}
-// 第一个参数cVar1，迭代求解中不变
-// fr: fr：是输入的(*func)(double,double)计算结果
-// fr: fr：是输入的(*func)(x,cVar2)计算结果
-// fl: fr-(*func)(cVar1,x1)
-// f: fr-(*func)(cVar1,x2)
-// rts：返回x的解
+double rtsec2(callfunc func, double cVar1, double fr, double x1, double x2, double fl,double f, double xacc, int iMAX)
 {
   double xl,rts,swap,dx;
   // pick the bound with the smaller function value as the most recent guess
@@ -64,14 +56,7 @@ double rtsec2(callfunc func, double cVar1,double fr,double x1,
 }
 
 
-double rtsec1(callfunc func, double cVar2,double fr,double x1,
-           double x2, double fl,double f, double xacc,int iMAX)
-// rtsec1 :(*func)(x,cVar2)所求解是方程的第一个参数：x，x={x1,x2}
-// 第二个参数cVar2，迭代求解中不变
-// fr: fr：是输入的(*func)(x,cVar2)计算结果
-// fl: fr-(*func)(x1,cVar2)
-// f: fr-(*func)(x2,cVar2)
-// rts：返回x的解
+double rtsec1(callfunc func, double cVar2, double fr, double x1, double x2, double fl, double f, double xacc,int iMAX)
 {
   double xl,rts,swap,dx;
   // pick the bound with the smaller function value as the most recent guess

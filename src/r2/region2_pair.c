@@ -278,6 +278,32 @@ double pT2h_reg2(double p, double T)
     return rgas_water * T * tau * (gamma0_tau_reg2(tau) + gammar_tau_reg2(pi, tau));
 }
 
+// specific entropy in region 2
+// sreg2 in kJ/(kg K)
+// temperature in K
+// pressure in Mpa
+double pT2s_reg2(double p, double T)
+{
+    double tau = r2Tstar / T;
+    double pi = p;
+
+    // gamma0_
+    double gamma0 = gamma0_reg2(pi, tau);
+    double gamma0tau = gamma0_tau_reg2(tau);
+
+    // gammar
+    double gammar = 0.0;
+    double gammarpi = 0.0;
+    double gammarpipi = 0.0;
+    double gammartau = 0.0;
+    double gammartautau = 0.0;
+    double gammarpitau = 0.0;
+  
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+
+    return rgas_water * (tau * (gamma0tau + gammartau) - (gamma0 + gammar));
+}
+
 // specific internal energy in region 2
 // ureg2 in kJ/kg
 // temperature in K
@@ -562,25 +588,6 @@ double hs2p_reg2(double h, double s)
     p = hs2p_reg2a(h, s);
   };
   return (p);
-
-  /*  double p1,p2,f1,f2;
-    p1 =p;
-    f1=s-ph2s_reg2(p1,h);
-    if (fabs(f1)>xacc)
-    {
-      if (f1>0) // pT2sreg1(p,h)< s ,the p1< expt p，so， p2=1.05*p1 p（p1,p2)
-        p2=(1.0+f1/s)*p1;
-      else
-        p2=(1.0-f1/s)*p1;
-
-      f2=s-ph2s_reg2(p2,h);
-
-      p=rtsec1(ph2s_reg2,h,s,p1,p2,f1,f2,xacc,iMAX);
-    }
-    else
-      p=p1;
-
-   return p;   */
 }
 
 double ph2T_reg2a(double p, double h)
@@ -634,15 +641,15 @@ double ph2T_reg2a(double p, double h)
 
   double pi, eta, theta;
   pi = p / 1.0;
-  eta = h / 2000.0 - 2.1;
+  eta = h / 2000.0;
 
-  return poly(pi, eta, 34, IJn);
+  return poly(pi, eta - 2.1, 34, IJn);
 }
 
+// Table 21. Numerical values of the coefficients and exponents
+// of the backward equation T ( p,h ) for
 double ph2T_reg2b(double p, double h)
 {
-  // Table 21. Numerical values of the coefficients and exponents
-  // of the backward equation T ( p,h ) for
   IJnData IJn[38] = {
       {0, 0, 1.4895041079516e3},
       {0, 1, 7.4307798314034e2},
@@ -755,24 +762,6 @@ double ph2T_reg2(double p, double h)
       T = ph2T_reg2b(p, h);
   else
     T = ph2T_reg2a(p, h);
-
-  /*double T1, T2, f1, f2;
-  T1 = T;
-  f1 = h - pT2h_reg2(p, T1);
-  if (fabs(f1) > xacc)
-  {
-    if (f1 > 0)
-      T2 = (1.0 + f1 / h) * T1; // TODO： 1.05 用 1+f1/h 是不是更快，没有测试
-    else
-      T2 = (1.0 - f1 / h) * T1;
-
-    f2 = h - pT2h_reg2(p, T2);
-
-    T = rtsec2(pT2h_reg2, p, h, T1, T2, f1, f2, xacc, iMAX);
-  }
-  else
-    T = T1;*/
-
   return T;
 }
 
@@ -849,12 +838,12 @@ double ps2T_reg2a(double p, double s)
 
     double pi, sigma, theta;
     pi = p / 1.0;
-    sigma = s / 2.0 - 2.0;
+    sigma = s / 2.0;
 
     theta = 0.0;
     for (int k = 0; k < 46; k++)
     {
-        theta += IJn[k].n * pow(pi, IJn[k].I) * pow(sigma, IJn[k].J);
+        theta += IJn[k].n * pow(pi, IJn[k].I) * pow(sigma - 2.0, IJn[k].J);
     }
     return 1.0 * theta;
 }
@@ -920,9 +909,9 @@ double ps2T_reg2b(double p, double s)
 
     double pi, sigma;
     pi = p / 1.0;
-    sigma = 10 - s / 0.7853;
+    sigma = s / 0.7853;
     
-    double theta = poly(pi, sigma, 44, IJn);
+    double theta = poly(pi, 10 - sigma, 44, IJn);
     return 1.0 * theta;
 }
 
@@ -970,9 +959,9 @@ double ps2T_reg2c(double p, double s)
 
     double pi, sigma;
     pi = p / 1.0;
-    sigma = 2 - s / 2.9251;
+    sigma = s / 2.9251;
     
-    double theta = poly(pi, sigma, 30, IJn);
+    double theta = poly(pi, 2 - sigma, 30, IJn);
     return 1.0 * theta;
 }
 
@@ -995,49 +984,4 @@ double ps2T_reg2(double p, double s)
         T = ps2T_reg2a(p, s);
     }
     return T;
-    /*
-        double T1, T2, f1, f2;
-        T1 = T;
-        f1 = s - pT2s_reg2(p, T1);
-        if (fabs(f1) > xacc)
-        {
-            if (f1 > 0) // pT2sreg1(p,T1)< s ,the T1< expt T，so， T2=1.05*T1 T（T1,T2)
-                T2 = (1.0 + f1 / s) * T1;
-            else
-                T2 = (1.0 - f1 / s) * T1;
-
-            f2 = s - pT2s_reg2(p, T2);
-
-            T = rtsec2(pT2s_reg2, p, s, T1, T2, f1, f2, xacc, iMAX);
-        }
-        else
-            T = T1;
-
-        return T;*/
-}
-
-// specific entropy in region 2
-// sreg2 in kJ/(kg K)
-// temperature in K
-// pressure in Mpa
-double pT2s_reg2(double p, double T)
-{
-    double tau = r2Tstar / T;
-    double pi = p;
-
-    // gamma0_
-    double gamma0 = gamma0_reg2(pi, tau);
-    double gamma0tau = gamma0_tau_reg2(tau);
-
-    // gammar
-    double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
-  
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
-
-    return rgas_water * (tau * (gamma0tau + gammartau) - (gamma0 + gammar));
 }

@@ -252,30 +252,11 @@ double hs2p_reg1(double h, double s)
   sigma = s / 7.6 + 0.05;
   pi= poly(eta,sigma , 19,IJn);
   return (100.0*pi);
-
-  /*// iteration: refine
-  double p1, p2, p, f1, f2;
-  p1 = (100.0 * pi);
-  f1 = s - ph2s_reg1(p1, h);
-  if (fabs(f1) > xacc)
-  {
-    if (f1 > 0) // pT2s_reg1(p,h)< s ,the p1< expt p，so， p2=1.05*p1 p（p1,p2)
-      p2 = (1.0 + f1 / s) * p1;
-    else
-      p2 = (1.0 - f1 / s) * p1;
-
-    f2 = s - ph2s_reg1(p2, h);
-    p = rtsec1(ph2s_reg1, h, s, p1, p2, f1, f2, xacc, iMAX);
-  }
-  else
-    p = p1;
-
-  return p;*/
 }
 
 
-double pT2v_reg1(double p, double T)
 // specific volume in region 1
+double pT2v_reg1(double p, double T)
 {
   double pi, tau;
   tau = r1Tstar / T;
@@ -283,8 +264,8 @@ double pT2v_reg1(double p, double T)
   return 0.001 * rgas_water * T * pi * gamma_pi_reg1(pi,tau) / p;
 }
 
-double pT2u_reg1(double p, double T)
 // specific internal energy in region 1
+double pT2u_reg1(double p, double T)
 {
   double pi, tau;
   tau = r1Tstar / T;
@@ -302,8 +283,8 @@ double pT2u_reg1(double p, double T)
   return rgas_water * T * (tau * gammatau - pi * gammapi);
 }
 
-double pT2s_reg1(double p, double T)
 // specific entropy in region 1
+double pT2s_reg1(double p, double T)
 {
 
   double pi, tau;
@@ -321,8 +302,8 @@ double pT2s_reg1(double p, double T)
   return rgas_water * (tau * gammatau - gamma);
 }
 
-double pT2h_reg1(double p, double T)
 // specific enthalpy in region 1
+double pT2h_reg1(double p, double T)
 {
   double pi, tau;
   tau = r1Tstar / T;
@@ -330,8 +311,8 @@ double pT2h_reg1(double p, double T)
   return rgas_water * T * tau * gamma_tau_reg1(pi,tau);
 }
 
-double pT2cp_reg1(double p, double T)
 // specific isobaric heat capacity in region 1
+double pT2cp_reg1(double p, double T)
 {
   double pi, tau;
   tau = r1Tstar / T;
@@ -339,9 +320,9 @@ double pT2cp_reg1(double p, double T)
    return -rgas_water * tau * tau * gamma_tautau_reg1(pi, tau);
 }
 
-double pT2cv_reg1(double p, double T)
 // specific isochoric heat capacity in region 1
 // cv in kJ/(kg K), T in K, p in MPa
+double pT2cv_reg1(double p, double T)
 {
 
   double pi, tau, a, b;
@@ -361,9 +342,9 @@ double pT2cv_reg1(double p, double T)
   return rgas_water * (a + b * b / gammapipi);
 }
 
-double pT2w_reg1(double p, double T)
 // speed of sound in region 1
 // w in m/s, T in K, p in Mpa
+double pT2w_reg1(double p, double T)
 {
   double pi, tau, gammapi, a, b;
   tau = r1Tstar / T;
@@ -392,9 +373,9 @@ double pT2w_reg1(double p, double T)
 //-------------------------------------------------------------
 // Backward equation T(p,h) for region 1
 //--------------------------------------------------------------
+// Page 11, Table6 :Initialize coefficients and exponents (P,H)->T for region 1
 double ph2T_reg1(double p, double h)
 {
-  // Page 11, Table6 :Initialize coefficients and exponents (P,H)->T for region 1
   IJnData IJn[] = {
       {0, 0, -238.72489924521},
       {0, 1, 404.21188637945},
@@ -420,35 +401,16 @@ double ph2T_reg1(double p, double h)
   double pi, eta;
   double theta;
   pi = p / 1.0;
-  eta = h / 2500.0 + 1.0;
-  theta = poly(pi, eta, 20, IJn);
+  eta = h / 2500.0;
+  theta = poly(pi, eta + 1.0, 20, IJn);
   return (1.0 *theta);
-
-  /*double T1, T2, T, f1, f2;
-  T1 = (1.0 * theta);
-  f1 = h - pT2h_reg1(p, T1);
-  if (fabs(f1) > xacc)
-  {
-    if (f1 > 0)
-      T2 = (1.0 + f1 / h) * T1; // TODO： 1.05 用 1+f1/h 是不是更快，没有测试
-    else
-      T2 = (1.0 - f1 / h) * T1;
-
-    f2 = h - pT2h_reg1(p, T2);
-
-    T = rtsec2(pT2h_reg1, p, h, T1, T2, f1, f2, xacc, iMAX);
-  }
-  else
-    T = T1;
-
-  return T;*/
 }
 
 //----------------------------------------------------------------
 //  Backward equation T(p,s) for region 1
 //----------------------------------------------------------------
-double ps2T_reg1(double p, double s)
 // Page 12, Table 8 : Initialize coefficients and exponents (P,S)->T for region 1
+double ps2T_reg1(double p, double s)
 {
   IJnData IJn[] = {
       {0, 0, 0.17478268058307e3},
@@ -478,27 +440,7 @@ double ps2T_reg1(double p, double s)
   double pi, sigma;
   double theta;
   pi = p / 1.0;
-  sigma = s / 1.0 + 2.0;
-  theta = poly(pi, sigma, 20, IJn);
+  sigma = s / 1.0;
+  theta = poly(pi, sigma + 2.0, 20, IJn);
    return (1.0*theta);
-
-  /*
-  // iteration: refine
-  double T1, T2, T, f1, f2;
-  T1 = (1.0 * theta);
-  f1 = s - pT2s_reg1(p, T1);
-  if (fabs(f1) > xacc)
-  {
-    if (f1 > 0) // pT2s_reg1(p,T1)< s ,the T1< expt T，so， T2=1.05*T1 T（T1,T2)
-      T2 = (1.0 + f1 / s) * T1;
-    else
-      T2 = (1.0 - f1 / s) * T1;
-
-    f2 = s - pT2s_reg1(p, T2);
-    T = rtsec2(pT2s_reg1, p, s, T1, T2, f1, f2, xacc, iMAX);
-  }
-  else
-    T = T1;
-
-  return T;*/
 }

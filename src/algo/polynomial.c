@@ -48,7 +48,6 @@ double poly_ij(double vi, double vj, int size, IJnData *IJn)
     v += IJn[k].n * IJn[k].I * ipowsac(vi, IJn[k].I - 1) * IJn[k].J * ipowsac(vj, IJn[k].J - 1);
   return v;
 }
-//--------------multiple values ------------------------------------------------------
 
 void polys_0_i_ii_j_jj_ij(double vi, double vj, int size, IJnData *IJn, double *poly_0,
     double *poly_i, double *poly_ii, double *poly_j, double *poly_jj, double *poly_ij)

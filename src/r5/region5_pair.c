@@ -144,12 +144,6 @@ double ph2T_reg5(double p, double h)
    double T, T1, T2;
    double f1, f2;
 
-   // TODO:  插值求迭代初值方法
-   //double  hmin =pT2hreg2(p,1073.15);
-   //double  hmax = pT2h_reg5(p,2273.15);
-   //T1=1073.15+(2273.15-1073.15)*(h-hmin)/(hmax-hmin);
-   //  求迭代初值方法2： 以三相点为起点,采用与理想气体的对比关系求迭代初值
-
    T = -1000;
 
    T1 = 0.5 * (2273.15 + 1073.15);
@@ -180,10 +174,6 @@ double ph2T_reg5(double p, double h)
 double ps2T_reg5(double p, double s)
 {
    double T, T1, T2, f1, f;
-   //RODO: 插值求迭代初值方法1
-   //double  smin =pT2sreg2(p,1073.15);
-   //double  smax = pT2s_reg5(p,2273.15);
-   //T1=1073.15+(2273.15-1073.15)*(s-smin)/(smax-smin);
 
    T = -1000;
 

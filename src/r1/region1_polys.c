@@ -81,6 +81,12 @@ double gamma_pipi_reg1(double pi, double tau)
 
 void polys_0_i_ii_j_jj_ij_reg1(double pi, double tau, double *gamma, double *gamma_pi, double *gamma_pipi, double *gamma_tau, double *gamma_tautau, double *gamma_pitau)
 {
+    *gamma = 0;
+	*gamma_pi = 0;
+	*gamma_pipi = 0;
+	*gamma_tau = 0;
+	*gamma_tautau = 0;
+	*gamma_pitau = 0;
     polys_0_i_ii_j_jj_ij(7.1 - pi, tau - 1.222, 34, IJn, gamma, gamma_pi, gamma_pipi, gamma_tau, gamma_tautau, gamma_pitau);
     *gamma_pi = -(*gamma_pi);
     *gamma_pitau = -(*gamma_pitau);

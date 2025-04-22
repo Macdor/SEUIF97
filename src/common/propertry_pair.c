@@ -95,8 +95,8 @@ double pair_prop(double v1, double v2, int o_id, region_fn regfn,
     return v;
 }
 
-double pT_reg(double p, double T, int o_id, properties_region pT_thermal, properties_region pT_ext)
 // o_id: output propertry
+double pT_reg(double p, double T, int o_id, properties_region pT_thermal, properties_region pT_ext)
 {
     double value;
     switch (o_id)

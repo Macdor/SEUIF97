@@ -49,21 +49,17 @@ double Ts2x_reg4(double T, double s)
     return (s - s_sat_w) / (s_sat_s - s_sat_w);
 }
 
-//
 //  Initialize coefficients for region 4
-//
 static double n[11] = {0, 0.11670521452767E+04, -0.72421316703206E+06, -0.17073846940092E+02,
     0.12020824702470E+05, -0.32325550322333E+07, 0.14915108613530E+02,
     -0.48232657361591E+04, 0.40511340542057E+06, -0.23855557567849E+00,
     0.65017534844798E+03};
 
-double pSat(double T)
 // saturation pressure of water
 // pSatW in bar
 // T :temperaturein K
-//
 // pSat = -1: temperature outside range
-//
+double pSat(double T)
 {
 double pS;
 if (T < TMIN4 || T > tc_water) // tc_water=647.096
@@ -79,14 +75,11 @@ pS = ipowsac(2 * cco / (-bco + sqrt(bco * bco - 4 * aco * cco)), 4);
 return pS;
 }
 
-double TSat(double p)
-//
 // saturation temperature of water
 // tSatW in K
 // p :pressure in bar
-//
 // tSatW=-1: pressure outside range
-//
+double TSat(double p)
 {
 double TS;
 if (p < Pmin || p > pc_water)
@@ -159,9 +152,7 @@ double hs2T_reg43(double h, double s)
 
     double nu = h / 2800;
     double sigma = s / 9.2;
-    // double suma = 0;
-    // for (int i = 0; i < 36; i++)
-    //    suma += IJn[i].n * ipowsac(nu - 0.119, IJn[i].I) * ipowsac(sigma - 1.07, IJn[i].J);
+
     return 550.0 * poly(nu - 0.119, sigma - 1.07, 36, IJn);
 }
 

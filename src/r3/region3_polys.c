@@ -95,9 +95,14 @@ double phi_deltatau_reg3(double delta, double tau)
 // mutiple polys
 //-----------------------------------------------------------------------------------------
 
-void polys_0_i_ii_j_jj_ij_reg3(double delta, double tau, double *poly,
-	double *poly_delta, double *poly_deltadelta, double *poly_deltatau,
-	double *poly_tautau)
+void polys_0_i_ii_j_jj_ij_reg3(double delta, double tau, double *phi,
+	double *phi_delta, double *phi_deltadelta, double *phi_tau, double *phi_tautau, double *phi_deltatau)
 {
-    polys_0_i_ii_j_jj_ij(delta, tau - 0.5, 43, IJn, poly, poly_delta, poly_deltadelta, poly_deltatau, poly_tautau);
+	*phi = n1 * log(delta);
+	*phi_delta = (n1 / delta);
+	*phi_deltadelta = (-n1 / delta / delta);
+	*phi_tau = 0;
+	*phi_tautau = 0;
+	*phi_deltatau = 0;
+    polys_0_i_ii_j_jj_ij(delta, tau - 0.5, 43, IJn, phi, phi_delta, phi_deltadelta, phi_tau, phi_tautau, phi_deltatau);
 }

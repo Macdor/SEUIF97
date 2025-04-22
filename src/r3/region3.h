@@ -10,8 +10,7 @@ double phi_tautau_reg3(double tau, double delta);
 double phi_deltatau_reg3(double tau, double delta);
 
 void polys_0_i_ii_j_jj_ij_reg3(double delta, double tau, double *poly,
-	double *poly_delta, double *poly_deltadelta, double *poly_deltatau,
-	double *poly_tautau);
+	double *poly_delta, double *poly_deltadelta, double *poly_tau, double *poly_tautau, double *poly_deltatau);
 
 double Td2p_reg3(double T, double d);
 double Td2u_reg3(double T, double d);
