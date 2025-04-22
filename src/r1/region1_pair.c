@@ -272,15 +272,15 @@ double pT2u_reg1(double p, double T)
   pi = p / r1pstar;
 
   double gamma = 0.0;
-  double gammapi = 0.0;
-  double gammapipi = 0.0;
-  double gammatau = 0.0;
-  double gammatautau = 0.0;
-  double gammapitau = 0.0;
+  double gamma_pi = 0.0;
+  double gamma_pipi = 0.0;
+  double gamma_tau = 0.0;
+  double gamma_tautau = 0.0;
+  double gamma_pitau = 0.0;
 
-  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gammapi, &gammapipi, &gammatau, &gammatautau, &gammapitau);
+  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gamma_pi, &gamma_pipi, &gamma_tau, &gamma_tautau, &gamma_pitau);
 
-  return rgas_water * T * (tau * gammatau - pi * gammapi);
+  return rgas_water * T * (tau * gamma_tau - pi * gamma_pi);
 }
 
 // specific entropy in region 1
@@ -292,14 +292,14 @@ double pT2s_reg1(double p, double T)
   pi = p / r1pstar;
 
   double gamma = 0.0;
-  double gammapi = 0.0;
-  double gammapipi = 0.0;
-  double gammatau = 0.0;
-  double gammatautau = 0.0;
-  double gammapitau = 0.0;
+  double gamma_pi = 0.0;
+  double gamma_pipi = 0.0;
+  double gamma_tau = 0.0;
+  double gamma_tautau = 0.0;
+  double gamma_pitau = 0.0;
 
-  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gammapi, &gammapipi, &gammatau, &gammatautau, &gammapitau); 
-  return rgas_water * (tau * gammatau - gamma);
+  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gamma_pi, &gamma_pipi, &gamma_tau, &gamma_tautau, &gamma_pitau); 
+  return rgas_water * (tau * gamma_tau - gamma);
 }
 
 // specific enthalpy in region 1
@@ -330,16 +330,16 @@ double pT2cv_reg1(double p, double T)
   pi = p / r1pstar;
 
   double gamma = 0.0;
-  double gammapi = 0.0;
-  double gammapipi = 0.0;
-  double gammatau = 0.0;
-  double gammatautau = 0.0;
-  double gammapitau = 0.0;
+  double gamma_pi = 0.0;
+  double gamma_pipi = 0.0;
+  double gamma_tau = 0.0;
+  double gamma_tautau = 0.0;
+  double gamma_pitau = 0.0;
 
-  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gammapi, &gammapipi, &gammatau, &gammatautau, &gammapitau);
-  a = -tau * tau * gammatautau;
-  b = gammapi - tau * gammapitau;
-  return rgas_water * (a + b * b / gammapipi);
+  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gamma_pi, &gamma_pipi, &gamma_tau, &gamma_tautau, &gamma_pitau);
+  a = -tau * tau * gamma_tautau;
+  b = gamma_pi - tau * gamma_pitau;
+  return rgas_water * (a + b * b / gamma_pipi);
 }
 
 // speed of sound in region 1
@@ -351,16 +351,16 @@ double pT2w_reg1(double p, double T)
   pi = p / r1pstar;
 
   double gamma = 0.0;
-  double gammapi = 0.0;
-  double gammapipi = 0.0;
-  double gammatau = 0.0;
-  double gammatautau = 0.0;
-  double gammapitau = 0.0;
+  double gamma_pi = 0.0;
+  double gamma_pipi = 0.0;
+  double gamma_tau = 0.0;
+  double gamma_tautau = 0.0;
+  double gamma_pitau = 0.0;
 
-  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gammapi, &gammapipi, &gammatau, &gammatautau, &gammapitau);
-  a = gammapi - tau * gammapitau;
-  b = a * a  / (tau * tau * gammatautau);
-  return gammapi * sqrt(1000.0 * rgas_water * T / (b - gammapipi));
+  polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gamma, &gamma_pi, &gamma_pipi, &gamma_tau, &gamma_tautau, &gamma_pitau);
+  a = gamma_pi - tau * gamma_pitau;
+  b = a * a  / (tau * tau * gamma_tautau);
+  return gamma_pi * sqrt(1000.0 * rgas_water * T / (b - gamma_pipi));
 }
 
 

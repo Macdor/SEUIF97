@@ -262,21 +262,11 @@ double pT_ext_reg1(double p, double T, int o_id)
         r = pT2dvdtcp_reg1(p, T);
         break;
     case ODVDHCP:
-    {
-        double dvdtcp = pT2dvdtcp_reg1(p, T);
-        double Cp = pT2cp_reg1(p, T);
-        r = dvdtcp/Cp;
+        r = pT2dvdhcp_reg1(p, T);
         break;
-    }
     case ODVDPCH:
-    {
-        double dvdpct = pT2dvdpct_reg1(p, T);
-        double dvdtcp = pT2dvdtcp_reg1(p, T);
-        double dhdpct = pT2ijoule_reg1(p, T);
-        double Cp = pT2cp_reg1(p, T);
-        r = dvdpct - dvdtcp*dhdpct/Cp;
+        r = pT2dvdpch_reg1(p, T);
         break;
-    }
     /*
        OPC => pT2pc_reg1(p, T),
        OBETAP => pT2batap_reg1(p, T),

@@ -31,7 +31,7 @@ int main(void)
     double in2 = 200;
     double out;
 
-    out = pt(in1, in2, 30);
-    printf("(p,x)(%.2f,%.2f) r= %.2f", in1, in2, out);
+    out = ph(in1, in2, 31);
+    printf("(in1,in2)(%.5f,%.5f) r= %.10f", in1, in2, out);
     return EXIT_SUCCESS;
 }

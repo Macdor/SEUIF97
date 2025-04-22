@@ -48,15 +48,15 @@ double pT2ipcec_reg2(double p, double T)
     double pi = p / r2pstar;
     
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
     
-    return (1.0 - pi * tau * gammarpitau / (1.0 + p * gammarpi)) / T;
+    return (1.0 - pi * tau * gammar_pitau / (1.0 + p * gammar_pi)) / T;
 }
 
 /// kt Isothermal compressibility 1/Mpa
@@ -67,14 +67,14 @@ double pT2kt_reg2(double p, double T)
     double pi = p / r2pstar;
 
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
-    return (1 - pi * pi * gammarpipi) / (1 + pi * gammarpi) / p;
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
+    return (1 - pi * pi * gammar_pipi) / (1 + pi * gammar_pi) / p;
 }
 
 /// the specific Gibbs free energy, Page 6, Eq(7)
@@ -99,15 +99,15 @@ double pT2f_reg2(double p, double T)
     double gamma0_pi = gamma0_pi_reg2(pi);
 
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    return rgas_water * T * (gamma0 + gammar - pi * (gamma0_pi + gammarpi));
+    return rgas_water * T * (gamma0 + gammar - pi * (gamma0_pi + gammar_pi));
 }
 
 /// joule ： Joule-Thomson coefficient    K/MPa (10^-3*K/kPa)
@@ -124,25 +124,25 @@ double pT2joule_reg2(double p, double T)
     //  (v / cp) * TCex_1
 
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
     double gamma0pi = gamma0_pi_reg2(pi);
     double gamma0pitau = gamma0_pitau_reg2();
     double gamma0tautau = gamma0_tautau_reg2(pi, tau);
 
-    double gammapi = gamma0pi + gammarpi;
-    double gammapitau = gamma0pitau + gammarpitau;
-    double gammatautau = gamma0tautau + gammartautau;
+    double gamma_pi = gamma0pi + gammar_pi;
+    double gamma_pitau = gamma0pitau + gammar_pitau;
+    double gamma_tautau = gamma0tautau + gammar_tautau;
 
-    double v = rgas_water * T * gammapi;
-    double cp = -rgas_water * tau * tau * gammatautau;
-    double TCex_1 = -tau * gammapitau / gammapi;
+    double v = rgas_water * T * gamma_pi;
+    double cp = -rgas_water * tau * tau * gamma_tautau;
+    double TCex_1 = -tau * gamma_pitau / gamma_pi;
     return (v / cp) * TCex_1;
 }
 
@@ -173,17 +173,17 @@ double pT2e_reg2(double p, double T)
     double pi = p / r2pstar;
 
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
     double gamma = gamma0_reg2(pi, tau) + gammar;
-    double gammatau = gamma0_tau_reg2(tau) + gammartau;
-    return rgas_water * (T * gamma + (T - 273.16) * (tau * gammatau - gamma));
+    double gamma_tau = gamma0_tau_reg2(tau) + gammar_tau;
+    return rgas_water * (T * gamma + (T - 273.16) * (tau * gamma_tau - gamma));
 }
 
 /// Region 1 - (dp/dt)v  MPa/K
@@ -193,17 +193,17 @@ double pT2dpdtcv_reg2(double p, double T)
     double pi = p / r2pstar;
 
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    double gamma_pi = gamma0_pi_reg2(pi) + gammarpi;
-    double gamma_pipi = gamma0_pipi_reg2(pi) + gammarpipi;
-    double gamma_pitau = gamma0_pitau_reg2() + gammarpitau;
+    double gamma_pi = gamma0_pi_reg2(pi) + gammar_pi;
+    double gamma_pipi = gamma0_pipi_reg2(pi) + gammar_pipi;
+    double gamma_pitau = gamma0_pitau_reg2() + gammar_pitau;
     return r2pstar * (gamma_pitau * r2Tstar - gamma_pi * T) / (T * T * gamma_pipi);
 }
 
@@ -224,17 +224,17 @@ double pT2dvdtcp_reg2(double p, double T)
     double pi = p / r2pstar;
 
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    double gammapi = gamma0_pi_reg2(pi) + gammarpi;
-    double gammapitau = gamma0_pitau_reg2() + gammarpitau;
-    return 0.001 * rgas_water * (gammapi - tau * gammapitau) / r2pstar;
+    double gamma_pi = gamma0_pi_reg2(pi) + gammar_pi;
+    double gamma_pitau = gamma0_pitau_reg2() + gammar_pitau;
+    return 0.001 * rgas_water * (gamma_pi - tau * gamma_pitau) / r2pstar;
 }
 
 // (dv/dh)p m3/(kg.K)
@@ -244,20 +244,20 @@ double pT2dvdhcp_reg2(double p, double T)
     double pi = p / r2pstar;
     
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    double gammapi = gamma0_pi_reg2(pi) + gammarpi;
-    double gammatautau = gamma0_tautau_reg2(pi, tau) + gammartautau;
-    double gammapitau = gamma0_pitau_reg2() + gammarpitau;
+    double gamma_pi = gamma0_pi_reg2(pi) + gammar_pi;
+    double gamma_tautau = gamma0_tautau_reg2(pi, tau) + gammar_tautau;
+    double gamma_pitau = gamma0_pitau_reg2() + gammar_pitau;
 
-    double cp = -rgas_water*tau*tau*gammatautau;
-    double dvdtcp = 0.001*rgas_water*(gammapi - tau*gammapitau)/r2pstar;
+    double cp = -rgas_water*tau*tau*gamma_tautau;
+    double dvdtcp = 0.001*rgas_water*(gamma_pi - tau*gamma_pitau)/r2pstar;
     double dvdhcp = dvdtcp/cp;
 
     return dvdhcp;
@@ -270,23 +270,23 @@ double pT2dvdpch_reg2(double p, double T)
     double pi = p / r2pstar;
     
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    double gammapi = gamma0_pi_reg2(pi) + gammarpi;
-    double gammapipi = gamma0_pipi_reg2(pi) + gammarpipi;
-    double gammatautau = gamma0_tautau_reg2(pi, tau) + gammartautau;
-    double gammapitau = gamma0_pitau_reg2() + gammarpitau;
+    double gamma_pi = gamma0_pi_reg2(pi) + gammar_pi;
+    double gamma_pipi = gamma0_pipi_reg2(pi) + gammar_pipi;
+    double gamma_tautau = gamma0_tautau_reg2(pi, tau) + gammar_tautau;
+    double gamma_pitau = gamma0_pitau_reg2() + gammar_pitau;
 
-    double cp = -rgas_water*tau*tau*gammatautau;
-    double dhdpct = rgas_water*r2Tstar*gammapitau/r2pstar;
-    double dvdpct = 0.001*rgas_water*T*gammapipi/r2pstar/r2pstar;
-    double dvdtcp = 0.001*rgas_water*(gammapi - tau*gammapitau)/r2pstar;
+    double cp = -rgas_water*tau*tau*gamma_tautau;
+    double dhdpct = rgas_water*r2Tstar*gamma_pitau/r2pstar;
+    double dvdpct = 0.001*rgas_water*T*gamma_pipi/r2pstar/r2pstar;
+    double dvdtcp = 0.001*rgas_water*(gamma_pi - tau*gamma_pitau)/r2pstar;
     double dvdhcp = dvdtcp/cp;
     double dvdpch = dvdpct - dvdhcp*dhdpct;
     return dvdpch;

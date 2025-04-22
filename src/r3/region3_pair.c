@@ -169,8 +169,8 @@ double Td2p_reg3(double T, double d)
 {
     double tau = tc_water / T;
     double delta = d / dc_water;
-    double phidelta = phi_delta_reg3(delta, tau);
-    return 0.001 * d * rgas_water * T * delta * phidelta;
+    double phi_delta = phi_delta_reg3(delta, tau);
+    return 0.001 * d * rgas_water * T * delta * phi_delta;
 }
 
 // speciphic internal energy in region 3
@@ -191,15 +191,15 @@ double Td2s_reg3(double T, double d)
     double delta = d / dc_water;
 
     double phi = 0.0;
-    double phidelta = 0.0;
-    double phideltadelta = 0.0;
-    double phitau = 0.0;
-    double phitautau = 0.0;
-    double phideltatau = 0.0;
+    double phi_delta = 0.0;
+    double phi_deltadelta = 0.0;
+    double phi_tau = 0.0;
+    double phi_tautau = 0.0;
+    double phi_deltatau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phidelta, &phideltadelta, &phitau, &phitautau, &phideltatau);
+    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phi_delta, &phi_deltadelta, &phi_tau, &phi_tautau, &phi_deltatau);
 
-    return rgas_water * (tau * phitau - phi);
+    return rgas_water * (tau * phi_tau - phi);
 }
 
 // speciphic enthalpy in region 3
@@ -210,15 +210,15 @@ double Td2h_reg3(double T, double d)
     double delta = d / dc_water;
 
     double phi = 0.0;
-    double phidelta = 0.0;
-    double phideltadelta = 0.0;
-    double phitau = 0.0;
-    double phitautau = 0.0;
-    double phideltatau = 0.0;
+    double phi_delta = 0.0;
+    double phi_deltadelta = 0.0;
+    double phi_tau = 0.0;
+    double phi_tautau = 0.0;
+    double phi_deltatau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phidelta, &phideltadelta, &phitau, &phitautau, &phideltatau);
+    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phi_delta, &phi_deltadelta, &phi_tau, &phi_tautau, &phi_deltatau);
 
-    return rgas_water * T * (tau * phitau + delta * phidelta);
+    return rgas_water * T * (tau * phi_tau + delta * phi_delta);
 }
 
 // speciphic isobaric heat capacity in region 3
@@ -229,17 +229,17 @@ double Td2cp_reg3(double T, double d)
     double delta = d / dc_water;
 
     double phi = 0.0;
-    double phidelta = 0.0;
-    double phideltadelta = 0.0;
-    double phitau = 0.0;
-    double phitautau = 0.0;
-    double phideltatau = 0.0;
+    double phi_delta = 0.0;
+    double phi_deltadelta = 0.0;
+    double phi_tau = 0.0;
+    double phi_tautau = 0.0;
+    double phi_deltatau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phidelta, &phideltadelta, &phitau, &phitautau, &phideltatau);
+    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phi_delta, &phi_deltadelta, &phi_tau, &phi_tautau, &phi_deltatau);
 
-    double a = delta * (phidelta - tau * phideltatau);
-    double b = delta * (2.0 * phidelta + delta * phideltadelta);
-    return rgas_water * (-tau * tau * phitautau + a * a / b);
+    double a = delta * (phi_delta - tau * phi_deltatau);
+    double b = delta * (2.0 * phi_delta + delta * phi_deltadelta);
+    return rgas_water * (-tau * tau * phi_tautau + a * a / b);
 }
 
 // speciphic isochoric heat capacity in region 3
@@ -260,16 +260,16 @@ double Td2w_reg3(double T, double d)
     double delta = d / dc_water;
 
     double phi = 0.0;
-    double phidelta = 0.0;
-    double phideltadelta = 0.0;
-    double phitau = 0.0;
-    double phitautau = 0.0;
-    double phideltatau = 0.0;
+    double phi_delta = 0.0;
+    double phi_deltadelta = 0.0;
+    double phi_tau = 0.0;
+    double phi_tautau = 0.0;
+    double phi_deltatau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phidelta, &phideltadelta, &phitau, &phitautau, &phideltatau);
+    polys_0_i_ii_j_jj_ij_reg3(delta, tau, &phi, &phi_delta, &phi_deltadelta, &phi_tau, &phi_tautau, &phi_deltatau);
 
-    double a = delta * (phidelta - tau * phideltatau);
-    double r = 1000.0 * rgas_water * T * (delta * (2.0 * phidelta + delta * phideltadelta) - a * a / (tau * tau * phitautau));
+    double a = delta * (phi_delta - tau * phi_deltatau);
+    double r = 1000.0 * rgas_water * T * (delta * (2.0 * phi_delta + delta * phi_deltadelta) - a * a / (tau * tau * phi_tautau));
     return sqrt(r);
 }
 

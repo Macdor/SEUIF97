@@ -289,19 +289,19 @@ double pT2s_reg2(double p, double T)
 
     // gamma0_
     double gamma0 = gamma0_reg2(pi, tau);
-    double gamma0tau = gamma0_tau_reg2(tau);
+    double gamma0_tau = gamma0_tau_reg2(tau);
 
     // gammar
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    return rgas_water * (tau * (gamma0tau + gammartau) - (gamma0 + gammar));
+    return rgas_water * (tau * (gamma0_tau + gammar_tau) - (gamma0 + gammar));
 }
 
 // specific internal energy in region 2
@@ -314,15 +314,15 @@ double pT2u_reg2(double p, double T)
     double pi = p;
 
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    return rgas_water * T * (tau * (gamma0_tau_reg2(tau) + gammartau) - pi * (gamma0_pi_reg2(pi) + gammarpi));
+    return rgas_water * T * (tau * (gamma0_tau_reg2(tau) + gammar_tau) - pi * (gamma0_pi_reg2(pi) + gammar_pi));
 }
 
 // specific isobaric heat capacity in region 2
@@ -346,16 +346,16 @@ double pT2cv_reg2(double p, double T)
     double pi = p;
     
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    double a = 1 + pi * (gammarpi - tau * gammarpitau);
-    return rgas_water * (-tau * tau * (gamma0_tautau_reg2(pi, tau) + gammartautau) - a * a / (1 - pi * pi * gammarpipi));
+    double a = 1 + pi * (gammar_pi - tau * gammar_pitau);
+    return rgas_water * (-tau * tau * (gamma0_tautau_reg2(pi, tau) + gammar_tautau) - a * a / (1 - pi * pi * gammar_pipi));
 }
 
 // speed of sound in region 2
@@ -368,18 +368,18 @@ double pT2w_reg2(double p, double T)
     double pi = p;
 
     double gammar = 0.0;
-    double gammarpi = 0.0;
-    double gammarpipi = 0.0;
-    double gammartau = 0.0;
-    double gammartautau = 0.0;
-    double gammarpitau = 0.0;
+    double gammar_pi = 0.0;
+    double gammar_pipi = 0.0;
+    double gammar_tau = 0.0;
+    double gammar_tautau = 0.0;
+    double gammar_pitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammar_pi, &gammar_pipi, &gammar_tau, &gammar_tautau, &gammar_pitau);
 
-    double a = pi * gammarpi;
-    double b = 1 + pi * (gammarpi - tau * gammarpitau);
-    return sqrt(1000.0 * rgas_water * T * (1 + 2 * pi * gammarpi + a * a) /
-                ((1 - pi * pi * gammarpipi) + b * b / (tau * tau * (gamma0_tautau_reg2(pi, tau) + gammartautau))));
+    double a = pi * gammar_pi;
+    double b = 1 + pi * (gammar_pi - tau * gammar_pitau);
+    return sqrt(1000.0 * rgas_water * T * (1 + 2 * pi * gammar_pi + a * a) /
+                ((1 - pi * pi * gammar_pipi) + b * b / (tau * tau * (gamma0_tautau_reg2(pi, tau) + gammar_tautau))));
 }
 
 

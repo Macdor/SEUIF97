@@ -32,9 +32,9 @@ double pT2kt_reg5(double p, double T)
 {
     double tau = r5Tstar / T;
     double pi = p / r5Pstar;
-    double gumma_pipi = gamma0_pipi_reg5(pi) + gammar_pipi_reg5(pi, tau);
-    double gumma_pi = gamma0_pi_reg5(pi) + gammar_pi_reg5(pi, tau);
-    return -(gumma_pipi / gumma_pi);
+    double gamma_pipi = gamma0_pipi_reg5(pi) + gammar_pipi_reg5(pi, tau);
+    double gamma_pi = gamma0_pi_reg5(pi) + gammar_pi_reg5(pi, tau);
+    return -(gamma_pipi / gamma_pi);
 }
 
 //  the specific Gibbs free energy, Page 6, Eq(7)
@@ -60,9 +60,9 @@ double pT2e_reg5(double p, double T)
 {
     double tau = r5Tstar / T;
     double pi = p / r5Pstar;
-    double gumma = gamma0_reg5(pi, tau) + gammar_reg5(pi, tau);
-    double gumma_tau = gamma0_tau_reg5(tau) + gammar_tau_reg5(pi, tau);
-    return rgas_water * (T * gumma + (T - Tt) * (tau * gumma_tau - gumma));
+    double gamma = gamma0_reg5(pi, tau) + gammar_reg5(pi, tau);
+    double gamma_tau = gamma0_tau_reg5(tau) + gammar_tau_reg5(pi, tau);
+    return rgas_water * (T * gamma + (T - Tt) * (tau * gamma_tau - gamma));
 }
 
 // coefficient of thermal expansion,
@@ -80,12 +80,12 @@ double pT2joule_reg5(double p, double T)
 {
     double tau = r5Tstar / T;
     double pi = p / r5Pstar;
-    double gumma_pi = gamma0_pi_reg5(pi) + gammar_pi_reg5(pi, tau);
-    double gumma_tautau = gamma0_tautau_reg5(tau) + gammar_tautau_reg5(pi, tau);
-    double gumma_pitau = gamma0_pitau_reg5() + gammar_pitau_reg5(pi, tau);
-    double v = 0.001 * rgas_water * T * gumma_pi;
-    double cp = -rgas_water * tau * tau * gumma_tautau;
-    double TCex_1 = -tau * gumma_pitau / gumma_pi;
+    double gamma_pi = gamma0_pi_reg5(pi) + gammar_pi_reg5(pi, tau);
+    double gamma_tautau = gamma0_tautau_reg5(tau) + gammar_tautau_reg5(pi, tau);
+    double gamma_pitau = gamma0_pitau_reg5() + gammar_pitau_reg5(pi, tau);
+    double v = 0.001 * rgas_water * T * gamma_pi;
+    double cp = -rgas_water * tau * tau * gamma_tautau;
+    double TCex_1 = -tau * gamma_pitau / gamma_pi;
     return 1000.0 * (v / cp) * TCex_1;
 }
 
@@ -96,8 +96,8 @@ double pT2ijoule_reg5(double p, double T)
 {
     double tau = r5Tstar / T;
     double pi = p / r5Pstar;
-    double gumma_pitau = gamma0_pitau_reg5() + gammar_pitau_reg5(pi, tau);
-    return 0.001 * rgas_water * r5Tstar * gumma_pitau;
+    double gamma_pitau = gamma0_pitau_reg5() + gammar_pitau_reg5(pi, tau);
+    return 0.001 * rgas_water * r5Tstar * gamma_pitau;
 }
 
 // z: Compressibility factor
@@ -112,10 +112,10 @@ double pT2dpdtcv_reg5(double p, double T)
 {
     double tau = r5Tstar / T;
     double pi = p / r5Pstar;
-    double gumma_pi = gamma0_pi_reg5(pi) + gammar_pi_reg5(pi, tau);
-    double gumma_pitau = gamma0_pitau_reg5() + gammar_pitau_reg5(pi, tau);
-    double gumma_pipi = gamma0_pipi_reg5(pi) + gammar_pipi_reg5(pi, tau);
-    return r5Pstar * (gumma_pitau * r5Tstar - gumma_pi * T) / (T * T * gumma_pipi);
+    double gamma_pi = gamma0_pi_reg5(pi) + gammar_pi_reg5(pi, tau);
+    double gamma_pitau = gamma0_pitau_reg5() + gammar_pitau_reg5(pi, tau);
+    double gamma_pipi = gamma0_pipi_reg5(pi) + gammar_pipi_reg5(pi, tau);
+    return r5Pstar * (gamma_pitau * r5Tstar - gamma_pi * T) / (T * T * gamma_pipi);
 }
 
 // (dv/dp)T  m3/MPa
@@ -123,8 +123,8 @@ double pT2dvdpct_reg5(double p, double T)
 {
     double tau = r5Tstar / T;
     double pi = p / r5Pstar;
-    double gumma_pipi = gamma0_pipi_reg5(pi) + gammar_pipi_reg5(pi, tau);
-    return 0.001 * rgas_water * T * gumma_pipi;
+    double gamma_pipi = gamma0_pipi_reg5(pi) + gammar_pipi_reg5(pi, tau);
+    return 0.001 * rgas_water * T * gamma_pipi;
 }
 
 // dvdt, cp m3/(kg.K)
@@ -132,7 +132,27 @@ double pT2dvdtcp_reg5(double p, double T)
 {
     double tau = r5Tstar / T;
     double pi = p / r5Pstar;
-    double gumma_pi = gamma0_pi_reg5(pi) + gammar_pi_reg5(pi, tau);
-    double gumma_pitau = gamma0_pitau_reg5() + gammar_pitau_reg5(pi, tau);
-    return 0.001 * rgas_water * (gumma_pi - tau * gumma_pitau);
+    double gamma_pi = gamma0_pi_reg5(pi) + gammar_pi_reg5(pi, tau);
+    double gamma_pitau = gamma0_pitau_reg5() + gammar_pitau_reg5(pi, tau);
+    return 0.001 * rgas_water * (gamma_pi - tau * gamma_pitau);
+}
+
+// (dv/dh)p m3/(kg.K)
+double pT2dvdhcp_reg5(double p, double T)
+{
+    double dvdtcp = Td2dvdtcp_reg5(p, T);
+    double cp = Td2cp_reg5(p, T);
+    double dvdhcp = dvdtcp/cp;
+    return dvdhcp;
+}
+
+// (dv/dp)h m3/(kg.K)
+double pT2dvdpch_reg5(double p, double T)
+{
+    double dvdpct = Td2dvdpct_reg5(p, T);
+    double dvdtcp = Td2dvdtcp_reg5(p, T);
+    double dhdpct = Td2ijoule_reg5(p, T);
+    double cp = Td2cp_reg5(p, T);
+    double dvdpch = dvdpct - dvdtcp*dhdpct/cp;
+    return dvdpch;
 }
