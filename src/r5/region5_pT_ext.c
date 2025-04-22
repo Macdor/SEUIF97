@@ -140,8 +140,8 @@ double pT2dvdtcp_reg5(double p, double T)
 // (dv/dh)p m3/(kg.K)
 double pT2dvdhcp_reg5(double p, double T)
 {
-    double dvdtcp = Td2dvdtcp_reg5(p, T);
-    double cp = Td2cp_reg5(p, T);
+    double dvdtcp = pT2dvdtcp_reg5(p, T);
+    double cp = pT2cp_reg5(p, T);
     double dvdhcp = dvdtcp/cp;
     return dvdhcp;
 }
@@ -149,10 +149,10 @@ double pT2dvdhcp_reg5(double p, double T)
 // (dv/dp)h m3/(kg.K)
 double pT2dvdpch_reg5(double p, double T)
 {
-    double dvdpct = Td2dvdpct_reg5(p, T);
-    double dvdtcp = Td2dvdtcp_reg5(p, T);
-    double dhdpct = Td2ijoule_reg5(p, T);
-    double cp = Td2cp_reg5(p, T);
+    double dvdpct = pT2dvdpct_reg5(p, T);
+    double dvdtcp = pT2dvdtcp_reg5(p, T);
+    double dhdpct = pT2ijoule_reg5(p, T);
+    double cp = pT2cp_reg5(p, T);
     double dvdpch = dvdpct - dvdtcp*dhdpct/cp;
     return dvdpch;
 }

@@ -388,10 +388,10 @@ double Td_ext_reg3(double T, double d, int o_id)
         r = Td2ijoule_reg3(T, d);
         break;
     case ODVDHCP:
-        r = pT2dvdhcp_reg3(T, d);
+        r = Td2dvdhcp_reg3(T, d);
         break;
     case ODVDPCH:
-        r = pT2dvdpch_reg3(T, d);
+        r = Td2dvdpch_reg3(T, d);
         break;
     default:
         r = INVALID_OUTID;

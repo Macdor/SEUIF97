@@ -125,7 +125,7 @@ double Td2ijoule_reg3(double T, double d)
 }
 
 // (dv/dh)p m3/(kg.K)
-double pT2dvdhcp_reg3(double T, double d)
+double Td2dvdhcp_reg3(double T, double d)
 {
     double dvdtcp = Td2dvdtcp_reg3(T, d);
     double cp = Td2cp_reg3(T, d);
@@ -134,7 +134,7 @@ double pT2dvdhcp_reg3(double T, double d)
 }
 
 // (dv/dp)h m3/(kg.K)
-double pT2dvdpch_reg3(double T, double d)
+double Td2dvdpch_reg3(double T, double d)
 {
     double dvdpct = Td2dvdpct_reg3(T, d);
     double dvdtcp = Td2dvdtcp_reg3(T, d);
