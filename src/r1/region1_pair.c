@@ -150,7 +150,7 @@ double Tv2p_reg1(double T, double v)
 //----------------------------------------------
 double Ts2p_reg1(double T, double s)
 {
-    double tau, p, p1, p2, pmin1, s1, s2, f1, f2;
+    double p, p1, p2, pmin1, s1, s2, f1, f2;
     pmin1 = pSat(T);
     p1 = pmin1;
     s1 = pT2s_reg1(p1, T);
@@ -346,7 +346,7 @@ double pT2cv_reg1(double p, double T)
 // w in m/s, T in K, p in Mpa
 double pT2w_reg1(double p, double T)
 {
-  double pi, tau, gammapi, a, b;
+  double pi, tau, a, b;
   tau = r1Tstar / T;
   pi = p / r1pstar;
 

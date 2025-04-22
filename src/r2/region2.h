@@ -29,7 +29,8 @@ double gammar_pipi_reg2(double pi, double tau);
 double gammar_pitau_reg2(double pi, double tau);
 double gammar_tau_reg2(double pi, double tau);
 double gammar_tautau_reg2(double pi, double tau);
-void polys_0_i_ii_j_jj_ij_reg2(double pi, double tau, double *gamma, double *gamma_pi, double *gamma_pipi, double *gamma_tau, double *gamma_tautau, double *gamma_pitau);
+
+void polys_0_i_ii_j_jj_ij_reg2(double pi, double tau, double *gammar, double *gammar_pi, double *gammar_pipi, double *gammar_tau, double *gammar_tautau, double *gammar_pitau);
 
 // IF97 fundamental: (p,t)
 double pT2v_reg2(double p, double T);

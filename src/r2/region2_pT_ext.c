@@ -54,7 +54,7 @@ double pT2ipcec_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
     
     return (1.0 - pi * tau * gammarpitau / (1.0 + p * gammarpi)) / T;
 }
@@ -73,7 +73,7 @@ double pT2kt_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
     return (1 - pi * pi * gammarpipi) / (1 + pi * gammarpi) / p;
 }
 
@@ -105,7 +105,7 @@ double pT2f_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     return rgas_water * T * (gamma0 + gammar - pi * (gamma0_pi + gammarpi));
 }
@@ -130,7 +130,7 @@ double pT2joule_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     double gamma0pi = gamma0_pi_reg2(pi);
     double gamma0pitau = gamma0_pitau_reg2();
@@ -179,7 +179,7 @@ double pT2e_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     double gamma = gamma0_reg2(pi, tau) + gammar;
     double gammatau = gamma0_tau_reg2(tau) + gammartau;
@@ -199,7 +199,7 @@ double pT2dpdtcv_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     double gamma_pi = gamma0_pi_reg2(pi) + gammarpi;
     double gamma_pipi = gamma0_pipi_reg2(pi) + gammarpipi;
@@ -230,7 +230,7 @@ double pT2dvdtcp_reg2(double p, double T)
     double gammartautau = 0.0;
     double gammarpitau = 0.0;
   
-    polys_0_i_ii_j_jj_ij_reg1(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
+    polys_0_i_ii_j_jj_ij_reg2(pi, tau, &gammar, &gammarpi, &gammarpipi, &gammartau, &gammartautau, &gammarpitau);
 
     double gammapi = gamma0_pi_reg2(pi) + gammarpi;
     double gammapitau = gamma0_pitau_reg2() + gammarpitau;

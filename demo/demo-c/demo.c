@@ -27,11 +27,11 @@ Author: Cheng Maohua
 int main(void)
 {
 
-    double in1 = 1.07;
-    double in2 = 81;
+    double in1 = 0.1;
+    double in2 = 200;
     double out;
 
-    out = pt(in1, in2, 2);
+    out = pt(in1, in2, 30);
     printf("(p,x)(%.2f,%.2f) r= %.2f", in1, in2, out);
     return EXIT_SUCCESS;
 }

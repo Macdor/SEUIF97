@@ -639,7 +639,7 @@ double ph2T_reg2a(double p, double h)
       {6, 44, -0.41535164835634E+06},
       {7, 28, -0.62459855192507E+02}};
 
-  double pi, eta, theta;
+  double pi, eta;
   pi = p / 1.0;
   eta = h / 2000.0;
 
@@ -696,7 +696,7 @@ double ph2T_reg2b(double p, double h)
       {7, 28, -2.5180545682962e-11},
       {9, 1, -1.7565233969407e-18},
       {9, 40, 8.6934156344163e-15}};
-  double pi, eta, theta;
+  double pi, eta;
   pi = p / 1.0 - 2;
   eta = h / 2000.0 - 2.6;
 
@@ -736,7 +736,7 @@ double ph2T_reg2c(double p, double h)
       {6, 20, -5.9270038474176E-04},
       {6, 22, 1.2918582991878E-03}};
 
-  double pi, eta, theta;
+  double pi, eta;
   pi = p / 1.0 + 25;
   eta = h / 2000.0 - 1.8;
 
