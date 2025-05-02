@@ -58,10 +58,10 @@ void polys_0_i_ii_j_jj_ij(double vi, double vj, int size, IJnData *IJn, double *
   {
     item = IJn[k].n * ipowsac(vi, IJn[k].I) * ipowsac(vj, IJn[k].J);
     *poly_0 += item;
-    *poly_i += item*IJn[k].I;
-    *poly_ii += item*IJn[k].I*(IJn[k].I-1);
-    *poly_j += item*IJn[k].J;
-    *poly_jj += item*IJn[k].J*(IJn[k].J-1);
-    *poly_ij += item*IJn[k].I * IJn[k].J;
+    *poly_i += item*IJn[k].I / vi;
+    *poly_ii += item*IJn[k].I*(IJn[k].I-1) / vi / vi;
+    *poly_j += item*IJn[k].J / vj;
+    *poly_jj += item*IJn[k].J*(IJn[k].J-1) / vj / vj;
+    *poly_ij += item*IJn[k].I * IJn[k].J / vi / vj;
   }
 }

@@ -317,7 +317,7 @@ double pT2cp_reg1(double p, double T)
   double pi, tau;
   tau = r1Tstar / T;
   pi = p / r1pstar;
-   return -rgas_water * tau * tau * gamma_tautau_reg1(pi, tau);
+  return -rgas_water * tau * tau * gamma_tautau_reg1(pi, tau);
 }
 
 // specific isochoric heat capacity in region 1
