@@ -19,7 +19,7 @@
 #include <math.h>
 #include <stdint.h>
 #include "region1.h"
-#include "../r4/region4.h"
+#include "region4.h"
 
 // Region 1  (p,v)->T using the secant method and refine adjust
 // * p: pressure  MPa
@@ -250,7 +250,7 @@ double hs2p_reg1(double h, double s)
   double pi;
   eta = h / 3400.0 + 0.05;
   sigma = s / 7.6 + 0.05;
-  pi= poly(eta,sigma , 19,IJn);
+  pi= poly(eta, sigma, 19, IJn);
   return (100.0*pi);
 }
 

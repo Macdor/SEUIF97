@@ -3,7 +3,6 @@ Region 5: the extended properties
 
 */
 #include <math.h>
-#include <stdint.h>
 #include "region5.h"
 
 

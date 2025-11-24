@@ -1,5 +1,5 @@
 #include "../src/common/seuif97.h"
-#include "../src/common/constand.h"
+#include "../src/common/constant.h"
 #include "../Unity/unity.h"
 #include "if97_data.h"
 

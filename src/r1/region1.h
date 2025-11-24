@@ -12,7 +12,7 @@
   Email: cmh@seu.edu.cn
 */
 #pragma once
-#include "../common/common.h"
+#include "common.h"
 
 static const double r1pstar = 16.53;  // MPa
 static const double r1Tstar = 1386.0; // K

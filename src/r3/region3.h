@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/common.h"
+#include "common.h"
 
 double phi_reg3(double tau, double delta);
 double phi_delta_reg3(double tau, double delta);
@@ -33,6 +33,8 @@ double Td2dpdtcv_reg3(double T, double d);
 double Td2ipcec_reg3(double T, double d);
 double Td2joule_reg3(double T, double d);
 double Td2ijoule_reg3(double T, double d);
+double Td2dvdhcp_reg3(double T, double d);
+double Td2dvdpch_reg3(double T, double d);
 //
 
 

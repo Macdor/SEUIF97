@@ -28,7 +28,6 @@
 */
 
 #include <math.h>
-#include <stdint.h>
 #include "region1.h"
 
 // k:Isentropic exponent OKISE 11
@@ -131,7 +130,7 @@ double pT2ijoule_reg1(double p, double T)
 {
     double tau = r1Tstar / T;
     double pi = p / r1pstar;
-    return 0.001 * rgas_water * r1Tstar * gamma_pitau_reg1(tau, pi) / r1pstar;
+    return rgas_water * r1Tstar * gamma_pitau_reg1(tau, pi) / r1pstar;
 }
 
 /// z: Compressibility factor
@@ -201,7 +200,7 @@ double pT2dvdtcp_reg1(double p, double T)
     return 0.001 * rgas_water * (gamma_pi - tau * gamma_pitau) / r1pstar;
 }
 
-// (dv/dh)p m3/(kg.K)
+// (dv/dh)p m3/kJ
 double pT2dvdhcp_reg1(double p, double T)
 {
     double tau = r1Tstar / T;

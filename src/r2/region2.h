@@ -11,7 +11,7 @@
 --------------------------------------------------------------*/
 #pragma once
 
-#include "../common/common.h"
+#include "common.h"
 
 static const double r2Tstar = 540.0; // K
 static const double r2pstar = 1.0;   // Mpa 为减少计算，没有使用这个变量

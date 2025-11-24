@@ -12,8 +12,7 @@
 
 */
 #include <math.h>
-#include "../common/constand.h"
-#include "../common/common.h"
+#include "common.h"
 
 // Prandtl number=dv*cp/tc
 // * dv: Dynamic viscosity Pa.s

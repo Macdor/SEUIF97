@@ -4,7 +4,6 @@
    (T,v)->p  (T,h)->p  (T,s)->p
 */
 #include <math.h>
-#include <stdint.h>
 #include "region5.h"
 
 // Region 5  (p,v)->T using the secant method and refine adjust

@@ -11,10 +11,9 @@
          temperature range is T （273.15 ， 623.15 ）
 */
 #include <math.h>
-#include <stdio.h>
-#include "../r1/region1.h"
-#include "../r2/region2.h"
-#include "../r3/region3.h"
+#include "region1.h"
+#include "region2.h"
+#include "region3.h"
 #include "region4.h"
 
 /// Region 4: (p,v)-> x

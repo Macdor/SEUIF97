@@ -1,7 +1,7 @@
 // Transport
 //  1.  pT_transport -> 1，2，5
 //  2  Td_transport_reg3  in region3_out.c
-#include "../common/common.h"
+#include "common.h"
 
 double pT_transport(double p, double T, int o_id, properties_region fn)
 {

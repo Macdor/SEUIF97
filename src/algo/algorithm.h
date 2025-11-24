@@ -3,8 +3,6 @@
 */
 #pragma once
 
-#include <math.h>
-
 typedef struct
 {
   int I, J;

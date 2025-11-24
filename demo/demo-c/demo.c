@@ -27,32 +27,17 @@ Author: Cheng Maohua
 int main(void)
 {
 
-    double in1 = 0.1;
-    double in2 = 25;
-    double out;
+   double in1 = 1.07;
+   double in2 = 2000;
+   double out;
 
-    out = pt(in1, in2, 19);
-    out = pt(in1, in2+1, 3) - pt(in1, in2, 3);
-
-    out = pt(in1, in2, 20);
-    out = pt(in1+1, in2, 3) - pt(in1, in2, 3);
-
-    out = pt(in1, in2, 21);
-
-    out = pt(in1, in2, 22);
-    out = pt(in1 + 1, in2, 3) - pt(in1, in2, 3);
-
-    out = pt(in1, in2, 30);
-    out = pt(in1, in2, 31);
-
-    in2 = 200;
-
-    out = ph(in1, in2, 19);
-    out = ph(in1, in2, 20);
-    out = ph(in1, in2, 21);
-    out = ph(in1, in2, 22);
-    out = ph(in1, in2, 30);
-    out = ph(in1, in2, 31);
-    printf("(in1,in2)(%.5f,%.5f) r= %.10f", in1, in2, out);
-    return EXIT_SUCCESS;
+   out = ph(in1, in2, 2);
+   out = ph(in1, in2, 19);
+   out = ph(in1, in2, 20);
+   out = ph(in1, in2, 21);
+   out = ph(in1, in2, 22);
+   out = ph(in1, in2, 30);
+   out = ph(in1, in2, 31);
+   printf("(in1,in2)(%.5f,%.5f) r= %.10f", in1, in2, out);
+   return EXIT_SUCCESS;
 }

@@ -1,6 +1,6 @@
 #pragma once
-#include "../algo/algorithm.h"
-#include "../common/constand.h"
+#include "algorithm.h"
+#include "constant.h"
 
 // methods
 typedef double (*properties_region)(double, double, int);

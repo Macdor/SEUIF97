@@ -28,7 +28,6 @@
 */
 
 #include <math.h>
-#include <stdint.h>
 #include "region2.h"
 
 // k:Isentropic exponent OKISE 11
@@ -156,7 +155,7 @@ double pT2ijoule_reg2(double p, double T)
     double gamma_pitau = gammar_pitau_reg2(pi, tau);
 
     gamma_pitau += gamma0_pitau_reg2();
-    return 0.001 * rgas_water * r2Tstar * gamma_pitau / r2pstar;
+    return rgas_water * r2Tstar * gamma_pitau / r2pstar;
 }
 
 /// z: Compressibility factor

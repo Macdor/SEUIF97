@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/common.h"
+#include "common.h"
 
 static const double r5Pstar = 1.0;	  // MPa
 static const double r5Tstar = 1000.0; // K
@@ -41,9 +41,8 @@ double pT2ipcec_reg5(double p, double T);
 double pT2dpdtcv_reg5(double p, double T);
 double pT2dvdpct_reg5(double p, double T);
 double pT2dvdtcp_reg5(double p, double T);
-
-
-
+double pT2dvdhcp_reg5(double p, double T);
+double pT2dvdpch_reg5(double p, double T);
 
 // IF97 backward:(p,h)->T
 double ph2T_reg5(double p, double h);

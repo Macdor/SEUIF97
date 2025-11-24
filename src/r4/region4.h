@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------
 #pragma once
 
-#include "../common/common.h"
+#include "common.h"
 
 double pSat(double T);
 double TSat(double p);
