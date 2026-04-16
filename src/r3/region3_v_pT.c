@@ -279,7 +279,9 @@ char SubRegion3(double p, double t)
             double tBjk = T_atRegionBoundary(p, "3jk");
 
             if (t <= tBcd)
-                subRegion = 'c';
+            {    subRegion = 'c';
+                 return subRegion; //2026 
+            }
             else if (t <= tBqu)
             {
                 subRegion = 'q';
@@ -291,14 +293,15 @@ char SubRegion3(double p, double t)
             if (t > tBrx && t <= tBjk)
             {
                 subRegion = 'r';
-                // 这里的判断算法有点问题，下面这个 subRegion会被重新设定u
+                // 这里的判断算法有点问题，下面这个subRegion会被重新设定u
                 // 简便处理，这个判断后，立即返回
                 return subRegion;
             }
 
             if (t > tBjk)
-                subRegion = 'k';
-
+            {   subRegion = 'k';
+                return subRegion; //2026 
+            }
             // tBqu < T <= tBrx
             // small regions right around critical point
             // 3u, 3x, 3y, 3z, 3v and 3w
