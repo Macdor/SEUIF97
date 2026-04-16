@@ -2,7 +2,7 @@
  The API of region 1
 */
 #include "region1.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 #include "../common/common.h"
 
 double pT_reg1(double p, double T, int o_id)

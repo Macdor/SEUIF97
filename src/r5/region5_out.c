@@ -3,7 +3,7 @@
 
 */
 #include "region5.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 #include "../common/constand.h"
 
 double pT_reg5(double p, double T, int o_id)

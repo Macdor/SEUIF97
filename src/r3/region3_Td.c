@@ -7,7 +7,7 @@
 #include "region3_solo_ij.h"
 #include "region3_coff.h"
 #include "region3.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 
 double Td_thermal_reg3(double T, double d, int o_id)
 // o_id: output property

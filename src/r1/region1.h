@@ -13,7 +13,7 @@
 */
 #pragma once
 #include "../common/common.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 
 double gamma_reg1(double pi, double tau);
 double gamma_pi_reg1(double pi, double tau);

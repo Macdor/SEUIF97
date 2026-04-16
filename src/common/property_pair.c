@@ -2,7 +2,7 @@
 //  1.  pT_transport -> 1，2，5
 //  2  Td_transport_reg3  in region3_out.c
 #include "../common/common.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 #include "../common/constand.h"
 #include "../algo/algorithm.h"
 #include "../r1/region1.h"

@@ -6,7 +6,7 @@
 #include <math.h>
 #include <stdint.h>
 #include "../common/constand.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 #include "../algo/algorithm.h"
 #include "region3.h"
 #include "region3_coff.h"

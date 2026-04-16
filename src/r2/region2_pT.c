@@ -15,7 +15,7 @@
 #include <math.h>
 #include "../algo/algorithm.h"
 #include "../common/constand.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 #include "region2.h"
 #include "region2_coff.h"
 #include "region2_solo_ij.h"

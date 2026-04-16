@@ -3,7 +3,7 @@
 
 */
 #include "region3.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 #include "../common/common.h"
 #include "../common/constand.h"
 

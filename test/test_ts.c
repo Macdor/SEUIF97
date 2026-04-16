@@ -1,5 +1,5 @@
 #include "../src/common/seuif97.h"
-#include "../src/common/propertry_id.h"
+#include "../src/common/property_id.h"
 #include "../Unity/unity.h"
 #include "../src/r1/region1.h"
 #include "../src/r2/region2.h"

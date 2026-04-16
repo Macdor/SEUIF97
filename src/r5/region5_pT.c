@@ -7,7 +7,7 @@
 #include <math.h>
 #include "region5.h"
 #include "../common/constand.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 #include "region5_coff.h"
 
 double pT_thermal_reg5(double p, double T, int o_id)

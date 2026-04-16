@@ -14,7 +14,7 @@
 #include <math.h>
 #include "../common/constand.h"
 #include "../common/common.h"
-#include "../common/propertry_id.h"
+#include "../common/property_id.h"
 #include "../algo/algorithm.h"
 
 // Prandtl number=dv*cp/tc
