@@ -286,7 +286,7 @@ char SubRegion3(double p, double t)
             {
                 subRegion = 'q';
                 // 这里的判断算法有点问题，下面这个 subRegion会被重新设定u
-                //  简便处理，这个判断后，立即返回
+                // 简便处理，这个判断后，立即返回
                 return subRegion;
             }
 
