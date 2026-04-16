@@ -109,7 +109,7 @@ double pT(double p, double T, int o_id)
 }
 
 double pT_reg(double p, double T, int o_id, properties_region pT_thermal, properties_region pT_ext)
-// o_id: output propertry
+// o_id: output property
 {
     double value;
     switch (o_id)

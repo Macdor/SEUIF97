@@ -10,7 +10,7 @@
 #include "../common/propertry_id.h"
 
 double Td_thermal_reg3(double T, double d, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     double value;
     switch (o_id)

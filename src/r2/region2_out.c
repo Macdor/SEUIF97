@@ -7,7 +7,7 @@
 #include "../common/common.h"
 
 double pT_reg2(double p, double T, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     double value = 0.0;
     switch (o_id)
@@ -26,7 +26,7 @@ double pT_reg2(double p, double T, int o_id)
 }
 
 double ph_reg2(double p, double h, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OP)
         return p;
@@ -39,7 +39,7 @@ double ph_reg2(double p, double h, int o_id)
 }
 
 double ps_reg2(double p, double s, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OP)
         return p;
@@ -52,7 +52,7 @@ double ps_reg2(double p, double s, int o_id)
 }
 
 double hs_reg2(double h, double s, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OH)
         return h;
@@ -68,7 +68,7 @@ double hs_reg2(double h, double s, int o_id)
 // the extend input pairs (p,v) T
 //------------------------------------------------------------------
 double pv_reg2(double p, double v, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OP)
         return p;
@@ -81,7 +81,7 @@ double pv_reg2(double p, double v, int o_id)
 }
 
 double Tv_reg2(double T, double v, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OT)
         return T;
@@ -95,7 +95,7 @@ double Tv_reg2(double T, double v, int o_id)
 
 // (T,s)
 double Ts_reg2(double T, double s, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OT)
         return T;
@@ -109,7 +109,7 @@ double Ts_reg2(double T, double s, int o_id)
 
 // (T,h)
 double Th_reg2(double T, double h, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OT)
         return T;

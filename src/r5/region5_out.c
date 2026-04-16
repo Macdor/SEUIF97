@@ -7,7 +7,7 @@
 #include "../common/constand.h"
 
 double pT_reg5(double p, double T, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     double value = 0.0;
     switch (o_id)
@@ -26,7 +26,7 @@ double pT_reg5(double p, double T, int o_id)
 }
 
 double ph_reg5(double p, double h, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     double T, value;
     switch (o_id)
@@ -72,7 +72,7 @@ double ph_reg5(double p, double h, int o_id)
 }
 
 double ps_reg5(double p, double s, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     double T, value;
     switch (o_id)
@@ -118,7 +118,7 @@ double ps_reg5(double p, double s, int o_id)
 }
 
 double hs_reg5(double h, double s, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     double p, value;
     switch (o_id)

@@ -1,6 +1,6 @@
 #pragma once
 
-// output propertry ID
+// output property ID
 #define OP 0
 #define OT 1
 #define OD 2

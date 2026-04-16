@@ -11,7 +11,7 @@
 #include "region5_coff.h"
 
 double pT_thermal_reg5(double p, double T, int o_id)
-// o_id: output propertry 
+// o_id: output property 
 {
     double value;
     switch (o_id)

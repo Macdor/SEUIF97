@@ -1,7 +1,7 @@
 /*  The transfort rroperties:
   Properties():
 
-| Propertry                             |    Unit     | Symbol |   o_id     |
+| property                             |    Unit     | Symbol |   o_id     |
 | ------------------------------------- | :---------: |:-----: |:---------: |
 | Dynamic viscosity                    |  kg/(m·s)    |     η  |         24 |
 | Kinematic viscosity                   |    m^2/s    |     ν  |         25 |

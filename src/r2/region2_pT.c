@@ -21,7 +21,7 @@
 #include "region2_solo_ij.h"
 
 double pT_thermal_reg2(double p, double T, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     double value;
     switch (o_id)

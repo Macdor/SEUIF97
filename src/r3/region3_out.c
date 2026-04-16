@@ -8,7 +8,7 @@
 #include "../common/constand.h"
 
 double Td_reg3(double T, double d, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     double value;
     switch (o_id)
@@ -105,7 +105,7 @@ double Td_transport_reg3(double T, double d, int o_id)
 }
 
 double pT_reg3(double p, double T, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OP)
         return p;
@@ -117,7 +117,7 @@ double pT_reg3(double p, double T, int o_id)
 }
 
 double ph_reg3(double p, double h, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OP)
         return p;
@@ -131,7 +131,7 @@ double ph_reg3(double p, double h, int o_id)
 }
 
 double ps_reg3(double p, double s, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OP)
         return p;
@@ -145,7 +145,7 @@ double ps_reg3(double p, double s, int o_id)
 }
 
 double hs_reg3(double h, double s, int o_id)
-// o_id: output propertry
+// o_id: output property
 {
     if (o_id == OH)
         return h;
