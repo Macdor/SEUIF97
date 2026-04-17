@@ -45,7 +45,7 @@ cmake --build ./build/ --config Release
 
 ## Functions of the SEUIF97 Shared Library
 
-Functions of water and steam propertiesand the thermodynamic process of steam turbine are provided in the **SEUIF97**
+Functions of water and steam properties and the thermodynamic process of steam turbine are provided in the **SEUIF97**
 
 **Water and Steam Properties**
 
@@ -63,14 +63,14 @@ The following 12 input pairs are implemented:
 (h,s)  
 ```
 
-The type of propertry functions are provided in the package
+The type of property functions are provided in the package
 
 ```c 
   ??(in1,in2,o_id)
 ```
 
-* the first,second input parameters : the input propertry pairs
-* the third input parametes: the property ID of the calculated property - [o_id](#properties)
+* the first,second input parameters : the input property pairs
+* the third input parameters: the property ID of the calculated property - [o_id](#properties)
 * the return: the calculated property value of `o_id`
 
 **Thermodynamic Process of Steam Turbine**
@@ -164,7 +164,7 @@ You can modify these interfaces provided in the repository to your own APIs.
 
 ## Properties 
 
-| Propertry                             |    Unit     | Symbol | o_id       |
+| Property                              |    Unit     | Symbol | o_id       |
 | ------------------------------------- | :---------: |:-----: |:---------: |
 | Pressure                              |     MPa     |      p |          0 |
 | Temperature                           |     °C      |      t |          1 |
