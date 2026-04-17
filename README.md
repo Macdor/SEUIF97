@@ -8,11 +8,11 @@ Through the high-speed library, the results of the IAPWS-IF97 are accurately pro
 
 The speed of SEUIF97 is also far faster than various approximate equations and algorithms for a fast calculation of the properties for water and steam.
 
-**The Fast Methods**
+****Key Acceleration Methods**
 
-* the shortest addition chain algorithm computes the integer power of a number quickly
-* apply Horner's rule to compute a set of powers and avoid to calculate the power of the same exponential repeatedly
-* the recursive method computes the value of multiple polynomials to avoid the calculation of the same item once again
+* The shortest addition chain algorithm is used for the rapid computation of integer powers.
+* Horner's rule is applied to compute a set of powers, avoiding redundant calculations of the same exponent
+* Polynomial Recurrence Method: Leverages the relationship between polynomials and derivatives to compute a single base polynomial, deriving the rest through power scaling. This avoids redundant computations and boosts efficiency.
 
 In addition to the source code, the repository provides 
 
