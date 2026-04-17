@@ -8,7 +8,7 @@ Through the high-speed library, the results of the IAPWS-IF97 are accurately pro
 
 The speed of SEUIF97 is also far faster than various approximate equations and algorithms for a fast calculation of the properties for water and steam.
 
-****Key Acceleration Methods**
+**Key Acceleration Methods**
 
 * Shortest Addition Chain Algorithm: Used for the rapid computation of integer powers via optimal multiplication sequences.
 * Power Caching for Multi-Polynomial Evaluation: Precomputes powers to avoid redundant calculations, directly retrieving them to boost performance across multiple polynomials.
