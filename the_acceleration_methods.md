@@ -33,7 +33,28 @@ $eta = h/h^* \quad  h^* = 2500 \text{ kJ kg}^{-1}$
 // algl/asc.c
 double possac(double x, int n)
 {
-...
+  // the shortest addition chains, [0,58]
+	double x2, x3, x4, x5, x6, x7, x8, x9;
+	double x10, x11, x12, x13, x14, x15, x16, x17, x18, x19;
+	double x20, x21, x22, x23, x24, x25, x26, x27, x28, x29;
+	double x32, x33, x36, x37, x46,x48, x49, x54;
+
+	switch (n)
+	{
+	case 0:
+		return (1);
+	case 1:
+		return (x);
+	case 2:
+		return (x * x);
+  ...
+  case 13:
+		x2 = x * x;
+		x4 = x2 * x2;
+		x8 = x4 * x4;
+		return (x8 * x4 * x);
+  ...
+  }  
 }    
 
 double ipowsac(double x, int n)
