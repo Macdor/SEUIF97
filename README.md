@@ -12,7 +12,7 @@ The speed of SEUIF97 is also far faster than various approximate equations and a
 
 * Shortest Addition Chain Algorithm: Used for the rapid computation of integer powers via optimal multiplication sequences.
 * Power Caching for Multi-Polynomial Evaluation: Precomputes powers to avoid redundant calculations, directly retrieving them to boost performance across multiple polynomials.
-* Recurrence Method for Multi-Polynomial Evaluation：Utilizes the derivative relationship to compute a base polynomial, then derives the rest via exponent scaling  to maximize efficiency
+* Recurrence Method for Multi-Polynomial Evaluation：Utilizes the derivative relationship to compute a base polynomial, then derives the rest via base scaling  to maximize efficiency
 
 In addition to the source code, the repository provides 
 
