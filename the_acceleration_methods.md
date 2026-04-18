@@ -125,6 +125,29 @@ static int j2soJ[34] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 5, 10, 2, 3, 5, 1
 
 void solo_ij_pow_reg1(double vi, double vj, double *soI_pow, double *soJ_pow);
 
+
+// r1/region1_solo_power.c
+void solo_ij_pow_reg1(double vi,double vj,double *soI_pow,double *soJ_pow)
+{
+    // [0, 1, 2, 3, 4, 5, 8, 21, 23, 29, 30, 31, 32];
+   
+    soI_pow[0] = 1.0;
+    for(int k=1; k<=5;k++) {
+        soI_pow[k] = soI_pow[k - 1] * vi;
+    }
+    double vi2 = vi * vi;
+    soI_pow[6] = soI_pow[5] * vi2 * vi; //8
+    soI_pow[7] = soI_pow[6] * soI_pow[6] * soI_pow[5]; //21
+    soI_pow[8] = soI_pow[7] * vi2; //23
+    soI_pow[9] = soI_pow[6] * soI_pow[7];
+    for(int k=10; k<=12;k++) {
+        soI_pow[k] = soI_pow[k - 1] * vi;
+    }
+
+    //  -2, -1, 0, 1, 2, 3, 4, 5, -9, -7, -3, 17, -4, 6, -5, 10, -8, -11, -6, -29, -31, -38, -39, -40, -41,
+    ...
+}
+
 // r1/region1_gef.c
 void polys_solo_i_j_reg1(double pi, double tau, double *poly_pi, double *poly_tau)
 {
