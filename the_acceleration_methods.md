@@ -10,7 +10,7 @@
 
 The code snippets demonstrate the Shortest Addition Chain Algorithm to calculate the $T(p,h)$ in region 1, illustrating the flow from the optimized kernel to the final physical property calculation:
 
-###  The IAPWS-IF97 Backward Equations
+###  Backward Equation $T(p,h)$ in region 1
 
 The backward equation $T(p,h)$ for region 1 has the following dimensionless:
 
