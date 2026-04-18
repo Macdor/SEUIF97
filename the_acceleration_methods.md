@@ -30,7 +30,7 @@ $eta = h/h^* \quad  h^* = 2500 \text{ kJ kg}^{-1}$
 // algo/algotithm.h
 #define IPOW ipowsac
 
-// algl/asc.c
+// algo/asc.c
 double possac(double x, int n)
 {
   // the shortest addition chains, [0,58]
