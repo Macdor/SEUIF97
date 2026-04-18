@@ -124,7 +124,7 @@ To use the shared library in your preferred programming language, follow these s
    
 2. Add the specific API file for your programming language to its corresponding`API` path.
 
-  * **Note**: API paths vary by language. Please refer to the specific  [Examples](./demo/) provided for your programming language to locate the correct path and setup instructions.
+   * **Note**: API paths vary by language. Please refer to the specific  [Examples](./demo/) provided for your programming language to locate the correct path and setup instructions.
 
 ## Interfaces and Examples
 
