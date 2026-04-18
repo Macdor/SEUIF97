@@ -18,11 +18,7 @@ $$\frac{T(p,h)}{T^*} = \theta(\pi, \eta) = \sum_{i=1}^{20} n_i \pi^{I_i} (\eta +
 
 where
 
-$\theta = T/T^* \quad  T^* = 1 \text{K}$
-
-$\pi = p/p^*  \quad  p^* = 1 \text{MPa}$
-
-$eta = h/h^*  \quad  h^* = 2500 \text{ kJ kg}^{-1}$
+$\theta = T/T^* \text{,}  T^* = 1 \text{K} \text{;} \quad \pi = p/p^* \text{, } p^* = 1 \text{MPa} \text{;}\quad \eta = h/h^*\text{,} h^* = 2500 \text{ kJ kg}^{-1}$
 
 ### C Code
 
