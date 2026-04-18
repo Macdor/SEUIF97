@@ -8,7 +8,7 @@
 
 ## Shortest Addition Chain Algorithm
 
-The code snippets demonstrate the acceleration methods to calculate the $T(p,h)$ in region 1, illustrating the flow from the optimized kernel to the final physical property calculation:
+The code snippets demonstrate the Shortest Addition Chain Algorithm to calculate the $T(p,h)$ in region 1, illustrating the flow from the optimized kernel to the final physical property calculation:
 
 ###  The IAPWS-IF97 Backward Equations
 
