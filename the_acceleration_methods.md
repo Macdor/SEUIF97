@@ -20,9 +20,9 @@ where
 
 $\theta = T/T^* \quad  T^* = 1 \text{K}$
 
-$\pi = p/p^*$
+$\pi = p/p^*  \quad  p^* = 1 \text{MPa}$
 
-$eta = h/h^*$
+$eta = h/h^*  \quad  h^* = 2500 \text{ kJ kg}^{-1}$
 
 ### C Code
 
