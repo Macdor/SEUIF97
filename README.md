@@ -53,19 +53,14 @@ The SEUIF97 library provides comprehensive functions for calculating water and s
 
 **Water and Steam Properties**
 
-Using SEUIF97, you can define the state of steam using various pairs of known properties to determine any desired output property, including in the [30 properties](#properties-in-libseuif97).
+SEUIF97 supports **12 distinct input state pairs** for calculating **36 thermodynamic, transport, and derived properties** (see [Properties](#properties)).
 
-The following 12 input pairs are implemented: 
+**Input Pairs:**
 
-```
-(p,t) (p,h) (p,s) (p,v) 
-
-(t,h) (t,s) (t,v) 
-
-(p,x) (t,x) (h,x) (s,x) 
-
-(h,s)  
-```
+* Pressure-based: $(p,t), (p,h), (p,s), (p,v)$
+* Temperature-based: $(t,h),(t,s), (t,v)$
+* Quality-based: $(p,x), (t,x),(h,x),(s,x)$
+* Other: $(h,s)$
 
 The type of property functions are provided in the package
 
