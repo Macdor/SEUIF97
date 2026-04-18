@@ -2,11 +2,11 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8242452.svg)](https://doi.org/10.5281/zenodo.8242452)
 
-This is the C implementation of the high-speed IAPWS-IF97 package **seuif97**. It is suitable for computation-intensive calculations，such as the simulation of non-stationary processes, on-line process monitoring and optimizations.
+This is the C implementation of the high-speed IAPWS-IF97 package **SEUIF97**. It is suitable for computation-intensive calculations，such as the simulation of non-stationary processes, on-line process monitoring and optimizations.
  
-Through the high-speed library, the results of the IAPWS-IF97 are accurately produced several times faster than repeated squaring method and `math.pow()` of the C standard library.   
+Through the high-speed library, IAPWS-IF97 results are generated with high accuracy and at speeds significantly faster than the **repeated squaring method** or the standard C library's `math.pow()`
 
-The speed of SEUIF97 is also far faster than various approximate equations and algorithms for a fast calculation of the properties for water and steam.
+**SEUIF97** is also significantly faster than approximate equations and fast-calculation algorithms for water and steam properties.
 
 **Key Acceleration Methods**
 
@@ -14,15 +14,11 @@ The speed of SEUIF97 is also far faster than various approximate equations and a
 * Power Caching for Multi-Polynomial Evaluation: Precomputes powers to avoid redundant calculations, directly retrieving them to boost performance across multiple polynomials.
 * Recurrence Method for Multi-Polynomial Evaluation：Utilizes the derivative relationship to compute a base polynomial, then derives the rest via base scaling  to maximize efficiency
 
-In addition to the source code, the repository provides 
+## The shared library
 
-* the compiled shared libraries using GCC: [/shared_lib/](./shared_lib/)
+**Building the shared library**
 
-* the interfaces and examples:  [/demo/](./demo)
-
-   *  C/C++, Python, C#, Java, Excel VBA, MATLAB,  Rust, Fortran, Pascal, Modelica, Golang
-
-## Building the shared library
+You can build the library using either `make` or `cmake`:
 
 * make
 
@@ -37,19 +33,27 @@ cmake -B ./build/
 cmake --build ./build/ --config Release
 ```
 
-**The compiled shared libraries  using GCC**
+**The compiled shared libraries**
+
+The compiled shared libraries using GCC are available in the [/shared_lib/](./shared_lib/) directory:
 
 * [Windows(x86/64)](./shared_lib/Windows): `libseuif97.dll` 
 
 * [Linux(x64)](./shared_lib/Linux): `libseuif97.so`
 
+**Interfaces and examples**
+
+Interfaces and examples are provided in the  [/demo/](./demo) directory, supporting a wide range of languages and environments
+
+*  C/C++, Python, C#, Java, Excel VBA, MATLAB, Rust, Fortran, Pascal, Golang, Modelica
+
 ## Functions of the SEUIF97 Shared Library
 
-Functions of water and steam properties and the thermodynamic process of steam turbine are provided in the **SEUIF97**
+The SEUIF97 library provides comprehensive functions for calculating water and steam properties, as well as the thermodynamic processes of steam turbines.
 
 **Water and Steam Properties**
 
-Using the SEUIF97, you can set the state of steam using various pairs of know properties to get any output properties you wish to know, including in the [30 properties in libseuif97](#properties-in-libseuif97).
+Using SEUIF97, you can define the state of steam using various pairs of known properties to determine any desired output property, including in the [30 properties](#properties-in-libseuif97).
 
 The following 12 input pairs are implemented: 
 
@@ -70,7 +74,7 @@ The type of property functions are provided in the package
 ```
 
 * the first,second input parameters : the input property pairs
-* the third input parameters: the property ID of the calculated property - [o_id](#properties)
+* the third input parameters: the ID of the calculated property - [o_id](#properties)
 * the return: the calculated property value of `o_id`
 
 **Thermodynamic Process of Steam Turbine**
@@ -112,9 +116,9 @@ double ishd(double pi, double ti, double pe);
 double ief(double pi, double ti, double pe, double te);
 ```
 
-## Install SEUIF97 
+## Using SEUIF97 library 
 
-Use the shared library from one programming language, you may
+To use the shared library in your preferred programming language, follow these steps:
 
 1. Put the shared library in the default `Lib` path of OS or the programming language
    * **Windows(x86/64)** 
@@ -123,9 +127,9 @@ Use the shared library from one programming language, you may
    * **Linux(x64)** 
      * copy `libseuif97.so` in the [Linux/x64](./shared_lib/Linux/x64) folder to a default path of Linux shared lib : `/usr/lib`/
    
-2. Add the API file of the programming language to its `API` path
+2. Add the specific API file for your programming language to its corresponding`API` path.
 
-   * The API paths of different programming languages are different,please refer to the [Examples](./demo/) of different programming languages
+  * **Note**: API paths vary by language. Please refer to the specific  [Examples](./demo/) provided for your programming language to locate the correct path and setup instructions.
 
 ## Interfaces and Examples
 
@@ -145,7 +149,7 @@ Use the shared library from one programming language, you may
 | [Modelica](./demo/demo-modelica)    |  [seuif97.mo](./demo/demo-modelica/demomodelica/seuif97.mo) |
 | [Golang](./demo-go)                |  **Example** [demo.go](./demo/demo-go/demo.go) |
 
-You can modify these interfaces provided in the repository to your own APIs.
+You can modify the provided interfaces to match your own API needs.
 
 **The Selected Examples**
 
