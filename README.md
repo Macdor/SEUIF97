@@ -12,7 +12,9 @@ Through the high-speed library, IAPWS-IF97 results are generated with high accur
 
 * Shortest Addition Chain Algorithm: Used for the rapid computation of integer powers via optimal multiplication sequences.
 * Power Caching for Multi-Polynomial Evaluation: Precomputes powers to avoid redundant calculations, directly retrieving them to boost performance across multiple polynomials.
-* Recurrence Method for Multi-Polynomial Evaluation：Utilizes the derivative relationship to compute a base polynomial, then derives the rest via base scaling  to maximize efficiency
+* Recurrence Method for Multi-Polynomial Evaluation：Utilizes the derivative relationship to compute a base polynomial, then derives the rest via base scaling  to maximize efficiency.
+
+Please refer to [The acceleration methods](./the_acceleration_methods.md) for more details on the algorithm.
 
 ## The shared library
 
