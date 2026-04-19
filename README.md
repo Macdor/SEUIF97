@@ -43,12 +43,6 @@ The compiled shared libraries using GCC are available in the [/shared_lib/](./sh
 
 * [Linux(x64)](./shared_lib/Linux): `libseuif97.so`
 
-**Interfaces and examples**
-
-Interfaces and examples are provided in the  [/demo/](./demo) directory, supporting a wide range of languages and environments
-
-*  C/C++, Python, C#, Java, Excel VBA, MATLAB, Rust, Fortran, Pascal, Golang, Modelica
-
 ## Functions of the SEUIF97 Shared Library
 
 The SEUIF97 library provides comprehensive functions for calculating water and steam properties, as well as the thermodynamic processes of steam turbines.
@@ -59,10 +53,10 @@ SEUIF97 supports **12 distinct input state pairs** for calculating **36 thermody
 
 **Input Pairs:**
 
-* Pressure-based: $(p,t), (p,h), (p,s), (p,v)$
-* Temperature-based: $(t,h),(t,s), (t,v)$
-* Quality-based: $(p,x), (t,x),(h,x),(s,x)$
-* Other: $(h,s)$
+* $(p,t), (p,h), (p,s), (p,v)$
+* $(t,h),(t,s), (t,v)$
+* $(p,x), (t,x),(h,x),(s,x)$
+* $(h,s)$
 
 The type of property functions are provided in the package
 
@@ -130,7 +124,11 @@ To use the shared library in your preferred programming language, follow these s
 
 ## Interfaces and Examples
 
-* [./demo/](./demo)
+Interfaces and examples are provided in the  [/demo/](./demo) directory, supporting a wide range of languages and environments
+
+*  C/C++, Python, C#, Java, Excel VBA, MATLAB, Rust, Fortran, Pascal, Golang, Modelica
+
+You can modify the provided interfaces to match your own API needs.
 
 |  Language                           |    Interface                                     | 
 |:-----------------------------------:|:-------------------------------------------------|
@@ -146,7 +144,7 @@ To use the shared library in your preferred programming language, follow these s
 | [Modelica](./demo/demo-modelica)    |  [seuif97.mo](./demo/demo-modelica/demomodelica/seuif97.mo) |
 | [Golang](./demo-go)                |  **Example** [demo.go](./demo/demo-go/demo.go) |
 
-You can modify the provided interfaces to match your own API needs.
+
 
 **The Selected Examples**
 
