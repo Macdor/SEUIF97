@@ -15,7 +15,7 @@
      gcc -o demo demo.c  -I./include  -L/usr/lib/ -lseuif97 -lm
 
 3. Windows with MSVC: seuif97.dll
-   Using cmake to to build the  seuif97.dll with MSVC
+   Using cmake to to build the  seuif97.dll with MSVC under Developer Command Prompt for VS
       ./seuif97.dll
       ./lib/seuif97.lib
       ./include/seuif97.h
