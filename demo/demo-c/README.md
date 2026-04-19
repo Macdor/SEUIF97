@@ -7,7 +7,7 @@
    * Linux `./usr/lib/libseuif97.so`
 
 2. The dynamic library with MSVC: seuif97.dll
-   *  Using cmake to to build the  seuif97.dll with MSVC
+   *  Using cmake to to build the  seuif97.dll with MSVC under Developer Command Prompt for VS
       * ./seuif97.dll
       * ./lib/seuif97.lib
 
