@@ -37,9 +37,9 @@ cmake --build ./build/ --config Release
 
 **The compiled shared libraries**
 
-The compiled shared libraries using GCC are available in the [/shared_lib/](./shared_lib/) directory:
+The compiled shared libraries using **GCC** are available in the [/shared_lib/](./shared_lib/) directory:
 
-* [Windows(x86/64)](./shared_lib/Windows): `libseuif97.dll` 
+* [Windows(x86/64)](./shared_lib/Windows): `libseuif97.dll`
 
 * [Linux(x64)](./shared_lib/Linux): `libseuif97.so`
 
@@ -111,9 +111,9 @@ double ief(double pi, double ti, double pe, double te);
 
 To use the shared library in your preferred programming language, follow these steps:
 
-1. Put the shared library in the default `Lib` path of OS or the programming language
+1. Put the shared library in the default path of OS or the programming language
    * **Windows(x86/64)** 
-     * copy `libseuif97.dll` in the [Windows/x86](./shared_lib/Windows/x86) or [Windows/x64](./shared_lib/Windows/x64) folder to a default path of Windows32/64's DLL:  `C:\Windows\System`
+     * copy `libseuif97.dll` in the [Windows/x86](./shared_lib/Windows/x86) or [Windows/x64](./shared_lib/Windows/x64) folder to a default path of Windows32/64's DLL,for example:  `C:\Windows\System`
    
    * **Linux(x64)** 
      * copy `libseuif97.so` in the [Linux/x64](./shared_lib/Linux/x64) folder to a default path of Linux shared lib : `/usr/lib`/

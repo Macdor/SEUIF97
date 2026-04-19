@@ -1,21 +1,27 @@
 /*
-Add  SEUIF97 the paths of lib and header file to  the  environment variables of GCC/MinGW-W64  :
-    1 Windows: C:/Windows/system/libseuif97.dll
-    2 Linux: ./usr/lib/libseuif97.so
-    3 ./include/seuif97.h
+1. Windows with MinGW-W64：libseuif97.dll
+   Add SEUIF97 the paths of lib and header file to  the  environment variables of GCC/MinGW-W64  :
+       C:/Windows/system/libseuif97.dll
+       ./include/seuif97.h
 
-Build:
-Windows with MinGW-W64：
-   gcc -o demo.exe demo.c -I./include  -LC:/Windows/system/  -lseuif97
+   Build:
+      gcc -o demo.exe demo.c -I./include  -LC:/Windows/system/  -lseuif97
 
-Linux：
-   gcc -o demo demo.c  -I./include  -L/usr/lib/ -lseuif97 -lm
+2. Linux: ibseuif97.so
+   Add SEUIF97 the paths of lib and header file to  the  environment variables of GCC/MinGW-W64  :
+      ./usr/lib/libseuif97.so
+      ./include/seuif97.h
+   Build:
+     gcc -o demo demo.c  -I./include  -L/usr/lib/ -lseuif97 -lm
 
-Run:
-./demo
+3. Windows with MSVC: seuif97.dll
+   Using cmake to to build the  seuif97.dll with MSVC
+      ./seuif97.dll
+      ./lib/seuif97.lib
+      ./include/seuif97.h
 
-Windows  MSVC: seuif97.dll
-   cl /Fedemo.exe /Fo./obj/demo.obj demo.c -I./include/  ./lib/seuif97.lib
+   Build:
+      cl /Fedemo.exe /Fo./obj/demo.obj demo.c -I./include/ ./lib/seuif97.lib
 
 Author: Cheng Maohua
 */
