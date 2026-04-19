@@ -184,15 +184,15 @@ You can modify the provided interfaces to match your own API needs.
 | Region                                |             |      r |         16 |
 | Isobaric cubic expansion coefficient  |     1/K     |    ɑv  |         17 |
 | Isothermal compressibility            |    1/MPa    |     kT |         18 |
-| Partial derivative (∂V/∂T)p           |  m3/(kg·K)  |(∂V/∂T)p|         19 |
-| Partial derivative (∂V/∂P)T           | m3/(kg·MPa) |(∂V/∂P)T|         20 |
+| Partial derivative (∂V/∂T)p           |  m^3/(kg·K) |(∂V/∂T)p|         19 |
+| Partial derivative (∂V/∂P)T           | m^3/(kg·MPa)|(∂V/∂P)T|         20 |
 | Partial derivative (∂p/∂t)v           |    MPa/K    |(∂p/∂t)v|         21 |
 | Isothermal throttling coefficient     | kJ/(kg·MPa) |    δt  |         22 |
 | Joule-Thomson coefficient             |    K/MPa    |     μ  |         23 |
 | Dynamic viscosity                     |  kg/(m·s)   |     η  |         24 |
 | Kinematic viscosity                   |    m^2/s    |     ν  |         25 |
 | Thermal conductivity                  |   W/(m.K)   |     λ  |         26 |
-| Thermal diffusivity                   |   um^2/s    |     a  |         27 |
+| Thermal diffusivity                   |   um^{2}/s  |     a  |         27 |
 | Prandtl number                        |             |     Pr |         28 |
 | Surface tension                       |     N/m     |     σ  |         29 |
 
