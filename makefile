@@ -1,7 +1,7 @@
 LIBDIR=./bin/
 ifeq ($(OS),Windows_NT)
     LIBNAME =$(LIBDIR)libseuif97.dll 
-	LIBFLAGES=-static-libstdc++ -static-libgcc -static -Wl,--add-stdcall-alias,--output-def=$(LIBDIR)libseuif97.def,-out-implib=$(LIBDIR)libseuif97.lib
+	LIBFLAGS=-static-libstdc++ -static-libgcc -static -Wl,--add-stdcall-alias,--output-def=$(LIBDIR)libseuif97.def,-out-implib=$(LIBDIR)libseuif97.lib
 else
 	UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
@@ -37,7 +37,7 @@ SRCS= ./src/algo/*.c \
 all: $(LIBNAME)
 
 $(LIBNAME): $(SRCS) 
-	$(CC) -shared -o $@ -fPIC $(CFLAGS) $^  $(INC) $(LIBFLAGES)
+	$(CC) -shared -o $@ -fPIC $(CFLAGS) $^  $(INC) $(LIBFLAGS)
 
 tests:
 	$(MAKE) -C ./test/ FILE=test_hs.c
