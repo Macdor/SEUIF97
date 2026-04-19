@@ -6,7 +6,7 @@ This is the C implementation of the high-speed IAPWS-IF97 package **SEUIF97**. I
  
 Through the high-speed library, IAPWS-IF97 results are generated with high accuracy and at speeds significantly faster than the **repeated squaring method** or the standard C library's `math.pow()`
 
-**SEUIF97** is also significantly faster than approximate equations and other fast-calculation algorithms for water and steam properties.
+**SEUIF97** is also faster than approximate equations and other fast-calculation algorithms for water and steam properties.
 
 ## Key Acceleration Methods
 
