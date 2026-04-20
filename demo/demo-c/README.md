@@ -13,10 +13,10 @@
       *  32:  `../../shared_lib/Windows/x86/libseuif97.lib`
 
 3. The dynamic library with MSVC: `seuif97.dll`
-   Using cmake to to build the  seuif97.dll with msvc
+   Using `cmake` to to build the  `seuif97.dll` with msvc
    * DLL: copy `./build/seuif97.dll` to
        * `./` or `C:\Windows\SysWOW64\seuif97.dll`, (32bits  build under Developer Command Prompt for VS)
-       * `/` or  `C:\Windows\System32\seuif97.dll`, (64bits  build under **x64** Native Tools Command Prompt for VS)
+       * `./` or  `C:\Windows\System32\seuif97.dll`, (64bits  build under **x64** Native Tools Command Prompt for VS)
    * Lib: `../../build/seuif97.lib`
  
 4. header file: `./include/seuif97.h`
