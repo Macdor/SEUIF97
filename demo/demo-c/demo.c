@@ -32,11 +32,8 @@
       lib:  ../../build/seuif97.lib
       ./include/seuif97.h
 
-   Build:
-     64 bits under x64 Native Tools Command Prompt for VS 
-        cl /Fedemo.exe demo.c -I./include/ ../../build/seuif97.lib
-     32 bits under Developer Command Prompt for VS
-        cl /Fedemo.exe demo.c -I./include/ ../../buildc/seuif97.lib
+   Build: 64 bits under x64 Native Tools Command Prompt for VS / 32 bits under Developer Command Prompt for VS
+       cl /Fedemo.exe demo.c -I./include/ ../../buildc/seuif97.lib
      
 Author: Cheng Maohua
 */
