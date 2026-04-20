@@ -37,11 +37,17 @@ cmake --build ./build/ --config Release
 
 **The compiled shared libraries**
 
-The compiled shared libraries using **GCC** are available in the [/shared_lib/](./shared_lib/) directory:
+The shared libraries  are available in the [/shared_lib/](./shared_lib/) directory:
 
-* [Windows(x86/64)](./shared_lib/Windows): `libseuif97.dll`
+* The shared library `libseuif97.dll` using **GCC** 
 
-* [Linux(x64)](./shared_lib/Linux): `libseuif97.so`
+   * [Windows(x64)](./shared_lib/Windows/x64)
+   * [Windows(x86)](./shared_lib/Windows/x86)
+   * [Liunx(x64)](./shared_lib/Linux/x64)
+
+* The dynamic library `seuif97.dll` usiing **MSVC**
+   * [Windows(x64-msvc)](./shared_lib/Windows/x64-msvc)
+   * [Windows(x86-msvc)](./shared_lib/Windows/x86-msvc)
 
 ## Functions of the SEUIF97 Shared Library
 
