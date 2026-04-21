@@ -142,7 +142,7 @@ You can modify the provided interfaces to match your own API needs.
 | [Fortran](./demo/demo-Fortran)      |  [seuif97.f08](./demo/demo-fortran/seuif97.f08)  |
 | [Pascal](./demo/demo-pascal)        |  [seuif97.pas](./demo/demo-pascal/seuif97.pas)   |
 | [Modelica](./demo/demo-modelica)    |  [seuif97.mo](./demo/demo-modelica/demomodelica/seuif97.mo) |
-| [Golang](./demo-go)                |  **Example** [demo.go](./demo/demo-go/demo.go) |
+| [Golang](./demo/demo-go)                |  **Example** [demo.go](./demo/demo-go/demo.go) |
 
 
 
