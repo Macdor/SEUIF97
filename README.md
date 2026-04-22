@@ -1,6 +1,6 @@
 # SEUIF97
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8242452.svg)](https://doi.org/10.5281/zenodo.8242452)
+![PyPI](https://img.shields.io/pypi/v/seuif97) [![Downloads](https://static.pepy.tech/badge/seuif97)](https://pepy.tech/project/seuif97) [![Downloads](https://static.pepy.tech/badge/seuif97/month)](https://pepy.tech/project/seuif97)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8242452.svg)](https://doi.org/10.5281/zenodo.8242452)
 
 This is the C implementation of the high-speed IAPWS-IF97 package **SEUIF97**. It is suitable for computation-intensive calculations，such as the simulation of non-stationary processes, on-line process monitoring and optimizations.
  
