@@ -3,8 +3,8 @@
 ## Key Acceleration Methods
 
 * Shortest Addition Chain Algorithm: Used for the rapid computation of integer powers via optimal multiplication sequences.
-* Power Caching for Multi-Polynomial Evaluation: Precomputes powers to avoid redundant calculations, directly retrieving them to boost performance across multiple polynomials.
-* Recurrence Method for Multi-Polynomial Evaluation：Utilizes the derivative relationship to compute a base polynomial, then derives the rest via base scaling  to maximize efficiency
+* Power Caching Strategy : Precomputes only distinct powers to avoid redundant calculations, directly retrieving them to speed up polynomial evaluation.
+* Recurrence Method for Multi-Polynomial Evaluation: Computes a base polynomial, then utilizes derivative relationships to derive the rest via base scaling to maximize efficiency.
 
 ## Shortest Addition Chain Algorithm
 
