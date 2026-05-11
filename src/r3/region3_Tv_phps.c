@@ -7,10 +7,10 @@ IAPWS-IF97-S03rev: Supp-Tv(ph,ps)3-2014.pdf
  */
 #include <math.h>
 #include "region3.h"
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../algo/algorithm.h"
 
-//  Initialize coefphicients and exponents for region 3
+//  Initialize coefficients and exponents for region 3
 
 double p2h3ab(double p)
 {

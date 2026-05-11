@@ -89,10 +89,10 @@ void test_pt_critical(void)
 {
   // critical point
   double tc_water = 647.096 - 273.15; // critical temperature in K
-  double pc_water = 22.064;           // critical p in Mpa
+  double pc_water = 22.064;           // critical p in MPa
   double dc_water = 322.0;            // critical density in kg/m**3
-  double sc_water = 4.41202148223476; // Critic entropy
-  double hc_water = 2.087546845e+03;  // Critic entropy h
+  double sc_water = 4.41202148223476; // Critical entropy
+  double hc_water = 2.087546845e+03;  // Critical enthalpy h
   TEST_ASSERT_EQUAL_FLOAT(sc_water, pt(pc_water, tc_water, OS));
   TEST_ASSERT_EQUAL_FLOAT(hc_water, pt(pc_water, tc_water, OH));
   TEST_ASSERT_EQUAL_FLOAT(dc_water, pt(pc_water, tc_water, OD));

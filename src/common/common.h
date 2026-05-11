@@ -8,7 +8,7 @@ typedef struct
 
 // methods
 typedef double (*properties_region)(double, double, int);
-// tansport properties
+// transport properties
 double viscosity(double rho, double T);
 double kinematic_viscosity(double rho, double T);
 double thCond(double rho, double T);

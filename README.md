@@ -2,7 +2,7 @@
 
 ![PyPI](https://img.shields.io/pypi/v/seuif97) [![Downloads](https://static.pepy.tech/badge/seuif97)](https://pepy.tech/project/seuif97) [![Downloads](https://static.pepy.tech/badge/seuif97/month)](https://pepy.tech/project/seuif97)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8242452.svg)](https://doi.org/10.5281/zenodo.8242452)
 
-This is the C implementation of the high-speed IAPWS-IF97 package **SEUIF97**. It is suitable for computation-intensive calculations，such as the simulation of non-stationary processes, on-line process monitoring and optimizations.
+This is the C implementation of the high-speed IAPWS-IF97 package **SEUIF97**. It is suitable for computation-intensive calculations, such as the simulation of non-stationary processes, on-line process monitoring and optimizations.
  
 Through the high-speed library, IAPWS-IF97 results are generated with high accuracy and at speeds significantly faster than the **repeated squaring method** or the standard C library's `math.pow()`
 
@@ -41,7 +41,7 @@ The shared libraries `libseuif97.dll` building with **MinGW-GCC/GCC**  are avail
 
    * [Windows(x64)](./shared_lib/Windows/x64)
    * [Windows(x86)](./shared_lib/Windows/x86)
-   * [Liunx(x64)](./shared_lib/Linux/x64)
+   * [Linux(x64)](./shared_lib/Linux/x64)
 
 ## Functions of the SEUIF97 Shared Library
 
@@ -116,7 +116,7 @@ To use the shared library in your preferred programming language, follow these s
      * copy `libseuif97.dll` in the [Windows/x86](./shared_lib/Windows/x86) or [Windows/x64](./shared_lib/Windows/x64) folder to a default path of Windows32/64's DLL,for example:  `C:\Windows\System`
    
    * **Linux(x64)** 
-     * copy `libseuif97.so` in the [Linux/x64](./shared_lib/Linux/x64) folder to a default path of Linux shared lib : `/usr/lib`/
+     * copy `libseuif97.so` in the [Linux/x64](./shared_lib/Linux/x64) folder to a default path of Linux shared lib : `/usr/lib`
    
 2. Add the specific API file for your programming language to its corresponding`API` path.
 
@@ -191,7 +191,7 @@ You can modify the provided interfaces to match your own API needs.
 | Joule-Thomson coefficient             |    K/MPa    |     μ  |         23 |
 | Dynamic viscosity                     |  kg/(m·s)   |     η  |         24 |
 | Kinematic viscosity                   |    m^2/s    |     ν  |         25 |
-| Thermal conductivity                  |   W/(m.K)   |     λ  |         26 |
+| Thermal conductivity                  |   W/(m·K)   |     λ  |         26 |
 | Thermal diffusivity                   |   um^{2}/s  |     a  |         27 |
 | Prandtl number                        |             |     Pr |         28 |
 | Surface tension                       |     N/m     |     σ  |         29 |

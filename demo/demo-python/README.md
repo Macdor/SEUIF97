@@ -4,7 +4,7 @@
 
 Put the shared library in the default `Lib` path of OS or the programming language,
 
-then,copy **seuif97.py** in the [api](./api) folder to a default path of Python's lib.
+then, copy **seuif97.py** in the [api](./api) folder to a default path of Python's lib.
 
 **Windows(x86/64)** 
 
@@ -29,7 +29,7 @@ The two type functions are provided in the  [seuif97.py](../../api/seuif97.py):
   * first,second input parameters: the input properties(double)
   * the return: the calculated property value(double)
 
-* ??(in1,in2,propertyID), , e.g:`h=pt(p,t,4)`, the propertyID h is 4 
+* ??(in1,in2,propertyID), e.g:`h=pt(p,t,4)`, the propertyID h is 4 
    * first,second input parameters: the input properties(double)
    * third input parameter: the propertyID of the calculated property(int, 0-29), see Properties in libseuif97
    * the return: the calculated property value(double)
@@ -37,7 +37,7 @@ The two type functions are provided in the  [seuif97.py](../../api/seuif97.py):
 ```python
 import seuif97
 
-p，t=16.10,535.10
+p, t=16.10,535.10
 
 # ??2?(in1,in2)
 h=seuif97.pt2h(p,t)

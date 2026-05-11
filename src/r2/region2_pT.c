@@ -14,7 +14,7 @@
 --------------------------------------------------- */
 #include <math.h>
 #include "../algo/algorithm.h"
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../common/property_id.h"
 #include "region2.h"
 #include "region2_coff.h"
@@ -80,7 +80,7 @@ double pT2h_reg2(double p, double T)
 // specific enthalpy in region 2
 // hreg2 in kJ/kg
 // temperature in K
-// pressure in Map
+// pressure in MPa
 //
 {
     double tau = r2Tstar / T;
@@ -93,7 +93,7 @@ double pT2u_reg2(double p, double T)
 // specific internal energy in region 2
 // ureg2 in kJ/kg
 // temperature in K
-// pressure in Mpa
+// pressure in MPa
 //
 {
     double tau = r2Tstar / T;
@@ -110,7 +110,7 @@ double pT2s_reg2(double p, double T)
 // specific entropy in region 2
 // sreg2 in kJ/(kg K)
 // temperature in K
-// pressure in Mpa
+// pressure in MPa
 //
 {
     double tau = r2Tstar / T;
@@ -141,7 +141,7 @@ double pT2cp_reg2(double p, double T)
 // specific isobaric heat capacity in region 2
 // cpreg2 in kJ/(kg K)
 // temperature in K
-// pressure in Mpa
+// pressure in MPa
 //
 {
     double tau = r2Tstar / T;
@@ -176,7 +176,7 @@ double pT2w_reg2(double p, double T)
 // speed of sound in region 2
 // wreg2 in m/s
 // temperature in K
-// pressure in Mpa
+// pressure in MPa
 //
 {
     double tau = r2Tstar / T;

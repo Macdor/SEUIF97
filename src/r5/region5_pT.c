@@ -6,7 +6,7 @@
 
 #include <math.h>
 #include "region5.h"
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../common/property_id.h"
 #include "region5_coff.h"
 

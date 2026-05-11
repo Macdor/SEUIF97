@@ -2,7 +2,7 @@
 //
 //  Td_ext_reg3(T: f64, d: f64, o_id: i32) -> f64
 //
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../common/property_id.h"
 #include "../algo/algorithm.h"
 #include "region3.h"

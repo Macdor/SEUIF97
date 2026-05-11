@@ -1,4 +1,4 @@
-/*  The transfort rroperties:
+/*  The transport properties:
   Properties():
 
 | property                             |    Unit     | Symbol |   o_id     |
@@ -12,7 +12,7 @@
 
 */
 #include <math.h>
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../common/common.h"
 #include "../common/property_id.h"
 #include "../algo/algorithm.h"

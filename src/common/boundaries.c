@@ -4,7 +4,7 @@
 */
 #include <math.h>
 #include "common.h"
-#include "constand.h"
+#include "constant.h"
 #include "../r1/region1.h"
 #include "../r2/region2.h"
 #include "../r4/region4.h"

@@ -15,10 +15,10 @@
 static double rgas_water = 0.461526; // gas constant in KJ/(kg K)
 // critical point
 static double tc_water = 647.096;          // critical temperature in K
-static double pc_water = 22.064;           // critical p in Mpa
+static double pc_water = 22.064;           // critical p in MPa
 static double dc_water = 322.0;            // critical density in kg/m**3
-static double sc_water = 4.41202148223476; // Critic entropy
-static double hc_water = 2.087546845e+03;  // Critic entropy h
+static double sc_water = 4.41202148223476; // Critical entropy
+static double hc_water = 2.087546845e+03;  // Critical enthalpy h
 // triple point
 static double Pt = 611.657e-6;     // the triple point
 static double Tt = 273.16;         // the triple point

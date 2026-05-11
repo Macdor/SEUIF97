@@ -5,7 +5,7 @@
 #include "region3.h"
 #include "../common/property_id.h"
 #include "../common/common.h"
-#include "../common/constand.h"
+#include "../common/constant.h"
 
 double Td_reg3(double T, double d, int o_id)
 // o_id: output property

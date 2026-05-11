@@ -29,7 +29,7 @@
 
 #include <math.h>
 #include <stdint.h>
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../common/property_id.h"
 #include "../algo/algorithm.h"
 #include "region2.h"
@@ -112,7 +112,7 @@ double pT2ipcec_reg2(double p, double T)
     return (1.0 - pi * tau * poly_pitau / (1.0 + p * poly_pi)) / T;
 }
 
-/// kt Isothermal compressibility 1/Mpa
+/// kt Isothermal compressibility 1/MPa
 // * kt=-(1.0/V)*(dv/dp)T the book 2019 p32
 double pT2kt_reg2(double p, double T)
 {

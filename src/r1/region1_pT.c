@@ -13,7 +13,7 @@
 ----------------------------------------------------------------*/
 #include <math.h>
 #include <stdint.h>
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../algo/algorithm.h"
 #include "region1.h"
 #include "region1_coff.h"
@@ -154,7 +154,7 @@ double pT2cv_reg1(double p, double T)
 
 double pT2w_reg1(double p, double T)
 // speed of sound in region 1
-// w in m/s, T in K, p in Mpa
+// w in m/s, T in K, p in MPa
 {
   double pi, tau, gammapi, a, b;
   tau = r1Tstar / T;

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "../algo/algorithm.h"
 #include "../common/common.h"
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../r1/region1.h"
 #include "../r2/region2.h"
 #include "../r3/region3.h"

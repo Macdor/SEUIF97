@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "../algo/algorithm.h"
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../common/common.h"
 #include "region3_solo_ij.h"
 #include "region3_coff.h"

@@ -2,7 +2,7 @@
 // the coefficients and
 //                    exponents of the dimensionless Helmholtz free energy
 //                    for Region 3 (Table 30, page 30)
-//   Initialize coefphicients and exponents for region 3
+//   Initialize coefficients and exponents for region 3
 #pragma once
 #include "../common/common.h"
 static const double n1 = 0.10658070028513e1;

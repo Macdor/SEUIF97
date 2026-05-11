@@ -4,7 +4,7 @@
      (h,s)->p  (3a,3b,3c)
  */
 #include <math.h>
-#include "../common/constand.h"
+#include "../common/constant.h"
 #include "../algo/algorithm.h"
 #include "region3.h"
 

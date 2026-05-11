@@ -27,7 +27,7 @@ $eta = h/h^* \quad  h^* = 2500 \text{ kJ kg}^{-1}$
 ### C Code
 
 ```c
-// algo/algotithm.h
+// algo/algorithm.h
 #define IPOW ipowsac
 
 // algo/sac.c
