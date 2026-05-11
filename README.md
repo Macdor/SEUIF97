@@ -11,7 +11,7 @@ Through the high-speed library, IAPWS-IF97 results are generated with high accur
 ## Key Acceleration Methods
 
 * Shortest Addition Chain Algorithm: Used for the rapid computation of integer powers via optimal multiplication sequences.
-* Power Caching Strategy : Precomputes only distinct powers to avoid redundant calculations, directly retrieving them to speed up polynomial evaluation.
+* Power Caching Strategy: Precomputes only distinct powers to avoid redundant calculations, directly retrieving them to speed up polynomial evaluation.
 * Recurrence Method for Multi-Polynomial Evaluation: Computes a base polynomial, then utilizes derivative relationships to derive the rest via base scaling to maximize efficiency.
 
 Please refer to [The acceleration methods](./the_acceleration_methods.md) for more details on the algorithm.
@@ -31,13 +31,13 @@ make
 * cmake
 
 ```bash
-cmake -B ./build/   
+cmake -B ./build/
 cmake --build ./build/ --config Release
 ```
 
 **The compiled shared libraries**
 
-The shared libraries `libseuif97.dll` built with **MinGW-GCC/GCC**  are available in the [/shared_lib/](./shared_lib/) directory:
+The shared libraries `libseuif97.dll` built with **MinGW-GCC/GCC** are available in the [/shared_lib/](./shared_lib/) directory:
 
    * [Windows(x64)](./shared_lib/Windows/x64)
    * [Windows(x86)](./shared_lib/Windows/x86)
@@ -64,7 +64,7 @@ The type of property functions are provided in the package
   ??(in1,in2,o_id)
 ```
 
-* the first,second input parameters : the input property pairs
+* the first, second input parameters: the input property pairs
 * the third input parameters: the ID of the calculated property - [o_id](#properties)
 * the return: the calculated property value of `o_id`
 
@@ -116,7 +116,7 @@ To use the shared library in your preferred programming language, follow these s
      * copy `libseuif97.dll` in the [Windows/x86](./shared_lib/Windows/x86) or [Windows/x64](./shared_lib/Windows/x64) folder to a default path of Windows32/64's DLL,for example:  `C:\Windows\System`
    
    * **Linux(x64)** 
-     * copy `libseuif97.so` in the [Linux/x64](./shared_lib/Linux/x64) folder to a default path of Linux shared lib : `/usr/lib`
+     * copy `libseuif97.so` in the [Linux/x64](./shared_lib/Linux/x64) folder to a default path of Linux shared lib: `/usr/lib`
    
 2. Add the specific API file for your programming language to its corresponding`API` path.
 

@@ -3,14 +3,14 @@
 ## Key Acceleration Methods
 
 * Shortest Addition Chain Algorithm: Used for the rapid computation of integer powers via optimal multiplication sequences.
-* Power Caching Strategy : Precomputes only distinct powers to avoid redundant calculations, directly retrieving them to speed up polynomial evaluation.
+* Power Caching Strategy: Precomputes only distinct powers to avoid redundant calculations, directly retrieving them to speed up polynomial evaluation.
 * Recurrence Method for Multi-Polynomial Evaluation: Computes a base polynomial, then utilizes derivative relationships to derive the rest via base scaling to maximize efficiency.
 
 ## Shortest Addition Chain Algorithm
 
 The code snippets demonstrate the Shortest Addition Chain Algorithm to calculate the $T(p,h)$ in region 1, illustrating the flow from the optimized kernel to the final physical property calculation:
 
-###  Backward Equation $T(p,h)$ in region 1
+### Backward Equation $T(p,h)$ in region 1
 
 The backward equation $T(p,h)$ for region 1 has the following dimensionless:
 
@@ -22,7 +22,7 @@ $\theta = T/T^* \quad  T^* = 1 \text{K}$
 
 $\pi = p/p^*  \quad  p^* = 1 \text{MPa}$
 
-$eta = h/h^* \quad  h^* = 2500 \text{ kJ kg}^{-1}$
+$\eta = h/h^* \quad  h^* = 2500 \text{ kJ kg}^{-1}$
 
 ### C Code
 
