@@ -1,4 +1,4 @@
-# SEUIF97 Software Design Document
+# SEUIF97 Software Design 
 
 ## 1. Document Overview
 
