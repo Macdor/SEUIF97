@@ -18,7 +18,7 @@ This document applies to the core C implementation code of the SEUIF97 project, 
 | Region 4 | Saturation line region |
 | Region 5 | High-temperature region (above 800°C) |
 | Shortest Addition Chain | Optimal multiplication sequence algorithm for fast integer power computation |
-| Power Caching | Precompute and cache distinct powers to avoid redundant polynomial calculations |
+| Power Caching | Precompute and cache distinct powers to avoid redundant power calculations |
 
 ---
 
