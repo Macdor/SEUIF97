@@ -37,7 +37,7 @@ cmake --build ./build/ --config Release
 
 **The compiled shared libraries**
 
-The shared libraries `libseuif97.dll` building with **MinGW-GCC/GCC**  are available in the [/shared_lib/](./shared_lib/) directory:
+The shared libraries `libseuif97.dll` built with **MinGW-GCC/GCC**  are available in the [/shared_lib/](./shared_lib/) directory:
 
    * [Windows(x64)](./shared_lib/Windows/x64)
    * [Windows(x86)](./shared_lib/Windows/x86)
@@ -190,9 +190,9 @@ You can modify the provided interfaces to match your own API needs.
 | Isothermal throttling coefficient     | kJ/(kg·MPa) |    δt  |         22 |
 | Joule-Thomson coefficient             |    K/MPa    |     μ  |         23 |
 | Dynamic viscosity                     |  kg/(m·s)   |     η  |         24 |
-| Kinematic viscosity                   |    m^2/s    |     ν  |         25 |
+| Kinematic viscosity                   |    m²/s    |     ν  |         25 |
 | Thermal conductivity                  |   W/(m·K)   |     λ  |         26 |
-| Thermal diffusivity                   |   um^{2}/s  |     a  |         27 |
+| Thermal diffusivity                   |   µm²/s  |     a  |         27 |
 | Prandtl number                        |             |     Pr |         28 |
 | Surface tension                       |     N/m     |     σ  |         29 |
 
