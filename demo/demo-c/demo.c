@@ -26,14 +26,14 @@
       cl /Fedemo.exe demo.c -I./include/ ../../shared_lib/Windows/x86/libseuif97.lib
 
 4. Windows with MSVC: seuif97.dll
-   Using cmake to to build the seuif97.dll with msvc
+   Using cmake to build the seuif97.dll with MSVC
       C:\Windows\System32\seuif97.dll //64bits under x64 Native Tools Command Prompt for VS
       C:\Windows\SysWOW64\seuif97.dll //32bits under Developer Command Prompt for VS
       lib:  ../../build/seuif97.lib
       ./include/seuif97.h
 
    Build: 64 bits under x64 Native Tools Command Prompt for VS / 32 bits under Developer Command Prompt for VS
-       cl /Fedemo.exe demo.c -I./include/ ../../buildc/seuif97.lib
+       cl /Fedemo.exe demo.c -I./include/ ../../build/seuif97.lib
      
 Author: Cheng Maohua
 */

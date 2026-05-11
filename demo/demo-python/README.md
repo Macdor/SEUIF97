@@ -4,7 +4,7 @@
 
 Put the shared library in the default `Lib` path of OS or the programming language,
 
-then, copy **seuif97.py** in the [api](./api) folder to a default path of Python's lib.
+then, copy **seuif97.py** in the current folder to a default path of Python's lib.
 
 **Windows(x86/64)** 
 
@@ -22,7 +22,7 @@ $sudo cp seuif97.py /usr/lib/python3.8/
 
 ## Functions
 
-The two type functions are provided in the  [seuif97.py](../../api/seuif97.py):
+The two type functions are provided in the  [seuif97.py](./seuif97.py):
 
 * ??2?(in1,in2) , e.g: `h=pt2h(p,t)`
   
