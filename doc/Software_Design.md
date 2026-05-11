@@ -3,7 +3,7 @@
 ## 1. Document Overview
 
 ### 1.1 Document Purpose
-This document serves as the software design specification for SEUIF97, the high-speed calculation library for water and steam thermodynamic properties. It describes in detail the system architecture, module partitioning, interface definitions, and algorithm implementations, providing a complete technical reference for future maintenance, extension, and secondary development.
+This document serves as the software design specification for SEUIF97, the high-speed calculation library for water and steam physical properties. It describes in detail the system architecture, module partitioning, interface definitions, and algorithm implementations, providing a complete technical reference for future maintenance, extension, and secondary development.
 
 ### 1.2 Scope
 This document applies to the core C implementation code of the SEUIF97 project, covering all functional modules for water and steam thermodynamic property calculation, transport property calculation, and steam turbine thermodynamic process calculation.
