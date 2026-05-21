@@ -34,11 +34,18 @@ cmake --build ./build/ --config Release
 
 ###  MinGW-GCC at Windows 
 
-For 64-bit __stdcall DLL 
-```bash
-cmake -B ./build -G "MinGW Makefiles"  -DCMAKE_BUILD_TYPE=Release
+64bit __stdcall  dll(VBA)
+```
+cmake -B ./build -G "MinGW Makefiles"  -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS=-m64
 cmake --build ./build/ --config Release
 ```
+
+32bit __stdcall  dll(VBA)
+```
+cmake -B ./build -G "MinGW Makefiles"  -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS=-m32
+cmake --build ./build/ --config Release
+```
+
 ###  Windows: Microsoft Visual Studio c++ 
 
 For 64-bit __stdcall DLL 
