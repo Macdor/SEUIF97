@@ -20,7 +20,7 @@ Please refer to [The acceleration methods](./the_acceleration_methods.md) for mo
 
 **Building the shared library**
 
-You can build the library using either `make` or `cmake`:
+You can build the library using either [make or cmake](./building_the_library.md):
 
 **The compiled shared libraries**
 
