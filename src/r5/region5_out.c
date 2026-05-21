@@ -107,7 +107,7 @@ double ps_reg5(double p, double s, int o_id)
         value = pT2cp_reg5(p, T);
         break;
     case OW:
-        T = ph2T_reg5(p, s);
+        T = ps2T_reg5(p, s);
         value = pT2w_reg5(p, T);
         break;
     default:
