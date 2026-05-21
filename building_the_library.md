@@ -1,5 +1,5 @@
 
-#  Building the shared Library
+#  Building the Shared Library
 
 ## Make
 
