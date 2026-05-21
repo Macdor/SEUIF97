@@ -1,20 +1,38 @@
 
-# CMake
+#  Building the shared Library
 
-## Linux
+## Make
+
+### MinGW-GCC at Windows
+
+64bit dll(for VBA)
+
+```makefile
+#CFLAGS=-O3 -DBUILD_DLL 
+```
+
+32bit DLL(for VBA)
+
+```makefile
+#CFLAGS=-O3 -DBUILD_DLL -m32
+```
+
+## CMake
+
+### Linux
 
 ```bash
 cmake -B ./build/   
 cmake --build ./build/ --config Release
 ```
 
-##  Windows: MinGW 
+###  Windows: MinGW 
 
 ```bash
 cmake -B ./build -G "MinGW Makefiles"  -DCMAKE_BUILD_TYPE=Release
 cmake --build ./build/ --config Release
 ```
-##  Windows: Microsoft Visual Studio c++ 
+###  Windows: Microsoft Visual Studio c++ 
 
 For 64-bit __stdcall DLL 
 

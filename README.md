@@ -22,19 +22,6 @@ Please refer to [The acceleration methods](./the_acceleration_methods.md) for mo
 
 You can build the library using either `make` or `cmake`:
 
-* make
-
-```bash
-make
-```
-
-* cmake
-
-```bash
-cmake -B ./build/
-cmake --build ./build/ --config Release
-```
-
 **The compiled shared libraries**
 
 The shared libraries `libseuif97.dll` built with **MinGW-GCC/GCC** are available in the [/shared_lib/](./shared_lib/) directory:
