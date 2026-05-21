@@ -35,13 +35,13 @@ cmake --build ./build/ --config Release
 ###  MinGW-GCC at Windows 
 
 64bit __stdcall  dll(VBA)
-```
+```bash
 cmake -B ./build -G "MinGW Makefiles"  -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS=-m64
 cmake --build ./build/ --config Release
 ```
 
 32bit __stdcall  dll(VBA)
-```
+```bash
 cmake -B ./build -G "MinGW Makefiles"  -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS=-m32
 cmake --build ./build/ --config Release
 ```
