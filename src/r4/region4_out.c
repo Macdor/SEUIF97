@@ -277,6 +277,7 @@ double pT_reg4(double p, double T, int o_id)
       value = Td_reg3(T, dc_water, o_id);
    else
       value = INVALID_VALUE;
+   return value     
 }
 
 // the extend input pairs
