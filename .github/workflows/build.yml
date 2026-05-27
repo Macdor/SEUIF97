@@ -27,7 +27,8 @@ jobs:
         sudo apt install -y cmake ninja-build build-essential
     
     - name: Configure CMake
-      run: cmake -B build -G "Ninja" \
+      run: |
+        cmake -B build -G "Ninja" \
         -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
         -DCMAKE_C_COMPILER=${{ env.CC }} \
         -DCMAKE_INSTALL_PREFIX=install/linux
