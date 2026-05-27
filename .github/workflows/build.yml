@@ -27,8 +27,10 @@ jobs:
         sudo apt install -y cmake ninja-build build-essential
     
     - name: Configure CMake
-      run: cmake --preset linux-release
-        -DCMAKE_C_COMPILER=${{ env.CC }}
+      run: cmake -B build -G "Ninja" \
+        -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+        -DCMAKE_INSTALL_PREFIX=install/linux \
+        -DCMAKE_C_COMPILER=${{ env.CC }} \
     
     - name: Build
       run: cmake --build build -j$(nproc)
