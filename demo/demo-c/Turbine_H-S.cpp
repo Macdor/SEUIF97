@@ -3,30 +3,27 @@
 
   using Gnuplot
 
-  Add  SEUIF97 the paths of lib and header file to  the  environment variables of GCC/MinGW-W64  :
+  seuif97's lib and header file
     1 Windows: libseuif97.dll
     2 Linux:  libseuif97.so
     3 seuif97.h
 
  4 lines:
-
     1  Isobar line:p inlet
     2  Isobar line:p outlet
     3  isentropic line:  (p inlet ,t inlet h inlet,s inlet), (p outlet,s inlet)
     4  Expansion line: inlet,outlet
 
-Build:
+Build using GCC:
 
- Windows：
->g++ -o turbine Turbine_H-S.cpp -LC:/Windows/system/ -lseuif97 -I./include
+Windows：
+  g++ -o turbine Turbine_H-S.cpp -LC:/Windows/system/ -lseuif97 -I./include
 
 Linux：
-$g++ -o turbine Turbine_H-S.cpp -L/usr/lib  -lseuif97 -lm   -I./include
+  g++ -o turbine Turbine_H-S.cpp -L/usr/lib  -lseuif97 -lm   -I./include
 
 Run:
 ./turbine
-
-License: this code is in the public domain
 
 Author:   Cheng Maohua
 Email:    cmh@seu.edu.cn
@@ -68,14 +65,14 @@ Turbine::Turbine(double pin, double tin, double pex, double tex)
 
 void Turbine::analysis(void)
 {
-    ef = seuief(win.p, win.t, wex.p, wex.t);
-    his = seuishd(win.p, win.t, wex.p);
+    ef = ief(win.p, win.t, wex.p, wex.t);
+    his = ishd(win.p, win.t, wex.p);
 
-    win.h = seupt(win.p, win.t, 4);
-    win.s = seupt(win.p, win.t, 5);
+    win.h =pt(win.p, win.t, 4);
+    win.s =pt(win.p, win.t, 5);
 
-    wex.h = seupt(wex.p, wex.t, 4);
-    wex.s = seupt(wex.p, wex.t, 5);
+    wex.h =pt(wex.p, wex.t, 4);
+    wex.s =pt(wex.p, wex.t, 5);
 };
 
 void Turbine::output(void)
@@ -91,11 +88,11 @@ void Turbine::expansionline(void)
 
     // 1 Isobar pin
     double s_isopin[2] = {win.s - sdelta, win.s + sdelta};
-    double h_isopin[2] = {seups(win.p, s_isopin[0], 4), seups(win.p, s_isopin[1], 4)};
+    double h_isopin[2] = {ps(win.p, s_isopin[0], 4), ps(win.p, s_isopin[1], 4)};
 
     // 2 Isobar pex
     double s_isopex[2] = {s_isopin[0], wex.s + sdelta};
-    double h_isopex[2] = {seups(wex.p, s_isopex[0], 4), seups(wex.p, s_isopex[1], 4)};
+    double h_isopex[2] = {ps(wex.p, s_isopex[0], 4), ps(wex.p, s_isopex[1], 4)};
 
     // 3 isentropic lines
     double h_isos[2] = {win.h, win.h - his};

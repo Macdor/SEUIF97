@@ -1,16 +1,13 @@
 /*
 This is header file of SEUIF97 
 
-License: this code is in the public domain
-
 Author:   Cheng Maohua
 Email:    cmh@seu.edu.cn
 
-Last modified: 2016.4.20
 */
 
-#ifndef SEUIF97H
-#define SEUIF97H
+#ifndef SEUIF97_H
+#define SEUIF97_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,35 +23,27 @@ extern "C" {
 
 #endif
 
-IMPORT seupt(double p, double t, int propertyID);
-IMPORT seuph(double p, double h, int propertyID);
-IMPORT seups(double p, double s, int propertyID);
-IMPORT seupv(double p, double v, int propertyID);
-IMPORT seuth(double t, double h, int propertyID);
-IMPORT seuthHi(double t, double h, int propertyID);
-IMPORT seuthLo(double t, double h, int propertyID);
-IMPORT seuts(double t, double s, int propertyID);
-IMPORT seutv(double t, double v, int propertyID);
-IMPORT seuhs(double h, double s, int propertyID);
-IMPORT seupx(double p, double x, int propertyID);
-IMPORT seutx(double t, double x, int propertyID);
+IMPORT pt(double p, double t, int o_id);
+IMPORT ph(double p, double h, int o_id);
+IMPORT ps(double p, double s, int o_id);
+IMPORT pv(double p, double v, int o_id);
 
-IMPORT seuishd(double pi, double ti, double pe);
-IMPORT seuief(double pi, double ti, double pe, double te);
-IMPORT seupt2eu(double p, double t, double tu);
-IMPORT seups2eu(double p, double s, double tu);
-IMPORT seuph2eu(double p, double h, double tu);
-IMPORT seupv2eu(double p, double v, double tu);
-IMPORT seuth2eu(double t, double h, double tu);
-IMPORT seuth2euHi(double t, double h, double tu);
-IMPORT seuth2euLo(double t, double h, double tu);
+IMPORT th(double t, double h, int o_id);
+IMPORT ts(double t, double s, int o_id);
+IMPORT tv(double t, double v, int o_id);
 
-IMPORT seuts2eu(double t, double s, double tu);
-IMPORT seutv2eu(double t, double v, double tu);
+IMPORT hs(double h, double s, int o_id);
 
-IMPORT seuhs2eu(double h, double s, double tu);
-IMPORT seupx2eu(double p, double x, double tu);
-IMPORT seutx2eu(double t, double x, double tu);
+IMPORT px(double p, double x, int o_id);
+IMPORT tx(double t, double x, int o_id);
+
+IMPORT hx(double h, double x, int o_id);
+IMPORT sx(double s, double x, int o_id);
+
+// Thermodynamic Process of Steam Turbine
+IMPORT ishd(double pi, double ti, double pe);
+IMPORT ief(double pi, double ti, double pe, double te);
+
 
 #ifdef __cplusplus
 }

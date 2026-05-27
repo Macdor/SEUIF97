@@ -1,0 +1,96 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master, develop ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+  PROJECT_NAME: seuif97
+  CC: gcc
+
+jobs:
+  # ===== Linux сборка =====
+  build-linux:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y cmake ninja-build build-essential
+    
+    - name: Configure CMake
+      run: |
+        cmake -B build -G "Ninja" \
+        -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+        -DCMAKE_C_COMPILER=${{ env.CC }} \
+        -DCMAKE_INSTALL_PREFIX=install/linux
+    
+    - name: Build
+      run: cmake --build build -j$(nproc)
+    
+    - name: Install
+      run: cmake --install build --config ${{ env.BUILD_TYPE }}
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-build
+        path: install/linux/
+        retention-days: 5
+
+  # ===== Android сборка =====
+  build-android:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        abi: [arm64-v8a, armeabi-v7a, x86, x86_64]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    
+    - name: Setup Android NDK
+      uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: r26b
+        add-to-path: true
+    
+    - name: Install Ninja
+      run: sudo apt install -y cmake ninja-build build-essential
+    
+    - name: Configure CMake for Android
+      run: |
+        cmake -B build_${{ matrix.abi }} \
+          -G "Ninja" \
+          -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
+          -DANDROID_ABI=${{ matrix.abi }} \
+          -DANDROID_PLATFORM=android-21 \
+          -DANDROID_STL=c++_shared \
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_INSTALL_PREFIX=install/android/${{ matrix.abi }}
+    
+    - name: Build
+      run: cmake --build build_${{ matrix.abi }} --config ${{ env.BUILD_TYPE }} -j$(nproc)
+    
+    - name: Install
+      run: cmake --install build_${{ matrix.abi }} --config ${{ env.BUILD_TYPE }}
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-${{ matrix.abi }}
+        path: install/android/${{ matrix.abi }}/
+        retention-days: 5

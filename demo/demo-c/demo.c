@@ -1,29 +1,3 @@
-/*
-Add  SEUIF97 the paths of lib and header file to  the  environment variables of GCC/MinGW-W64  :
-    1 Windows: C:/Windows/system/libseuif97.dll
-    2 Linux: ./usr/lib/libseuif97.so
-    3 ./include/euif97.h
-
-SEUIF97 Library with MSVC:
-    ./lib/libseuif97.lib (the lib:x64)
-
-Build: MSVC：
->cl /Fedemo.exe /Fo./obj/demo.obj demo.c -I./include/  ./lib/libseuif97.lib
-
-Build:
-Windows with MinGW-W64：
->gcc -o demo.exe demo.c -I./include  -LC:/Windows/system/  -lseuif97
-
-Linux：
-$gcc -o demo demo.c  -I./include  -L/usr/lib/ -lseuif97 -lm
-
-
-Run:
-./demo
-
-Author: Cheng Maohua
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "seuif97.h"
@@ -31,13 +5,17 @@ Author: Cheng Maohua
 int main(void)
 {
 
-    double p = 16.13;
-    double t = 535;
-    double h, s, v;
+   double in1 = 1.07;
+   double in2 = 2000;
+   double out;
 
-    h = seupt(p, t, 4);
-    s = seupt(p, t, 5);
-    v = seupt(p, t, 3);
-    printf("(p,t)(%.2f,%.2f) h= %.2f, s= %.4f, v= %.4f\n", p, t, h, s, v);
-    return EXIT_SUCCESS;
+   out = ph(in1, in2, 2);
+   out = ph(in1, in2, 19);
+   out = ph(in1, in2, 20);
+   out = ph(in1, in2, 21);
+   out = ph(in1, in2, 22);
+   out = ph(in1, in2, 30);
+   out = ph(in1, in2, 31);
+   printf("(in1,in2)(%.5f,%.5f) r= %.10f", in1, in2, out);
+   return EXIT_SUCCESS;
 }

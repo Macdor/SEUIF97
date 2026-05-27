@@ -1,407 +1,168 @@
 # SEUIF97
 
-[![DOI](https://zenodo.org/badge/110833324.svg)](https://zenodo.org/badge/latestdoi/110833324)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8242452.svg)](https://doi.org/10.5281/zenodo.8242452)
 
-SEUIF97 is the high-speed shared library of IAPWS-IF97. It is suitable for computation-intensive calculations，such as heat cycle calculations, simulations of non-stationary processes, real-time process monitoring and optimizations.   
+This is the C implementation of the high-speed IAPWS-IF97 package **seuif97**. It is suitable for computation-intensive calculations，such as heat cycle calculations, simulations of non-stationary processes, real-time process monitoring and optimizations.   
  
-Through the high-speed library, the results of the IAPWS-IF97 are accurately produced at about 3x speed-up compared to the repeated squaring method for fast computation of integer powers, 10x speed-up compared to  the `math.pow()` of the C standard library.   
+Through the high-speed library, the results of the IAPWS-IF97 are accurately produced several times faster than repeated squaring method and `math.pow()` of the C standard library.   
 
-* [The C source codes](https://github.com/thermalogic/SEUIF97/tree/c_src)
+**The Fast Methods**
 
-[The shared  libraries](./SharedLibrary/):
+* the shortest addition chain algorithm computes the integer power of a number quickly
+* apply Horner's rule to compute a set of powers and avoid to calculate the power of the same exponential repeatedly
+* the recursive method computes the value of multiple polynomials to avoid the calculation of the same item once again
 
-* Windows(x86/64): `libseuif97.dll` 
+In addition to the source code, the repository provides 
 
-* Linux(x64/aarch64): `libseuif97.so`
+* the compiled shared libraries using GCC: [/shared_lib/](./shared_lib/)
 
-[The binding APIs](./api/) of the programming languages:
+* the interfaces and examples of multiple programming languages:  [/demo/](./demo)
 
-* Python, C/C++, Rust,Excel VBA, C#, Java, MATLAB, Fortran, Modelica, Pascal
+   *  C/C++, Python, C#, Java, Excel VBA, MATLAB,  Rust, Fortran, Pascal, Modelica, Golang
 
-**Publications:**
+## Building the shared library
 
-* 王培红,贾俊颖,程懋华. 水和水蒸汽热力性质IAPWS-IF97公式的通用计算模型[J]. 动力工程,2001,21(6)：1564-1567 [[ pdf ]](./doc/水和水蒸汽热力性质IAPWS-IF97公式的通用计算模型.pdf)
+* make
 
-* 芮嘉敏,孙振业,程懋华. 基于最短加法链状态空间树的IAPWS-IF97快速计算方法[J]. 汽轮机技术,2017,59(4):245-247 [[ pdf ]](./doc/基于最短加法链状态空间树的IAPWS-IF97快速计算方法.pdf)
- 
+```bash
+make
+```
+
+* cmake
+
+```bash
+cmake -B ./build/   
+cmake --build ./build/ --config Release
+```
+
+**The compiled shared libraries  using GCC**
+
+* [Windows(x86/64)](./shared_lib/Windows): `libseuif97.dll` 
+
+* [Linux(x64)](./shared_lib/Linux): `libseuif97.so`
+
 ## Functions of the SEUIF97 Shared Library
 
-Functions of water and steam properties, exergy analysis and the thermodynamic process of steam turbine are provided in **SEUIF97**
+Functions of water and steam propertiesand the thermodynamic process of steam turbine are provided in the **SEUIF97**
 
-### Water and Steam Properties
+**Water and Steam Properties**
 
-Using SEUIF97, you can set the state of steam using various pairs of know properties to get any output properties you wish to know, including in the [30 properties in libseuif97](#properties).
+Using the SEUIF97, you can set the state of steam using various pairs of know properties to get any output properties you wish to know, including in the [30 properties in libseuif97](#properties-in-libseuif97).
 
-The following input pairs are implemented: 
+The following 12 input pairs are implemented: 
 
 ```
-(p,t) (p,h) (p,s) (p,v) (p,x) 
+(p,t) (p,h) (p,s) (p,v) 
 
-(t,h) (t,s) (t,v) (t,x) 
+(t,h) (t,s) (t,v) 
+
+(p,x) (t,x) (h,x) (s,x) 
 
 (h,s)  
 ```
 
-### Thermodynamic Process of Steam Turbine
+The type of propertry functions are provided in the package
+
+```c 
+  ??(in1,in2,o_id)
+```
+
+* the first,second input parameters : the input propertry pairs
+* the third input parametes: the property ID of the calculated property - [o_id](#properties)
+* the return: the calculated property value of `o_id`
+
+**Thermodynamic Process of Steam Turbine**
    
-*  1 Isentropic Enthalpy Drop：seuishd(pi,ti,pe)
+* Isentropic Enthalpy Drop：ishd(pi,ti,pe)
 
-       pi - double,  inlet pressure(MPa); ti - double, inlet temperature(°C)
-       pe - double, outlet pressure(MPa)
+  ```txt
+    pi - inlet pressure(MPa); ti -inlet temperature(°C)
+    pe - outlet pressure(MPa)
+  ```
+*  Isentropic Efficiency(0~100)： ief(pi,ti,pe,te) (superheated steam zone)
+   ```txt
+       pi - inlet pressure(MPa);  ti - inlet temperature(°C)
+       pe - outlet pressure(MPa); te - outlet temperature(°C)
+   ```
 
-* 2 Isentropic Efficiency(0~100)： seuief(pi,ti,pe,te) (superheated steam zone)
-
-       pi - double, inlet pressure(MPa);  ti - double, inlet temperature(°C)
-       pe - double, outlet pressure(MPa); te - double, outlet temperature(°C)
-
-## [API](./api)
-
-* Python: [seuif97.py](./api/seuif97.py) 
-
-* C/C++:  [seuif97.h](./api/seuif97.h) 
-
-* Rust: [seuif97.rs](./api/seuif97.rs) 
-
-* Excel VBA: [seuif97.bas](./demo/ExcelVBA/seuif97.bas)
-
-* C#: [seuif97.cs](./api/seuif97.cs) 
-
-* MATLAB: [seuif97.m](./demo/MATLAB64/seuif97/seuif97.m)
-
-* Java: [seuif97.java](./api/seuif97.java)  
-
-* Fortran: [seuif97.f08](./api/seuif97.f08)  
-
-* Modelica: [seuif97.mo](./api/seuif97.mo) 
-
-* Pascal: [seuif97.pas](./api/seuif97.pas) 
-
-## Install SEUIF97 Library Manually
-
-Download **SEUIF97.zip** of the repository，then unzip and install the shared library and APIs for different programming languages manually.
-
-Call the shared library from one programming language, you may
-
-1. Put the shared library in the Lib path of OS or the programming language
-
-2. Add the API file of the programming language to its API path
-
-### Put the shared library in the Lib path of OS
-
-##### Windows(x86/64) 
-  
-copy `libseuif97.dll` in the [Windows/x86](./SharedLibrary/Windows/x86) or [Windows/x64](./SharedLibrary/Windows/x64) folder to a default path of Windows32/64's DLL
-      
-       C:\Windows\system
-   
-##### Linux(x64/aarch64)
-    
-copy `libseuif97.so` in the [Linux/x64](./SharedLibrary/Linux/x64) or [Linux/aarch64](./SharedLibrary/Linux/aarch64) folder to a default path of Linux shared lib
-
-```bash
-$sudo cp libseuif97.so /usr/lib/
-```
-### Put the API file to the API path of programming languages
-
-The API paths of different programming languages are also different.  
-
-Please refer to the instructions of different programming languages
-
-## [SEUIF97 for Python](./demo/demo-python)
-
-### Install seuif97 from PyPI
-
-* [seuif97 on PyPI](https://pypi.org/project/seuif97)
-
-Windows(x86/64)
-
-```
->python -m pip install seuif97
-```
-
-Linux(x64)
-
-```
-$sudo -H python3 -m pip install seuif97
-```
-
-### Install manually
-
-Put the shared library in the default path of OS's Lib as the instructions above.
-
-Then,copy **seuif97.py** in the [api](./api) folder to a default path of Python's lib.
-
-#### Windows(x86/64) 
-
-If you have installed Python3.8 in the C:\Python38\, copy to
-    
-       C:\Python38\Lib 
-
-#### Linux(x64/aarch64) 
-
-If you have installed Python3.8 
-
-```bash  
-$sudo cp seuif97.py /usr/lib/python3.8/
-```
-
-### Usage
-
-The two type functions are provided in the seuif97 pacakge:
-
-* ??2?(in1,in2) , e.g: `h=pt2h(p,t)`
-  
-  * first,second input parameters: the input properties(double)
-  * the return: the calculated property value(double)
-
-* ??(in1,in2,propertyID), , e.g:`h=pt(p,t,4)`, the propertyID h is 4 
-   * first,second input parameters: the input properties(double)
-   * third input parameter: the propertyID of the calculated property(int, 0-29), see [Properties](#properties)
-   * the return: the calculated property value(double)
-
-```python
-import seuif97
-
-p，t=16.10,535.10
-
-# ??2?(in1,in2)
-h=seuif97.pt2h(p,t)
-s=seuif97.pt2s(p,t)
-v=seuif97.pt2v(p,t)
-print("(p,t),h,s,v:",
-      "{:>.2f}\t {:>.2f}\t {:>.2f}\t {:>.3f}\t {:>.4f}".format(p, t, h, s, v))
-
-# ??(in1,in2,propertyid)
-t = seuif97.ph(p, h, 1)
-s = seuif97.ph(p, h, 5)
-v = seuif97.ph(p, h, 3)
-print("(p,h),t,s,v:",
-      "{:>.2f}\t {:>.2f}\t {:>.2f}\t {:>.3f}\t {:>.4f}".format(p, h, t, s, v))  
-```
-
-#### [Diagram T-S](./demo-python/Diagram_T-S.py)
-
-![Diagram T-S](./demo/demo-python/img/T-s.jpg)
-
-## [C/C++](./demo/demo-c)  
-
-In C/C++, using syntax like `h =  seupt(p, t, 4)`
+**The Function Prototype in C**
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-#include "seuif97.h"
-
-int main(void)
-{
-
-    double p = 16.13;
-    double t = 535;
-    double h, s, v;
-
-    h = seupt(p, t, 4);
-    s = seupt(p, t, 5);
-    v = seupt(p, t, 3);
-    printf("(p,t)(%.2f,%.2f) h= %.2f, s= %.4f, v= %.4f\n", p, t, h, s, v);
-    return EXIT_SUCCESS;
-}
-```
-
-## [Rust](./demo/demo-rust)
-
-```bash
-[dependencies]
-libloading = "0.6.7"
-```
-
-In Rust, using syntax like `h = pt(p, t, 4)`
-
-```rust
-mod seuif97;
-use seuif97::pt;
-
-fn main() {
-    let h:f64=pt(16.0,535.0,4);
-    println!("{h}");
-  
-}
-```
-
-## [Excel VBA(32/64)](./demo/ExcelVBA)
-
-* Excel workbook(macro enabled) with seuif97 module to call Libseuif97.dll
-
-     From the `Developer Tools` tab, you can click the `Visual Basic` button ,then `Import File` [seuif97.bas](../demo/ExcelVBA/seuif97.bas) into the workbook that uses it.
-
-     ![Import](./demo/ExcelVBA/img/import_module.jpg)
-
-     ![module](./demo/ExcelVBA/img/demo_module.jpg)
-
-* The template xlsm file of using `seuif97.bas` module: 
-
-   you may use  [app_template_seuif97.xlsm](./demo/ExcelVBA/app_template_seuif97.xlsm) to start your work .
-
-## [C#](./demo/demo-csharp)
-
-In C#, using syntax like `h = Seuif97.seupt(p, t, 4)`
-
-```csharp
-using System;
-using seuif97;
-
-namespace demo_seuif97
-{
-    class demo_seuif97
-    {
-        static void Main(string[] args)
-        {
-            double p = 16.13;
-            double t = 535.0;
-            double h, s;
-            h = Seuif97.seupt(p, t, 4);
-            s = Seuif97.seupt(p, t, 5);
-            Console.WriteLine("(p,t) h,s {0 :.00} {1:.0} {2:.000} {3:.000}", p, t, h, s);
-       }
-    }
-}
-```
-
-## [Java](./demo/demo-java)
-
-Using [JNA](https://github.com/java-native-access/jna) to access libseuif97 library.
-
-In Java, using syntax like `h=seuif97.INSTANCE.seupt(p, t, 4)`
-
-```java
-public class demoseuif97 {
-
-    public static void main(String[] args){
-        double p=16.0;
-        double t=540.0;
-        double h;
-        h=seuif97.INSTANCE.seupt(p,t,4);
-        System.out.printf("(p,t)->h: (%.1f %.1f) h: %.2f ",p,t,h);
-   }
-} 
-```
-
-## [MATLAB(Windows64)](./demo/MATLAB64/)
-
-* Copy the folder `\seuif97` in `MATLAB64` to the path `\extern` of the installed MATLAB
-
-   For example,if MATLAB 2018a is installed : `C:\Program Files\MATLAB\R2018a\extern\`
-
-* Add the path  `C:\Program Files\MATLAB\R2018a\extern\seuif97` to the Search Path of MATLAB
-
-In MATLAB, using syntax like `=pt(p, t, 4)`
-
-```MATLAB
-myfuns = seuif97;
-p=18.0;
-t=535;
-h=myfuns.pt(p,t,4);
-s=myfuns.pt(p,t,5);
-v=myfuns.pt(p,t,3);
-fprintf('(p,t),h,s,v: %.2f,%.2f,%.2f,%.4f,%.4f\n',p,t,h,s,v);
-```
-
-## [Fortran Using gfortran](./demo/demo-Fortran)
-
-In Fortran, using syntax like `h=seupt(p, t, 4)`
-
-```fortran
-program demo
-  use iso_c_binding
-  use seuif97
-  implicit none
-  real(c_double) :: p,t,h,s,v
-  p = 16.13;
-  t = 535.0;
-  h = seupt(p, t, 4);
-  s = seupt(p, t, 5);
-  v = seupt(p, t, 3);
-  write (*,'(A,F10.2,F10.2,F10.2,F10.4,F10.4)') "(p,t),h,s,v",p,t,h,s,v 
-end program demo
-```
-
-## [Modelica](./demo/demo-modelica)
-
-```modelica
-model demo_seuif97 "Model of seuif97"
-
-function pt
-    input Real p;
-    input Real t;
-    input Integer w;
-    output Real result;
-external"C" result = seupt(
-        p,
-        t,
-        w);
-    annotation (Library="libseuif97");
-end pt;
-
-Real h;
-parameter Real p=16;
-parameter Real t=542;
-parameter Integer w=4;
-
-equation
-  h = pt(
-    p,
-    t,
-    w);
-end demo_seuif97;
-```
-
-## [Pascal](./demo/demo-pascal)
-
-In Pascal, using syntax like `seupt(p,t,IF97H)`
-
-```pascal
-program demo;
-uses seuif97;
-
-var p,t,h,s:double;
-
-begin
-   p:=16.0;
-   t:=535.0;
-   h:=seupt(p,t,IF97H);
-   s:=seupt(p,t,IF97S);
-   writeln('(h,s)',h,s);
-end.
-```
-
-## The Function Prototypes in C
-
-If you need to modify the APIs provided in the repository or program your own APIs, you can refer to the library's header file: [seuif97.h](./api/seuif97.h). 
-
-```cpp
 // Functions of Properties
-double seupt(double pressure,    double temperature, int propertyID);
-double seuph(double pressure,    double enthalpy,    int propertyID);
-double seups(double pressure,    double entropy,     int propertyID);
-double seupv(double pressure,    double volume,      int propertyID);
+double pt(double p, double t, int o_id);
+double ph(double p, double h, int o_id);
+double ps(double p, double s, int o_id);
+double pv(double p, double v, int o_id);
 
-double seuth(double temperature, double enthalpy, int propertyID);
-double seuts(double temperature, double entropy,  int propertyID);
-double seutv(double temperature, double volume,   int propertyID);
+double th(double t, double h, int o_id);
+double ts(double t, double s, int o_id);
+double tv(double t, double v,  int o_id);
 
-double seuhs(double enthalpy,    double entropy,  int propertyID);
+double hs(double h, double s,  int o_id);
 
-double seupx(double pressure,    double quality,  int propertyID);
-double seutx(double temperature, double quality,  int propertyID);
+double px(double p, double x,  int o_id);
+double tx(double t, double x,  int o_id);
+double hx(double h, double x,  int o_id);
+double sx(double s, double x,  int o_id);
 
 //The Functions for Thermodynamic Process of Steam Turbine
-double seuishd(double pi, double ti, double pe);
-double seuief(double pi, double ti, double pe, double te);
-
+double ishd(double pi, double ti, double pe);
+double ief(double pi, double ti, double pe, double te);
 ```
+
+## Install SEUIF97 
+
+Use the shared library from one programming language, you may
+
+1. Put the shared library in the default `Lib` path of OS or the programming language
+   * **Windows(x86/64)** 
+     * copy `libseuif97.dll` in the [Windows/x86](./shared_lib/Windows/x86) or [Windows/x64](./shared_lib/Windows/x64) folder to a default path of Windows32/64's DLL:  `C:\Windows\System`
+   
+   * **Linux(x64)** 
+     * copy `libseuif97.so` in the [Linux/x64](./shared_lib/Linux/x64) folder to a default path of Linux shared lib : `/usr/lib`/
+   
+2. Add the API file of the programming language to its `API` path
+
+   * The API paths of different programming languages are different,please refer to the [Examples](./demo/) of different programming languages
+
+## Interfaces and Examples
+
+* [./demo/](./demo)
+
+|  Language                           |    Interface                                     | 
+|:-----------------------------------:|:-------------------------------------------------|
+| [C/C++](./demo/demo-c)              |  [seuif97.h](./demo/demo-c/include/seuif97.h)    |
+| [Python](./demo/demo-python)        |  [seuif97.py](./demo/demo-python/seuif97.py)     |
+| [C#](./demo/demo-csharp)            |  [seuif97.cs](./demo/demo-csharp/seuif97.cs)     |
+| [Excel VBA](./demo/ExcelVBA)        |  [seuif97.bas](./demo/ExcelVBA/seuif97.bas)      |
+| [Java](./demo/demo-java)            |  [seuif97.java](./demo/demo-java/seuif97.java)   |
+| [MATLAB64](./demo/MATLAB64)         |  [seuif97.m](./demo/MATLAB64/seuif97/seuif97.m)  |
+| [Rust](./demo/demo-rust)            |  [seuif97.rs](./demo/demo-rust/src/seuif97.rs)   |
+| [Fortran](./demo/demo-Fortran)      |  [seuif97.f08](./demo/demo-fortran/seuif97.f08)  |
+| [Pascal](./demo/demo-pascal)        |  [seuif97.pas](./demo/demo-pascal/seuif97.pas)   |
+| [Modelica](./demo/demo-modelica)    |  [seuif97.mo](./demo/demo-modelica/demomodelica/seuif97.mo) |
+| [Golang](./demo-go)                |  **Example** [demo.go](./demo/demo-go/demo.go) |
+
+You can modify these interfaces provided in the repository to your own APIs.
+
+**The Selected Examples**
+
+**Python**
+
+* [T-S Diagram](./demo/demo-python/Diagram_T-S.py)
+
+* [H-S Diagram](./demo/demo-python/Diagram_H-S.py)
+
+* [H-S Diagram of Steam Turbine Expansion](./demo/demo-python/Turbine_H-S.py)
+
+**C++**
+
+* [H-S Diagram of Steam Turbine Expansion](./demo/demo-c/Turbine_H-S.cpp)
+
 
 ## Properties 
 
-| Propertry                             |    Unit     | Symbol | propertryID |
+| Propertry                             |    Unit     | Symbol | o_id       |
 | ------------------------------------- | :---------: |:-----: |:---------: |
 | Pressure                              |     MPa     |      p |          0 |
 | Temperature                           |     °C      |      t |          1 |
@@ -425,19 +186,22 @@ double seuief(double pi, double ti, double pe, double te);
 | Partial derivative (∂V/∂T)p           |  m3/(kg·K)  |(∂V/∂T)p|         19 |
 | Partial derivative (∂V/∂P)T           | m3/(kg·MPa) |(∂V/∂P)T|         20 |
 | Partial derivative (∂p/∂t)v           |    MPa/K    |(∂p/∂t)v|         21 |
-| Isothermal Joule-Thomson coefficient  | kJ/(kg·MPa) |    δt  |         22 |
+| Isothermal throttling coefficient     | kJ/(kg·MPa) |    δt  |         22 |
 | Joule-Thomson coefficient             |    K/MPa    |     μ  |         23 |
 | Dynamic viscosity                     |  kg/(m·s)   |     η  |         24 |
 | Kinematic viscosity                   |    m^2/s    |     ν  |         25 |
 | Thermal conductivity                  |   W/(m.K)   |     λ  |         26 |
 | Thermal diffusivity                   |   um^2/s    |     a  |         27 |
 | Prandtl number                        |             |     Pr |         28 |
-| Surface tension                       |    mN/m     |     σ  |         29 |
+| Surface tension                       |     N/m     |     σ  |         29 |
+
+## Publications
+
+* 王培红,贾俊颖,程懋华. 水和水蒸汽热力性质IAPWS-IF97公式的通用计算模型[J]. 动力工程,2001,21(6)：1564-1567 [[ pdf ]](./doc/水和水蒸汽热力性质IAPWS-IF97公式的通用计算模型.pdf)
+
+* 芮嘉敏,孙振业,程懋华. 基于最短加法链状态空间树的IAPWS-IF97快速计算方法[J]. 汽轮机技术,2017,59(4):245-247 [[ pdf ]](./doc/基于最短加法链状态空间树的IAPWS-IF97快速计算方法.pdf)
+ 
 
 ## Cite as
 
-* Wang Pei-hong, Jia Jun-ying, Cheng Mao-hua. General Calculating Models of Water and Steam Properties(IAPWS-IF97), Power Engineering, 21 (6), 2001, pp. 1564-1567. (Chinese)
-
-* Rui Jia-min, Sun zhen-ye, Cheng Mao-hua. Fast Calculation Method of IAPWS-IF97 Formula Based on The State Space Tree of the Shortest Addition Chain,Turbine Technology, 59(4),2017, pp.245-247(Chinese)
-
-* Cheng Maohua. SEUIF97: the high-speed shared library of IAPWS-IF97(1.0.1). Zenodo. https://doi.org/10.5281/zenodo.4586961
+* Cheng Maohua. (2023). The C implementation of the high-speed IAPWS-IF97 package: SEUIF97 (1.2.0). Zenodo. https://doi.org/10.5281/zenodo.8242452
