@@ -4,7 +4,7 @@
 #include "common.h"
 #include "seuif97.h"
 
-IF97_DLL double ishd(double pi, double ti, double pe)
+IF97_API double ishd(double pi, double ti, double pe)
 {
    double hi, si, he_isos;
    if (pi <= pe)
@@ -26,7 +26,7 @@ IF97_DLL double ishd(double pi, double ti, double pe)
 }
 
 // superheated steam zone , %
-IF97_DLL double ief(double pi, double ti, double pe, double te)
+IF97_API double ief(double pi, double ti, double pe, double te)
 {
    double hi, si, he_isos, he, se, ishd, ahd;
    if (pi <= pe)

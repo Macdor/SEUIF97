@@ -1,4 +1,5 @@
 /demo/demo-python/__pycache__
+/install
 /build
 *.exe
 *.class
