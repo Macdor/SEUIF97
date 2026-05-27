@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 3.20)
 project(seuif97 
     VERSION 0.1.0 
     DESCRIPTION "SEUIF97 - Steam and Water Properties Library"
